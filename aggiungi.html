@@ -8,6 +8,7 @@
     <link rel="stylesheet" href="//netdna.bootstrapcdn.com/bootstrap/3.1.1/css/bootstrap.min.css">
     <link rel="stylesheet" href="//netdna.bootstrapcdn.com/bootstrap/3.1.1/css/bootstrap-theme.min.css">
     <link rel="stylesheet" href="//netdna.bootstrapcdn.com/font-awesome/4.1.0/css/font-awesome.min.css">
+    <link rel="stylesheet" href="//cdn.datatables.net/1.10.0/css/jquery.dataTables.css">
     <link rel="stylesheet" href="files/style.css">
 
     <!--[if lt IE 9]>
@@ -21,16 +22,15 @@
 <div class="container">
 
     <div class="row">
-        <div class="col-xs-12">
+        <div class="col-xs-6">
             <h1>Simple invoices 1.0</h1>
         </div>
-    </div>
-
-    <div class="row">
-        <div class="col-xs-12">
-            <div class="btn-group">
+        <div class="col-xs-6">
+            <br/>
+            <div class="btn-group pull-right">
                 <a href="intestatario.html" class="btn btn-default"><i class="fa fa-info-circle"></i> Intestatario</a>
-                <a href="aggiungi.html" class="btn btn-default"><i class="fa fa-plus"></i> Aggiungi</a>
+                <a href="aggiungi.html" class="btn btn-default"><i class="fa fa-plus"></i> Nuova Fattura</a>
+                <a href="index.html" class="btn btn-default"><i class="fa fa-bars"></i> Fatture</a>
             </div>
         </div>
     </div>
@@ -63,7 +63,10 @@
                                     <div class="col-xs-6">
                                         <div class="form-group">
                                             <label>Data</label>
-                                            <input type="text" class="form-control input-sm" name="" value="">
+                                            <div class="input-group">
+                                                <input type="text" class="form-control input-sm" name="" value="">
+                                                <span class="input-group-addon"><i class="fa fa-calendar"></i></span>
+                                            </div>
                                         </div>
                                     </div>
                                 </div>
@@ -201,7 +204,13 @@
 
                                 <div class="row">
                                     <div class="col-xs-12">
-                                        <table class="table">
+                                        <hr/>
+                                    </div>
+                                </div>
+
+                                <div class="row">
+                                    <div class="col-xs-12">
+                                        <table id="myTable" class="table">
                                             <thead>
                                             <tr>
                                                 <th>Codice</th>
@@ -215,12 +224,6 @@
                                             </tr>
                                             </tbody>
                                         </table>
-                                    </div>
-                                </div>
-
-                                <div class="row">
-                                    <div class="col-xs-12">
-                                        <p>...</p>
                                     </div>
                                 </div>
 
@@ -282,7 +285,10 @@
                                                 <div class="col-xs-12">
                                                     <div class="form-group">
                                                         <label>Prezzo</label>
-                                                        <input type="text" class="form-control input-sm" name="" value="">
+                                                        <div class="input-group">
+                                                            <input type="text" class="form-control input-sm" name="" value="">
+                                                            <span class="input-group-addon">.00</span>
+                                                        </div>
                                                     </div>
                                                     <div class="checkbox">
                                                         <label>
@@ -300,7 +306,7 @@
                                                         <label>IVA</label>
                                                         <select class="form-control"></select>
                                                     </div>
-                                                    <input type="submit" class="btn btn-default" value="Aggiungi">
+                                                    <a href="" class="btn btn-default"><i class="fa fa-plus-square"></i> Aggiungi</a>
                                                 </div>
                                             </div>
                                         </div>
@@ -315,8 +321,8 @@
                             <div class="col-xs-12">
                                 <hr/>
                                 <ul class="list-inline">
-                                    <li><a href="" class="btn btn-default">Stampa con quantità</a></li>
-                                    <li><a href="" class="btn btn-default">Stampa</a></li>
+                                    <li><a href="" class="btn btn-default"><i class="fa fa-print"></i> Stampa con quantità</a></li>
+                                    <li><a href="" class="btn btn-default"><i class="fa fa-print"></i> Stampa</a></li>
                                     <li><a href="" class="btn btn-default">Salva</a></li>
                                 </ul>
                             </div>
@@ -333,6 +339,8 @@
 
 <script src="https://ajax.googleapis.com/ajax/libs/jquery/1.11.0/jquery.min.js"></script>
 <script src="//netdna.bootstrapcdn.com/bootstrap/3.1.1/js/bootstrap.min.js"></script>
+<script src="//cdn.datatables.net/1.10.0/js/jquery.dataTables.js"></script>
+<script src="files/common.jquery.js"></script>
 
 </body>
 </html>
