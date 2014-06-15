@@ -7,7 +7,6 @@
     <title>Simple invoices 1.0</title>
     <link rel="stylesheet" href="//netdna.bootstrapcdn.com/bootstrap/3.1.1/css/bootstrap.min.css">
     <link rel="stylesheet" href="//netdna.bootstrapcdn.com/bootstrap/3.1.1/css/bootstrap-theme.min.css">
-    <link rel="stylesheet" href="//netdna.bootstrapcdn.com/font-awesome/4.1.0/css/font-awesome.min.css">
     <link rel="stylesheet" href="//cdn.datatables.net/1.10.0/css/jquery.dataTables.css">
     <link rel="stylesheet" href="files/style.css">
 
@@ -23,14 +22,15 @@
 
     <div class="row">
         <div class="col-xs-6">
-            <h1>Simple invoices 1.0</h1>
+            <h1><img src="files/folder-invoices-icon.png" alt=""/> Simple invoices 1.0</h1>
         </div>
         <div class="col-xs-6">
             <br/>
+
             <div class="btn-group pull-right">
-                <a href="configurazione.html" class="btn btn-default"><i class="fa fa-info-circle"></i> Configurazione</a>
-                <a href="aggiungi.html" class="btn btn-default"><i class="fa fa-plus"></i> Nuova Fattura</a>
-                <a href="index.html" class="btn btn-default"><i class="fa fa-bars"></i> Fatture</a>
+                <a href="configurazione.html" class="btn btn-default"><span class="glyphicon glyphicon-user"></span> Configurazione</a>
+                <a href="aggiungi.html" class="btn btn-default"><span class="glyphicon glyphicon-plus"></span> Nuova Fattura</a>
+                <a href="index.html" class="btn btn-default"><span class="glyphicon glyphicon-th-list"></span> Fatture</a>
             </div>
         </div>
     </div>
@@ -49,8 +49,7 @@
                     <table id="myTable" class="table">
                         <thead>
                         <tr>
-                            <th>Modifica</th>
-                            <th>Cancella</th>
+                            <th>Action</th>
                             <th>Numero</th>
                             <th>Anno</th>
                             <th>Data</th>
@@ -61,8 +60,21 @@
                         </thead>
                         <tbody>
                         <tr>
-                            <td><a href="" class="btn btn-default btn-sm"><i class="fa fa-pencil-square-o"></i> Modifica</a></td>
-                            <td><a href="" class="btn btn-default btn-sm"><i class="fa fa-trash-o"></i> Cancella</a></td>
+                            <td>
+                                <div class="btn-group">
+                                    <a href="" class="btn btn-default btn-sm">Modifica</a>
+                                    <button type="button" class="btn btn-default dropdown-toggle btn-sm" data-toggle="dropdown">
+                                        <span class="caret"></span>
+                                        <span class="sr-only">Toggle Dropdown</span>
+                                    </button>
+                                    <ul class="dropdown-menu" role="menu">
+                                        <li><a href="#">Stampa con quantità</a></li>
+                                        <li><a href="#">Stampa</a></li>
+                                        <li class="divider"></li>
+                                        <li><a href="#"><span class="glyphicon glyphicon-trash"></span> Cancella</a></li>
+                                    </ul>
+                                </div>
+                            </td>
                             <td>111</td>
                             <td>111</td>
                             <td>111</td>
@@ -82,6 +94,8 @@
 <script src="https://ajax.googleapis.com/ajax/libs/jquery/1.11.0/jquery.min.js"></script>
 <script src="//netdna.bootstrapcdn.com/bootstrap/3.1.1/js/bootstrap.min.js"></script>
 <script src="//cdn.datatables.net/1.10.0/js/jquery.dataTables.js"></script>
+<script src="files/bootstrap-filestyle.min.js"></script>
+<script src="files/bootstrap-datepicker.js"></script>
 <script src="files/common.jquery.js"></script>
 
 </body>
