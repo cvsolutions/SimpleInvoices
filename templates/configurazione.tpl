@@ -8,14 +8,11 @@
                     <h3 class="panel-title">Configurazione</h3>
                 </div>
                 <div class="panel-body">
-                    <form id="my-form" role="form" method="post">
+                    <form id="configurazione" role="form" method="post">
 
                         <div class="row">
                             <div class="col-xs-12">
-                                <div class="alert alert-warning alert-dismissable">
-                                    <button type="button" class="close" data-dismiss="alert" aria-hidden="true">&times;</button>
-                                    <strong>Warning!</strong> Better check yourself, you're not looking too good.
-                                </div>
+                                <div id="result" style="display: none"></div>
                             </div>
                         </div>
 

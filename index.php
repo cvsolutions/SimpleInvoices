@@ -48,8 +48,7 @@ $app->get('/configurazione', function () use ($DB, $tpl) {
  * POST Configurazione
  */
 $app->post('/configurazione', function (Request $request) use ($DB, $app) {
-    // print_r($_FILES);
-    $stmt = $DB->prepare("UPDATE configurazione SET ragione_sociale = ?, codice_fiscale = ?, partita_iva = ?, indirizzo = ?, cap = ?, citta = ?, provincia = ?, telefono = ?, fax = ?, email = ?, pie_di_pagina = ?");
+    $stmt = $DB->prepare('UPDATE configurazione SET ragione_sociale = ?, codice_fiscale = ?, partita_iva = ?, indirizzo = ?, cap = ?, citta = ?, provincia = ?, telefono = ?, fax = ?, email = ?, pie_di_pagina = ?');
     $stmt->bindParam(1, $request->get('ragione_sociale'));
     $stmt->bindParam(2, $request->get('codice_fiscale'));
     $stmt->bindParam(3, $request->get('partita_iva'));
@@ -61,8 +60,23 @@ $app->post('/configurazione', function (Request $request) use ($DB, $app) {
     $stmt->bindParam(9, $request->get('fax'));
     $stmt->bindParam(10, $request->get('email'));
     $stmt->bindParam(11, $request->get('pie_di_pagina'));
-    $stmt->execute();
-    return $app->json(array());
+
+    if ($_FILES) {
+
+        $fileerror = $_FILES['logo']['error'];
+        $filetype  = $_FILES['logo']['type'];
+        $tmpfile   = $_FILES['logo']['tmp_name'];
+
+        if ($fileerror == 0) {
+            move_uploaded_file($tmpfile, 'data/logo.png');
+        }
+    }
+
+    if ($stmt->execute()) {
+        return $app->json(array(
+            'success' => true
+        ));
+    }
 });
 
 /**

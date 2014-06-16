@@ -1,16 +1,28 @@
 $(document).ready(function () {
 
+    /**
+     * filestyle
+     */
     $(':file').filestyle();
 
+    /**
+     * datepicker
+     */
     $('.datepicker').datepicker()
 
+    /**
+     * dataTable
+     */
     $('#fatture').dataTable({
         'processing': true,
         'serverSide': true,
         'ajax': "/fatture.json"
     });
 
-    $('#my-form').submit(function (event) {
+    /**
+     * submit configurazione
+     */
+    $('#configurazione').submit(function () {
         $.ajax({
             url: '/configurazione',
             type: 'POST',
@@ -22,9 +34,19 @@ $(document).ready(function () {
                     text: 'Loading...'
                 });
             },
-            success: function (data) {
-                // alert('ok');
+            success: function () {
                 $.isLoading('hide');
+                $('#result').fadeIn().show();
+                $('#result').append($('<div/>').attr({
+                    'class': 'alert alert-success alert-dismissable'
+                }).append('<div/>').html('Operazione eseguita con successo!'));
+            },
+            error: function (xhr, ajaxOptions, thrownError) {
+                $.isLoading('hide');
+                $('#result').fadeIn().show();
+                $('#result').append($('<div/>').attr({
+                    'class': 'alert alert-danger alert-dismissable'
+                }).append('<div/>').html(thrownError));
             }
         });
         return false;
