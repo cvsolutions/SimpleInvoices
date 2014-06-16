@@ -1,0 +1,56 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="utf-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <title>Simple invoices 1.0 by Concetto Vecchio</title>
+    <link rel="stylesheet" href="<?php echo $this->basePath('css/bootstrap.css'); ?>">
+    <link rel="stylesheet" href="<?php echo $this->basePath('css/bootstrap-theme.css'); ?>">
+    <link rel="stylesheet" href="<?php echo $this->basePath('css/jquery.dataTables.css'); ?>">
+    <link rel="stylesheet" href="<?php echo $this->basePath('css/datepicker.css'); ?>">
+    <link rel="stylesheet" href="<?php echo $this->basePath('css/style.css'); ?>">
+
+    <!--[if lt IE 9]>
+    <script src="<?php echo $this->basePath('js/html5shiv.js'); ?>"></script>
+    <script src="<?php echo $this->basePath('js/respond.min.js'); ?>"></script>
+    <![endif]-->
+</head>
+
+<body>
+
+<div class="container">
+
+    <div class="row">
+        <div class="col-xs-6">
+            <h1><img src="<?php echo $this->basePath('img/folder-invoices-icon.png'); ?>" alt=""/> Simple invoices 1.0</h1>
+        </div>
+        <div class="col-xs-6">
+            <br/>
+
+            <div class="btn-group pull-right">
+                <a href="/configurazione" class="btn btn-default"><span class="glyphicon glyphicon-user"></span> Configurazione</a>
+                <a href="/aggiungi-fattura" class="btn btn-default"><span class="glyphicon glyphicon-plus"></span> Nuova Fattura</a>
+                <a href="/" class="btn btn-default"><span class="glyphicon glyphicon-th-list"></span> Fatture</a>
+            </div>
+        </div>
+    </div>
+
+    <div class="row">
+        <div class="col-xs-12">&nbsp;</div>
+    </div>
+
+    <?php echo $this->content; ?>
+
+</div>
+
+<script src="https://ajax.googleapis.com/ajax/libs/jquery/1.11.0/jquery.min.js"></script>
+<script src="<?php echo $this->basePath('js/bootstrap.js'); ?>"></script>
+<script src="<?php echo $this->basePath('js/jquery.dataTables.js'); ?>"></script>
+<script src="<?php echo $this->basePath('js/bootstrap-filestyle.js'); ?>"></script>
+<script src="<?php echo $this->basePath('js/bootstrap-datepicker.js'); ?>"></script>
+<script src="<?php echo $this->basePath('js/jquery.isloading.js'); ?>"></script>
+<script src="<?php echo $this->basePath('js/jquery.common.js'); ?>"></script>
+
+</body>
+</html>
