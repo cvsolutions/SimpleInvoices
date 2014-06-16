@@ -11,6 +11,15 @@
                     <form id="my-form" role="form" method="post">
 
                         <div class="row">
+                            <div class="col-xs-12">
+                                <div class="alert alert-warning alert-dismissable">
+                                    <button type="button" class="close" data-dismiss="alert" aria-hidden="true">&times;</button>
+                                    <strong>Warning!</strong> Better check yourself, you're not looking too good.
+                                </div>
+                            </div>
+                        </div>
+
+                        <div class="row">
                             <div class="col-xs-6">
                                 <fieldset>
                                     <legend>Intestatario Fatture</legend>
