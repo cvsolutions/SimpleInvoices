@@ -30,7 +30,7 @@
 
             <div class="btn-group pull-right">
                 <a href="/configurazione" class="btn btn-default"><span class="glyphicon glyphicon-user"></span> Configurazione</a>
-                <a href="/aggiungi" class="btn btn-default"><span class="glyphicon glyphicon-plus"></span> Nuova Fattura</a>
+                <a href="/aggiungi-fattura" class="btn btn-default"><span class="glyphicon glyphicon-plus"></span> Nuova Fattura</a>
                 <a href="/" class="btn btn-default"><span class="glyphicon glyphicon-th-list"></span> Fatture</a>
             </div>
         </div>
@@ -49,6 +49,7 @@
 <script src="../js/jquery.dataTables.js"></script>
 <script src="../js/bootstrap-filestyle.js"></script>
 <script src="../js/bootstrap-datepicker.js"></script>
+<script src="../js/jquery.isloading.js"></script>
 <script src="../js/common.jquery.js"></script>
 
 </body>

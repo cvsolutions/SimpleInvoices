@@ -8,7 +8,7 @@
                     <h3 class="panel-title">Configurazione</h3>
                 </div>
                 <div class="panel-body">
-                    <form role="form">
+                    <form id="my-form" role="form" method="post">
 
                         <div class="row">
                             <div class="col-xs-6">
@@ -19,7 +19,7 @@
                                         <div class="col-xs-12">
                                             <div class="form-group">
                                                 <label>Ragione Sociale</label>
-                                                <input type="text" class="form-control input-sm" name="" value="">
+                                                <input type="text" class="form-control input-sm" name="ragione_sociale" value="{$row.ragione_sociale}">
                                             </div>
                                         </div>
                                     </div>
@@ -28,13 +28,13 @@
                                         <div class="col-xs-6">
                                             <div class="form-group">
                                                 <label>Codice Fiscale</label>
-                                                <input type="text" class="form-control input-sm" name="" value="">
+                                                <input type="text" class="form-control input-sm" name="codice_fiscale" value="{$row.codice_fiscale}">
                                             </div>
                                         </div>
                                         <div class="col-xs-6">
                                             <div class="form-group">
                                                 <label>Partita IVA</label>
-                                                <input type="text" class="form-control input-sm" name="" value="">
+                                                <input type="text" class="form-control input-sm" name="partita_iva" value="{$row.partita_iva}">
                                             </div>
                                         </div>
                                     </div>
@@ -43,7 +43,7 @@
                                         <div class="col-xs-12">
                                             <div class="form-group">
                                                 <label>Indirizzo</label>
-                                                <input type="text" class="form-control input-sm" name="" value="">
+                                                <input type="text" class="form-control input-sm" name="indirizzo" value="{$row.indirizzo}">
                                             </div>
                                         </div>
                                     </div>
@@ -52,19 +52,19 @@
                                         <div class="col-xs-3">
                                             <div class="form-group">
                                                 <label>CAP</label>
-                                                <input type="text" class="form-control input-sm" name="" value="">
+                                                <input type="text" class="form-control input-sm" name="cap" value="{$row.cap}">
                                             </div>
                                         </div>
                                         <div class="col-xs-3">
                                             <div class="form-group">
                                                 <label>Città</label>
-                                                <input type="text" class="form-control input-sm" name="" value="">
+                                                <input type="text" class="form-control input-sm" name="citta" value="{$row.citta}">
                                             </div>
                                         </div>
                                         <div class="col-xs-6">
                                             <div class="form-group">
                                                 <label>Provincia</label>
-                                                <input type="text" class="form-control input-sm" name="" value="">
+                                                <input type="text" class="form-control input-sm" name="provincia" value="{$row.provincia}">
                                             </div>
                                         </div>
                                     </div>
@@ -73,13 +73,13 @@
                                         <div class="col-xs-6">
                                             <div class="form-group">
                                                 <label>Telefono</label>
-                                                <input type="text" class="form-control input-sm" name="" value="">
+                                                <input type="text" class="form-control input-sm" name="telefono" value="{$row.telefono}">
                                             </div>
                                         </div>
                                         <div class="col-xs-6">
                                             <div class="form-group">
                                                 <label>FAX</label>
-                                                <input type="text" class="form-control input-sm" name="" value="">
+                                                <input type="text" class="form-control input-sm" name="fax" value="{$row.fax}">
                                             </div>
                                         </div>
                                     </div>
@@ -88,7 +88,7 @@
                                         <div class="col-xs-12">
                                             <div class="form-group">
                                                 <label>Indirizzo E-mail</label>
-                                                <input type="text" class="form-control input-sm" name="" value="">
+                                                <input type="text" class="form-control input-sm" name="email" value="{$row.email}">
                                             </div>
                                         </div>
                                     </div>
@@ -104,7 +104,7 @@
                                         <div class="col-xs-12">
                                             <div class="form-group">
                                                 <label>Piè di pagina</label>
-                                                <textarea rows="5" class="form-control input-sm"></textarea>
+                                                <textarea rows="5" class="form-control input-sm" name="pie_di_pagina">{$row.pie_di_pagina}</textarea>
                                             </div>
                                         </div>
                                     </div>
@@ -127,7 +127,7 @@
                                         </div>
                                         <div class="col-xs-8">
                                             <div class="form-group">
-                                                <input type="file" name="">
+                                                <input type="file" name="logo">
 
                                                 <p class="help-block">Selezionare un file immagine</p>
                                             </div>
@@ -140,7 +140,7 @@
                         </div>
 
                         <hr/>
-                        <a href="" class="btn btn-default">Salva</a>
+                        <input type="submit" class="btn btn-default" value="Salva">
 
                     </form>
                 </div>
