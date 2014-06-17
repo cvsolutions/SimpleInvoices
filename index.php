@@ -16,6 +16,12 @@ $app          = new Silex\Application();
 $app['debug'] = true;
 
 /**
+ * define var
+ */
+define('SUCCESS_MESSAGE', 'Operazione eseguita con successo!');
+define('IMAGES_ONLY_MESSAGE', 'È possibile inserire solo immagini!');
+
+/**
  * Homepage
  */
 $app->get('/', function () use ($tpl) {
@@ -48,34 +54,57 @@ $app->get('/configurazione', function () use ($DB, $tpl) {
  * POST Configurazione
  */
 $app->post('/configurazione', function (Request $request) use ($DB, $app) {
-    $stmt = $DB->prepare('UPDATE configurazione SET ragione_sociale = ?, codice_fiscale = ?, partita_iva = ?, indirizzo = ?, cap = ?, citta = ?, provincia = ?, telefono = ?, fax = ?, email = ?, pie_di_pagina = ?');
-    $stmt->bindParam(1, $request->get('ragione_sociale'));
-    $stmt->bindParam(2, $request->get('codice_fiscale'));
-    $stmt->bindParam(3, $request->get('partita_iva'));
-    $stmt->bindParam(4, $request->get('indirizzo'));
-    $stmt->bindParam(5, $request->get('cap'));
-    $stmt->bindParam(6, $request->get('citta'));
-    $stmt->bindParam(7, $request->get('provincia'));
-    $stmt->bindParam(8, $request->get('telefono'));
-    $stmt->bindParam(9, $request->get('fax'));
-    $stmt->bindParam(10, $request->get('email'));
-    $stmt->bindParam(11, $request->get('pie_di_pagina'));
 
-    if ($_FILES) {
+    $error    = $_FILES['logo']['error'];
+    $type     = $_FILES['logo']['type'];
+    $tmp_name = $_FILES['logo']['tmp_name'];
 
-        $fileerror = $_FILES['logo']['error'];
-        $filetype  = $_FILES['logo']['type'];
-        $tmpfile   = $_FILES['logo']['tmp_name'];
+    if (is_uploaded_file($tmp_name)) {
 
-        if ($fileerror == 0) {
-            move_uploaded_file($tmpfile, 'data/logo.png');
+        if ($error == 0) {
+
+            if ($type == 'image/jpeg') {
+
+                if (move_uploaded_file($tmp_name, 'data/logo.png')) {
+                    return $app->json(array(
+                        'notice' => 'success',
+                        'messages' => SUCCESS_MESSAGE,
+                        'img' => 'data/logo.png'
+                    ));
+                }
+
+            } else {
+
+                return $app->json(array(
+                    'notice' => 'danger',
+                    'messages' => IMAGES_ONLY_MESSAGE
+                ));
+            }
         }
-    }
 
-    if ($stmt->execute()) {
-        return $app->json(array(
-            'success' => true
-        ));
+    } else {
+
+        $query = 'UPDATE configurazione SET ragione_sociale = ?, codice_fiscale = ?, partita_iva = ?, indirizzo = ?, cap = ?, citta = ?, provincia = ?, telefono = ?, fax = ?, email = ?, pie_di_pagina = ?';
+        $stmt  = $DB->prepare($query);
+
+        $stmt->bindParam(1, $request->get('ragione_sociale'));
+        $stmt->bindParam(2, $request->get('codice_fiscale'));
+        $stmt->bindParam(3, $request->get('partita_iva'));
+        $stmt->bindParam(4, $request->get('indirizzo'));
+        $stmt->bindParam(5, $request->get('cap'));
+        $stmt->bindParam(6, $request->get('citta'));
+        $stmt->bindParam(7, $request->get('provincia'));
+        $stmt->bindParam(8, $request->get('telefono'));
+        $stmt->bindParam(9, $request->get('fax'));
+        $stmt->bindParam(10, $request->get('email'));
+        $stmt->bindParam(11, $request->get('pie_di_pagina'));
+
+        if ($stmt->execute()) {
+            return $app->json(array(
+                'notice' => 'success',
+                'messages' => SUCCESS_MESSAGE
+            ));
+        }
     }
 });
 

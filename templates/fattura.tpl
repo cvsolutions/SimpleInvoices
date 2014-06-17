@@ -287,7 +287,8 @@
                         <div class="row">
                             <div class="col-xs-12">
                                 <hr/>
-                                <a href="" class="btn btn-default">Salva</a>
+                                <input type="hidden" name="id" value="">
+                                <input type="submit" class="btn btn-default" value="Salva">
                             </div>
                         </div>
 

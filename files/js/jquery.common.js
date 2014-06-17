@@ -23,6 +23,7 @@ $(document).ready(function () {
      * submit configurazione
      */
     $('#configurazione').submit(function () {
+        var result = $('#result');
         $.ajax({
             url: '/configurazione',
             type: 'POST',
@@ -34,17 +35,28 @@ $(document).ready(function () {
                     text: 'Loading...'
                 });
             },
-            success: function () {
+            success: function (data) {
                 $.isLoading('hide');
-                $('#result').fadeIn().show();
-                $('#result').append($('<div/>').attr({
-                    'class': 'alert alert-success alert-dismissable'
-                }).append('<div/>').html('Operazione eseguita con successo!'));
+                result.fadeIn().show();
+
+                if (data.img) {
+                    $('.img-thumbnail').attr({
+                        'src': data.img
+                    });
+                }
+
+                result.append($('<div/>').attr({
+                    'class': 'alert alert-' + data.notice + ' alert-dismissable'
+                }).append('<div/>').html(data.messages));
+                setTimeout(function () {
+                    result.fadeOut();
+                    $('.alert-dismissable').remove();
+                }, 3000);
             },
             error: function (xhr, ajaxOptions, thrownError) {
                 $.isLoading('hide');
-                $('#result').fadeIn().show();
-                $('#result').append($('<div/>').attr({
+                result.fadeIn().show();
+                result.append($('<div/>').attr({
                     'class': 'alert alert-danger alert-dismissable'
                 }).append('<div/>').html(thrownError));
             }
