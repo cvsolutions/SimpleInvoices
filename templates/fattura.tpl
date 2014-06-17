@@ -282,7 +282,7 @@
                         <div class="row">
                             <div class="col-xs-12">
                                 <hr/>
-                                <input type="hidden" name="id" value="{$id}">
+                                <input type="hidden" name="id" id="id" value="{$id}">
                                 <input type="submit" class="btn btn-default" value="Salva">
                             </div>
                         </div>

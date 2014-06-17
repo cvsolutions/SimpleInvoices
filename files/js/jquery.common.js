@@ -14,9 +14,8 @@ $(document).ready(function () {
      * dataTable
      */
     $('#fatture').dataTable({
-        'processing': true,
-        'serverSide': true,
-        'ajax': "/fatture.json"
+        'bProcessing': true,
+        'sAjaxSource': "/fatture.json"
     });
 
     /**
@@ -135,6 +134,10 @@ $(document).ready(function () {
             },
             success: function (data) {
                 $.isLoading('hide');
+                $('#myTable').dataTable({
+                    'bProcessing': true,
+                    'sAjaxSource': '/servizi/' + data.fattura + '.json'
+                });
             },
             error: function (xhr, ajaxOptions, thrownError) {
                 $.isLoading('hide');

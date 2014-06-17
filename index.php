@@ -32,20 +32,32 @@ $app->get('/', function () use ($tpl) {
 /**
  * Fatture json
  */
-$app->get('/fatture.json', function () use ($app) {
-    return $app->json(array(
-        'recordsTotal' => 1,
-        'data' => array('a', '', '', '', '', '', '')
-    ));
+$app->get('/fatture.json', function () use ($DB, $app) {
+
+    $fatture = $DB->prepare('SELECT * FROM fatture');
+    $fatture->execute();
+    $obj = array();
+    foreach ($fatture->fetchAll(PDO::FETCH_ASSOC) as $row) {
+        $obj = array(
+            '',
+            $row['numero'],
+            0,
+            $row['emissione'],
+            $row['id_cliente'],
+            0,
+            0
+        );
+    }
+    return $app->json(array('aaData' => $obj));
 });
 
 /**
  * Configurazione
  */
 $app->get('/configurazione', function () use ($DB, $tpl) {
-    $sth = $DB->prepare('SELECT * FROM configurazione LIMIT 0,1');
-    $sth->execute();
-    $tpl->assign('row', $sth->fetch(PDO::FETCH_ASSOC));
+    $configurazione = $DB->prepare('SELECT * FROM configurazione LIMIT 0,1');
+    $configurazione->execute();
+    $tpl->assign('row', $configurazione->fetch(PDO::FETCH_ASSOC));
     $tpl->display('configurazione.tpl');
     return false;
 });
@@ -123,7 +135,7 @@ $app->get('/aggiungi-fattura', function () use ($tpl) {
  */
 $app->post('/aggiungi-fattura', function (Request $request) use ($DB, $app) {
 
-    $cliente    = $request->get('id_cliente');
+    $cliente = $request->get('id_cliente');
     echo $id_cliente = $cliente == 0 ? mt_rand(11111, 99999) : 0;
 
     $fatture = $DB->prepare('INSERT INTO fatture (id, numero, emissione, oggetto, pagamento, note, id_cliente) VALUES (?, ?, ?, ?, ?, ?, ?)');
@@ -145,11 +157,16 @@ $app->post('/aggiungi-fattura', function (Request $request) use ($DB, $app) {
         $clienti->bindParam(6, $request->get('cap'));
         $clienti->bindParam(7, $request->get('citta'));
         $clienti->bindParam(8, $request->get('provincia'));
+        $clienti->execute();
     }
 
-    return $app->json(array(
-        'numero' => $request->get('numero')
-    ));
+    if ($fatture->execute()) {
+        return $app->json(array(
+            'notice' => 'success',
+            'fattura' => $request->get('id'),
+            'messages' => SUCCESS_MESSAGE
+        ));
+    }
 });
 
 /**
@@ -157,21 +174,40 @@ $app->post('/aggiungi-fattura', function (Request $request) use ($DB, $app) {
  */
 $app->post('/aggiungi-servizi', function (Request $request) use ($DB, $app) {
 
-    $servizi = $DB->prepare('INSERT INTO servizi (id, codice, descrizione, quantita, prezzo, iva, inclusa, id_fattura) VALUES (?, ?, ?, ?, ?, ?, ?, ?)');
-    $servizi->bindParam(1, $request->get('id'));
-    $servizi->bindParam(2, $request->get('codice'));
-    $servizi->bindParam(3, $request->get('descrizione'));
-    $servizi->bindParam(4, $request->get('quantita'));
-    $servizi->bindParam(5, $request->get('prezzo'));
-    $servizi->bindParam(6, $request->get('iva'));
-    $servizi->bindParam(7, $request->get('inclusa'));
-    $servizi->bindParam(8, $request->get('id_fattura'));
+    $servizi = $DB->prepare('INSERT INTO servizi (codice, descrizione, quantita, prezzo, iva, inclusa, id_fattura) VALUES (?, ?, ?, ?, ?, ?, ?)');
+    $servizi->bindParam(1, $request->get('codice'));
+    $servizi->bindParam(2, $request->get('descrizione'));
+    $servizi->bindParam(3, $request->get('quantita'));
+    $servizi->bindParam(4, $request->get('prezzo'));
+    $servizi->bindParam(5, $request->get('iva'));
+    $servizi->bindParam(6, $request->get('inclusa'));
+    $servizi->bindParam(7, $request->get('id_fattura'));
 
-    return $app->json(array(
-        'codice' => $request->get('codice')
-    ));
+    if ($servizi->execute()) {
+        return $app->json(array(
+            'notice' => 'success',
+            'fattura' => $request->get('id_fattura'),
+            'messages' => SUCCESS_MESSAGE
+        ));
+    }
+});
 
-
+$app->get('/servizi/{fattura}.json', function ($fattura) use ($DB, $app) {
+    $servizi = $DB->prepare('SELECT * FROM servizi WHERE id_fattura = ?');
+    $servizi->bindParam(1, $fattura);
+    $servizi->execute();
+    $obj = array();
+    foreach ($servizi->fetchAll(PDO::FETCH_ASSOC) as $row) {
+        $obj = array(
+            $row['codice'],
+            $row['descrizione'],
+            $row['prezzo'],
+            $row['quantita'],
+            0,
+            $row['iva']
+        );
+    }
+    return $app->json(array('aaData' => $obj));
 });
 
 $DB = null;
