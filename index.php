@@ -70,7 +70,7 @@ $app->post('/configurazione', function (Request $request) use ($DB, $app) {
                         'notice' => 'success',
                         'messages' => SUCCESS_MESSAGE,
                         'logo' => 1,
-                        'img' => 'data/logo.png'
+                        'img' => '../data/logo.png'
                     ));
                 }
 
