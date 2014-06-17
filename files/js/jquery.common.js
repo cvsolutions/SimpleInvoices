@@ -30,6 +30,8 @@ $(document).ready(function () {
             data: new FormData(this),
             processData: false,
             contentType: false,
+            dataType: 'json',
+            cache: false,
             beforeSend: function () {
                 $.isLoading({
                     text: 'Loading...'
@@ -63,4 +65,80 @@ $(document).ready(function () {
         });
         return false;
     });
+
+    /**
+     * submit fattura
+     */
+    $('#fattura').submit(function () {
+
+        var result = $('#result');
+
+        $.ajax({
+            url: '/aggiungi-fattura',
+            type: 'POST',
+            data: new FormData(this),
+            beforeSend: function () {
+                $.isLoading({
+                    text: 'Loading...'
+                });
+            },
+            success: function (data) {
+                $.isLoading('hide');
+
+            },
+            error: function (xhr, ajaxOptions, thrownError) {
+                $.isLoading('hide');
+                result.fadeIn().show();
+                result.append($('<div/>').attr({
+                    'class': 'alert alert-danger alert-dismissable'
+                }).append('<div/>').html(thrownError));
+            }
+        });
+        return false;
+    });
+
+    /**
+     * submit servizi
+     */
+    $('#servizi').click(function () {
+
+        var codice = $('#codice').val();
+        var descrizione = $('#descrizione').val();
+        var quantita = $('#quantita').val();
+        var prezzo = $('#prezzo').val();
+        var iva = $('#iva').val();
+        var inclusa = $('#inclusa').val();
+        var id_fattura = $('#id').val();
+
+        $.ajax({
+            url: '/aggiungi-servizi',
+            type: 'POST',
+            data: {
+                'codice': codice,
+                'descrizione': descrizione,
+                'quantita': quantita,
+                'prezzo': prezzo,
+                'iva': iva,
+                'inclusa': inclusa,
+                'id_fattura': id_fattura
+            },
+            dataType: 'json',
+            cache: false,
+            beforeSend: function () {
+                $.isLoading({
+                    text: 'Loading...'
+                });
+            },
+            success: function (data) {
+                $.isLoading('hide');
+            },
+            error: function (xhr, ajaxOptions, thrownError) {
+                $.isLoading('hide');
+            }
+        });
+        return false;
+    });
+
+
+    //...
 });
