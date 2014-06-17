@@ -164,5 +164,32 @@ $(document).ready(function () {
     });
 
 
+    $('#id_cliente').change(function () {
+
+        var id = $(this).val();
+
+        $.ajax({
+            url: '/cliente',
+            type: 'POST',
+            data: {
+                id: id
+            },
+            dataType: 'json',
+            cache: false,
+            success: function (data) {
+                $('#ragione_sociale').val(data.ragione_sociale);
+                $('#codice_fiscale').val(data.codice_fiscale);
+                $('#partita_iva').val(data.partita_iva);
+                $('#indirizzo').val(data.indirizzo);
+                $('#cap').val(data.cap);
+                $('#citta').val(data.citta);
+                $('#provincia').val(data.provincia);
+            },
+            error: function (xhr, ajaxOptions, thrownError) {
+            }
+        });
+        return false;
+    });
+
     //...
 });

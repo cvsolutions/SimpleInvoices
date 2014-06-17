@@ -259,7 +259,7 @@ $app->get('/servizi/{fattura}.json', function ($fattura) use ($DB, $app) {
 /**
  * Cliente JSON
  */
-$app->get('/cliente.json', function (Request $request) use ($DB, $app) {
+$app->post('/cliente', function (Request $request) use ($DB, $app) {
 
     $servizi = $DB->prepare('SELECT * FROM clienti WHERE id = ?');
     $servizi->bindParam(1, $request->get('id'));

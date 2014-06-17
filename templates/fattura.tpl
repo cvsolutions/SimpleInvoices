@@ -64,7 +64,7 @@
                                             <div class="row">
                                                 <div class="col-xs-4">
                                                     <div class="form-group">
-                                                        <select class="form-control input-sm" name="id_cliente">
+                                                        <select class="form-control input-sm" name="id_cliente" id="id_cliente">
                                                             <option value="0">-</option>
                                                             {foreach from=$clienti item=row}
                                                                 <option value="{$row.id}">{$row.ragione_sociale}</option>
@@ -74,7 +74,7 @@
                                                 </div>
                                                 <div class="col-xs-8">
                                                     <div class="form-group">
-                                                        <input type="text" class="form-control input-sm" name="ragione_sociale" value="">
+                                                        <input type="text" class="form-control input-sm" name="ragione_sociale" id="ragione_sociale" value="">
                                                     </div>
                                                 </div>
                                             </div>
@@ -83,13 +83,13 @@
                                                 <div class="col-xs-6">
                                                     <div class="form-group">
                                                         <label>Codice Fiscale</label>
-                                                        <input type="text" class="form-control input-sm" name="codice_fiscale" value="">
+                                                        <input type="text" class="form-control input-sm" name="codice_fiscale" id="codice_fiscale" value="">
                                                     </div>
                                                 </div>
                                                 <div class="col-xs-6">
                                                     <div class="form-group">
                                                         <label>Partita IVA</label>
-                                                        <input type="text" class="form-control input-sm" name="partita_iva" value="">
+                                                        <input type="text" class="form-control input-sm" name="partita_iva" id="partita_iva" value="">
                                                     </div>
                                                 </div>
                                             </div>
@@ -98,7 +98,7 @@
                                                 <div class="col-xs-12">
                                                     <div class="form-group">
                                                         <label>Indirizzo</label>
-                                                        <input type="text" class="form-control input-sm" name="indirizzo" value="">
+                                                        <input type="text" class="form-control input-sm" name="indirizzo" id="indirizzo" value="">
                                                     </div>
                                                 </div>
                                             </div>
@@ -107,19 +107,19 @@
                                                 <div class="col-xs-3">
                                                     <div class="form-group">
                                                         <label>CAP</label>
-                                                        <input type="text" class="form-control input-sm" name="cap" value="">
+                                                        <input type="text" class="form-control input-sm" name="cap" id="cap" value="">
                                                     </div>
                                                 </div>
                                                 <div class="col-xs-3">
                                                     <div class="form-group">
                                                         <label>Città</label>
-                                                        <input type="text" class="form-control input-sm" name="citta" value="">
+                                                        <input type="text" class="form-control input-sm" name="citta" id="citta" value="">
                                                     </div>
                                                 </div>
                                                 <div class="col-xs-6">
                                                     <div class="form-group">
                                                         <label>Provincia</label>
-                                                        <input type="text" class="form-control input-sm" name="provincia" value="">
+                                                        <input type="text" class="form-control input-sm" name="provincia" id="provincia" value="">
                                                     </div>
                                                 </div>
                                             </div>
