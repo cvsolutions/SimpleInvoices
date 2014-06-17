@@ -5,11 +5,11 @@
     <meta http-equiv="X-UA-Compatible" content="IE=edge">
     <meta name="viewport" content="width=device-width, initial-scale=1">
     <title>Simple invoices 1.0 by Concetto Vecchio</title>
-    <link rel="stylesheet" href="../css/bootstrap.css">
-    <link rel="stylesheet" href="../css/bootstrap-theme.css">
-    <link rel="stylesheet" href="../css/jquery.dataTables.css">
-    <link rel="stylesheet" href="../css/datepicker.css">
-    <link rel="stylesheet" href="../css/style.css">
+    <link rel="stylesheet" href="../files/css/bootstrap.css">
+    <link rel="stylesheet" href="../files/css/bootstrap-theme.css">
+    <link rel="stylesheet" href="../files/css/jquery.dataTables.css">
+    <link rel="stylesheet" href="../files/css/datepicker.css">
+    <link rel="stylesheet" href="../files/css/style.css">
 
     <!--[if lt IE 9]>
     <script src="https://oss.maxcdn.com/libs/html5shiv/3.7.0/html5shiv.js"></script>
@@ -45,12 +45,12 @@
 </div>
 
 <script src="https://ajax.googleapis.com/ajax/libs/jquery/1.11.0/jquery.min.js"></script>
-<script src="../js/bootstrap.js"></script>
-<script src="../js/jquery.dataTables.js"></script>
-<script src="../js/bootstrap-filestyle.js"></script>
-<script src="../js/bootstrap-datepicker.js"></script>
-<script src="../js/jquery.isloading.js"></script>
-<script src="../js/jquery.common.js"></script>
+<script src="../files/js/bootstrap.js"></script>
+<script src="../files/js/jquery.dataTables.js"></script>
+<script src="../files/js/bootstrap-filestyle.js"></script>
+<script src="../files/js/bootstrap-datepicker.js"></script>
+<script src="../files/js/jquery.isloading.js"></script>
+<script src="../files/js/jquery.common.js"></script>
 
 </body>
 </html>
