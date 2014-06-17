@@ -8,7 +8,7 @@
                     <h3 class="panel-title">Configurazione</h3>
                 </div>
                 <div class="panel-body">
-                    <form id="configurazione" role="form" method="post">
+                    <form id="configurazione" enctype="multipart/form-data" role="form" method="post">
 
                         <div class="row">
                             <div class="col-xs-12">
@@ -129,7 +129,7 @@
 
                                     <div class="row">
                                         <div class="col-xs-4">
-                                            <img src="data/logo.png" class="img-responsive img-thumbnail" alt=""/>
+                                            <img src="data/logo.png" id="logo" class="img-responsive img-thumbnail" alt=""/>
                                         </div>
                                         <div class="col-xs-8">
                                             <div class="form-group">

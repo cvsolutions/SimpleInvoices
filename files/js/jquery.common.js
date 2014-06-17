@@ -42,7 +42,7 @@ $(document).ready(function () {
                 result.fadeIn().show();
 
                 if (data.img) {
-                    $('.img-thumbnail').attr({
+                    $('#logo').attr({
                         'src': data.img
                     });
                 }
@@ -77,6 +77,10 @@ $(document).ready(function () {
             url: '/aggiungi-fattura',
             type: 'POST',
             data: new FormData(this),
+            processData: false,
+            contentType: false,
+            dataType: 'json',
+            cache: false,
             beforeSend: function () {
                 $.isLoading({
                     text: 'Loading...'
