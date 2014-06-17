@@ -44,7 +44,7 @@
 
 </div>
 
-<script src="../files/js/jquery.js"></script>
+<script src="https://ajax.googleapis.com/ajax/libs/jquery/1.11.0/jquery.min.js"></script>
 <script src="../files/js/bootstrap.js"></script>
 <script src="../files/js/jquery.dataTables.js"></script>
 <script src="../files/js/bootstrap-filestyle.js"></script>
