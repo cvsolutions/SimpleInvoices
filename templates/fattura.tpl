@@ -9,7 +9,7 @@
                 </div>
                 <div class="panel-body">
 
-                    <form id="fattura" role="form" method="post">
+                    <form id="fattura" role="form" autocomplete="off" method="post">
 
                         <div class="row">
                             <div class="col-xs-12">

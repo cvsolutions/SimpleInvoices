@@ -34,16 +34,16 @@ $app->get('/', function () use ($tpl) {
  */
 $app->get('/fatture.json', function () use ($DB, $app) {
 
-    $fatture = $DB->prepare('SELECT * FROM fatture');
+    $fatture = $DB->prepare('SELECT fatture.*, clienti.ragione_sociale  FROM fatture, clienti WHERE fatture.id_cliente = clienti.id');
     $fatture->execute();
     $obj = array();
     foreach ($fatture->fetchAll(PDO::FETCH_ASSOC) as $row) {
         $obj[] = array(
             0,
             $row['numero'],
-            0,
+            $row['anno'],
             $row['emissione'],
-            $row['id_cliente'],
+            $row['ragione_sociale'],
             0,
             0
         );
