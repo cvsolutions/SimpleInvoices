@@ -30,7 +30,7 @@ $app->get('/', function () use ($tpl) {
 });
 
 /**
- * nnnn
+ * Fatture json
  */
 $app->get('/fatture.json', function () use ($app) {
     return $app->json(array(
@@ -112,8 +112,16 @@ $app->post('/configurazione', function (Request $request) use ($DB, $app) {
  * Aggiungi Fattura
  */
 $app->get('/aggiungi-fattura', function () use ($tpl) {
+    $tpl->assign('id', mt_rand(11111, 99999));
     $tpl->display('fattura.tpl');
     return false;
+});
+
+/**
+ * POST Aggiungi Fattura
+ */
+$app->post('/aggiungi-fattura', function (Request $request) use ($DB, $app) {
+
 });
 
 $DB = null;
