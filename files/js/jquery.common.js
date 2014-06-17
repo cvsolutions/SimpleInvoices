@@ -1,6 +1,12 @@
 $(document).ready(function () {
 
     /**
+     * delay fade Timeout
+     * @type {number}
+     */
+    var delay = 3000;
+
+    /**
      * filestyle
      */
     $(':file').filestyle();
@@ -8,21 +14,25 @@ $(document).ready(function () {
     /**
      * datepicker
      */
-    $('.datepicker').datepicker()
+    $('.datepicker').datepicker({
+        dateFormat: 'yy-mm-dd'
+    });
 
     /**
      * dataTable
      */
     $('#fatture').dataTable({
-        'bProcessing': true,
-        'sAjaxSource': "/fatture.json"
+        bProcessing: true,
+        sAjaxSource: "/fatture.json"
     });
 
     /**
      * submit configurazione
      */
     $('#configurazione').submit(function () {
+
         var result = $('#result');
+
         $.ajax({
             url: '/configurazione',
             type: 'POST',
@@ -52,7 +62,7 @@ $(document).ready(function () {
                 setTimeout(function () {
                     result.fadeOut();
                     $('.alert-dismissable').remove();
-                }, 3000);
+                }, delay);
             },
             error: function (xhr, ajaxOptions, thrownError) {
                 $.isLoading('hide');
@@ -87,7 +97,14 @@ $(document).ready(function () {
             },
             success: function (data) {
                 $.isLoading('hide');
-
+                result.fadeIn().show();
+                result.append($('<div/>').attr({
+                    'class': 'alert alert-' + data.notice + ' alert-dismissable'
+                }).append('<div/>').html(data.messages));
+                setTimeout(function () {
+                    result.fadeOut();
+                    $('.alert-dismissable').remove();
+                }, delay);
             },
             error: function (xhr, ajaxOptions, thrownError) {
                 $.isLoading('hide');
@@ -117,13 +134,13 @@ $(document).ready(function () {
             url: '/aggiungi-servizi',
             type: 'POST',
             data: {
-                'codice': codice,
-                'descrizione': descrizione,
-                'quantita': quantita,
-                'prezzo': prezzo,
-                'iva': iva,
-                'inclusa': inclusa,
-                'id_fattura': id_fattura
+                codice: codice,
+                descrizione: descrizione,
+                quantita: quantita,
+                prezzo: prezzo,
+                iva: iva,
+                inclusa: inclusa,
+                id_fattura: id_fattura
             },
             dataType: 'json',
             cache: false,

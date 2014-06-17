@@ -12,6 +12,12 @@
                     <form id="fattura" role="form" method="post">
 
                         <div class="row">
+                            <div class="col-xs-12">
+                                <div id="result" style="display: none"></div>
+                            </div>
+                        </div>
+
+                        <div class="row">
 
                             <div class="col-xs-6">
 

@@ -38,8 +38,8 @@ $app->get('/fatture.json', function () use ($DB, $app) {
     $fatture->execute();
     $obj = array();
     foreach ($fatture->fetchAll(PDO::FETCH_ASSOC) as $row) {
-        $obj = array(
-            '',
+        $obj[] = array(
+            0,
             $row['numero'],
             0,
             $row['emissione'],
@@ -55,8 +55,10 @@ $app->get('/fatture.json', function () use ($DB, $app) {
  * Configurazione
  */
 $app->get('/configurazione', function () use ($DB, $tpl) {
+
     $configurazione = $DB->prepare('SELECT * FROM configurazione LIMIT 0,1');
     $configurazione->execute();
+
     $tpl->assign('row', $configurazione->fetch(PDO::FETCH_ASSOC));
     $tpl->display('configurazione.tpl');
     return false;
@@ -98,24 +100,34 @@ $app->post('/configurazione', function (Request $request) use ($DB, $app) {
 
     } else {
 
-        $configurazione = $DB->prepare('UPDATE configurazione SET ragione_sociale = ?, codice_fiscale = ?, partita_iva = ?, indirizzo = ?, cap = ?, citta = ?, provincia = ?, telefono = ?, fax = ?, email = ?, pie_di_pagina = ?');
-        $configurazione->bindParam(1, $request->get('ragione_sociale'));
-        $configurazione->bindParam(2, $request->get('codice_fiscale'));
-        $configurazione->bindParam(3, $request->get('partita_iva'));
-        $configurazione->bindParam(4, $request->get('indirizzo'));
-        $configurazione->bindParam(5, $request->get('cap'));
-        $configurazione->bindParam(6, $request->get('citta'));
-        $configurazione->bindParam(7, $request->get('provincia'));
-        $configurazione->bindParam(8, $request->get('telefono'));
-        $configurazione->bindParam(9, $request->get('fax'));
-        $configurazione->bindParam(10, $request->get('email'));
-        $configurazione->bindParam(11, $request->get('pie_di_pagina'));
+        try {
 
-        if ($configurazione->execute()) {
+            $configurazione = $DB->prepare('UPDATE configurazione SET ragione_sociale = ?, codice_fiscale = ?, partita_iva = ?, indirizzo = ?, cap = ?, citta = ?, provincia = ?, telefono = ?, fax = ?, email = ?, pie_di_pagina = ?');
+            $configurazione->bindParam(1, $request->get('ragione_sociale'));
+            $configurazione->bindParam(2, $request->get('codice_fiscale'));
+            $configurazione->bindParam(3, $request->get('partita_iva'));
+            $configurazione->bindParam(4, $request->get('indirizzo'));
+            $configurazione->bindParam(5, $request->get('cap'));
+            $configurazione->bindParam(6, $request->get('citta'));
+            $configurazione->bindParam(7, $request->get('provincia'));
+            $configurazione->bindParam(8, $request->get('telefono'));
+            $configurazione->bindParam(9, $request->get('fax'));
+            $configurazione->bindParam(10, $request->get('email'));
+            $configurazione->bindParam(11, $request->get('pie_di_pagina'));
+
+            $configurazione->execute();
             return $app->json(array(
                 'notice' => 'success',
                 'logo' => 0,
                 'messages' => SUCCESS_MESSAGE
+            ));
+
+        } catch (PDOException $Exception) {
+            return $app->json(array(
+                'notice' => 'danger',
+                'logo' => 0,
+                'code' => $Exception->getCode(),
+                'messages' => $Exception->getMessage()
             ));
         }
     }
@@ -124,7 +136,16 @@ $app->post('/configurazione', function (Request $request) use ($DB, $app) {
 /**
  * Aggiungi Fattura
  */
-$app->get('/aggiungi-fattura', function () use ($tpl) {
+$app->get('/aggiungi-fattura', function () use ($DB, $tpl) {
+
+    $fatture = $DB->prepare('SELECT COUNT(numero) AS totale FROM fatture LIMIT 0,1');
+    $fatture->execute();
+
+    $clienti = $DB->prepare('SELECT * FROM clienti');
+    $clienti->execute();
+
+    $tpl->assign('fatture', $fatture->fetch(PDO::FETCH_ASSOC));
+    $tpl->assign('clienti', $clienti->fetchAll(PDO::FETCH_ASSOC));
     $tpl->assign('id', mt_rand(11111, 99999));
     $tpl->display('fattura.tpl');
     return false;
@@ -135,38 +156,49 @@ $app->get('/aggiungi-fattura', function () use ($tpl) {
  */
 $app->post('/aggiungi-fattura', function (Request $request) use ($DB, $app) {
 
-    $cliente = $request->get('id_cliente');
-    echo $id_cliente = $cliente == 0 ? mt_rand(11111, 99999) : 0;
+    $cliente    = $request->get('id_cliente');
+    $id_cliente = $cliente == 0 ? mt_rand(11111, 99999) : $cliente;
 
-    $fatture = $DB->prepare('INSERT INTO fatture (id, numero, emissione, oggetto, pagamento, note, id_cliente) VALUES (?, ?, ?, ?, ?, ?, ?)');
-    $fatture->bindParam(1, $request->get('id'));
-    $fatture->bindParam(2, $request->get('numero'));
-    $fatture->bindParam(3, $request->get('emissione'));
-    $fatture->bindParam(4, $request->get('oggetto'));
-    $fatture->bindParam(5, $request->get('pagamento'));
-    $fatture->bindParam(6, $request->get('note'));
-    $fatture->bindParam(6, $id_cliente);
+    try {
 
-    if ($cliente == 0) {
-        $clienti = $DB->prepare('INSERT INTO clienti (id, ragione_sociale, codice_fiscale, partita_iva, indirizzo, cap, citta, provincia) VALUES (?, ?, ?, ?, ?, ?, ?, ?)');
-        $clienti->bindParam(1, $id_cliente);
-        $clienti->bindParam(2, $request->get('ragione_sociale'));
-        $clienti->bindParam(3, $request->get('codice_fiscale'));
-        $clienti->bindParam(4, $request->get('partita_iva'));
-        $clienti->bindParam(5, $request->get('indirizzo'));
-        $clienti->bindParam(6, $request->get('cap'));
-        $clienti->bindParam(7, $request->get('citta'));
-        $clienti->bindParam(8, $request->get('provincia'));
-        $clienti->execute();
-    }
+        $fatture = $DB->prepare('INSERT INTO fatture (id, numero, anno, emissione, oggetto, pagamento, note, id_cliente) VALUES (?, ?, ?, ?, ?, ?, ?, ?)');
+        $fatture->bindParam(1, $request->get('id'));
+        $fatture->bindParam(2, $request->get('numero'));
+        $fatture->bindParam(3, date('Y', time()));
+        $fatture->bindParam(4, $request->get('emissione'));
+        $fatture->bindParam(5, $request->get('oggetto'));
+        $fatture->bindParam(6, $request->get('pagamento'));
+        $fatture->bindParam(7, $request->get('note'));
+        $fatture->bindParam(8, $id_cliente);
 
-    if ($fatture->execute()) {
+        if ($cliente == 0) {
+            $clienti = $DB->prepare('INSERT INTO clienti (id, ragione_sociale, codice_fiscale, partita_iva, indirizzo, cap, citta, provincia) VALUES (?, ?, ?, ?, ?, ?, ?, ?)');
+            $clienti->bindParam(1, $id_cliente);
+            $clienti->bindParam(2, $request->get('ragione_sociale'));
+            $clienti->bindParam(3, $request->get('codice_fiscale'));
+            $clienti->bindParam(4, $request->get('partita_iva'));
+            $clienti->bindParam(5, $request->get('indirizzo'));
+            $clienti->bindParam(6, $request->get('cap'));
+            $clienti->bindParam(7, $request->get('citta'));
+            $clienti->bindParam(8, $request->get('provincia'));
+            $clienti->execute();
+        }
+
+        $fatture->execute();
         return $app->json(array(
             'notice' => 'success',
             'fattura' => $request->get('id'),
             'messages' => SUCCESS_MESSAGE
         ));
+
+    } catch (PDOException $Exception) {
+        return $app->json(array(
+            'notice' => 'danger',
+            'code' => $Exception->getCode(),
+            'messages' => $Exception->getMessage()
+        ));
     }
+
 });
 
 /**
@@ -183,22 +215,36 @@ $app->post('/aggiungi-servizi', function (Request $request) use ($DB, $app) {
     $servizi->bindParam(6, $request->get('inclusa'));
     $servizi->bindParam(7, $request->get('id_fattura'));
 
-    if ($servizi->execute()) {
+    try {
+
+        $servizi->execute();
         return $app->json(array(
             'notice' => 'success',
             'fattura' => $request->get('id_fattura'),
             'messages' => SUCCESS_MESSAGE
         ));
+
+    } catch (PDOException $Exception) {
+        return $app->json(array(
+            'notice' => 'danger',
+            'fattura' => $request->get('id_fattura'),
+            'code' => $Exception->getCode(),
+            'messages' => $Exception->getMessage()
+        ));
     }
 });
 
+/**
+ * Servizi fattura JSON
+ */
 $app->get('/servizi/{fattura}.json', function ($fattura) use ($DB, $app) {
+
     $servizi = $DB->prepare('SELECT * FROM servizi WHERE id_fattura = ?');
     $servizi->bindParam(1, $fattura);
     $servizi->execute();
     $obj = array();
     foreach ($servizi->fetchAll(PDO::FETCH_ASSOC) as $row) {
-        $obj = array(
+        $obj[] = array(
             $row['codice'],
             $row['descrizione'],
             $row['prezzo'],
@@ -208,6 +254,17 @@ $app->get('/servizi/{fattura}.json', function ($fattura) use ($DB, $app) {
         );
     }
     return $app->json(array('aaData' => $obj));
+});
+
+/**
+ * Cliente JSON
+ */
+$app->get('/cliente.json', function (Request $request) use ($DB, $app) {
+
+    $servizi = $DB->prepare('SELECT * FROM clienti WHERE id = ?');
+    $servizi->bindParam(1, $request->get('id'));
+    $servizi->execute();
+    return $app->json($servizi->fetch(PDO::FETCH_ASSOC));
 });
 
 $DB = null;
