@@ -25,7 +25,7 @@
                                     <div class="col-xs-6">
                                         <div class="form-group">
                                             <label>Fattura N.</label>
-                                            <input type="text" class="form-control input-sm" name="numero" value="">
+                                            <input type="text" class="form-control input-sm" name="numero" value="{$fatture.totale + 1}">
                                         </div>
                                     </div>
                                     <div class="col-xs-6">
@@ -33,7 +33,7 @@
                                             <label>Data</label>
 
                                             <div class="input-group">
-                                                <input type="text" class="form-control input-sm datepicker" name="emissione" value="">
+                                                <input type="text" class="form-control input-sm datepicker" name="emissione" value="{$smarty.now|date_format:"%Y-%m-%d"}" readonly>
                                                 <span class="input-group-addon"><span class="glyphicon glyphicon-calendar"></span></span>
                                             </div>
                                         </div>
@@ -66,7 +66,9 @@
                                                     <div class="form-group">
                                                         <select class="form-control input-sm" name="id_cliente">
                                                             <option value="0">-</option>
-                                                            <option value="1">Pippo</option>
+                                                            {foreach from=$clienti item=row}
+                                                                <option value="{$row.id}">{$row.ragione_sociale}</option>
+                                                            {/foreach}
                                                         </select>
                                                     </div>
                                                 </div>
