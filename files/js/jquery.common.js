@@ -42,7 +42,7 @@ $(document).ready(function () {
                 result.fadeIn().show();
 
                 if (data.img) {
-                    $('.img-thumbnail').attr({
+                    $('#logo').attr({
                         'src': data.img
                     });
                 }
