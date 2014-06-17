@@ -123,6 +123,8 @@ $app->get('/aggiungi-fattura', function () use ($tpl) {
  */
 $app->post('/aggiungi-fattura', function (Request $request) use ($DB, $app) {
 
+    $cliente    = $request->get('id_cliente');
+    echo $id_cliente = $cliente == 0 ? mt_rand(11111, 99999) : 0;
 
     $fatture = $DB->prepare('INSERT INTO fatture (id, numero, emissione, oggetto, pagamento, note, id_cliente) VALUES (?, ?, ?, ?, ?, ?, ?)');
     $fatture->bindParam(1, $request->get('id'));
@@ -131,17 +133,19 @@ $app->post('/aggiungi-fattura', function (Request $request) use ($DB, $app) {
     $fatture->bindParam(4, $request->get('oggetto'));
     $fatture->bindParam(5, $request->get('pagamento'));
     $fatture->bindParam(6, $request->get('note'));
-    $fatture->bindParam(6, $request->get('id_cliente'));
+    $fatture->bindParam(6, $id_cliente);
 
-    $clienti = $DB->prepare('INSERT INTO clienti (id, ragione_sociale, codice_fiscale, partita_iva, indirizzo, cap, citta, provincia) VALUES (?, ?, ?, ?, ?, ?, ?, ?)');
-    $clienti->bindParam(1, $request->get('id'));
-    $clienti->bindParam(2, $request->get('ragione_sociale'));
-    $clienti->bindParam(3, $request->get('codice_fiscale'));
-    $clienti->bindParam(4, $request->get('partita_iva'));
-    $clienti->bindParam(5, $request->get('indirizzo'));
-    $clienti->bindParam(6, $request->get('cap'));
-    $clienti->bindParam(7, $request->get('citta'));
-    $clienti->bindParam(8, $request->get('provincia'));
+    if ($cliente == 0) {
+        $clienti = $DB->prepare('INSERT INTO clienti (id, ragione_sociale, codice_fiscale, partita_iva, indirizzo, cap, citta, provincia) VALUES (?, ?, ?, ?, ?, ?, ?, ?)');
+        $clienti->bindParam(1, $id_cliente);
+        $clienti->bindParam(2, $request->get('ragione_sociale'));
+        $clienti->bindParam(3, $request->get('codice_fiscale'));
+        $clienti->bindParam(4, $request->get('partita_iva'));
+        $clienti->bindParam(5, $request->get('indirizzo'));
+        $clienti->bindParam(6, $request->get('cap'));
+        $clienti->bindParam(7, $request->get('citta'));
+        $clienti->bindParam(8, $request->get('provincia'));
+    }
 
     return $app->json(array(
         'numero' => $request->get('numero')
