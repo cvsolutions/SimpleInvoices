@@ -280,11 +280,8 @@ $(document).ready(function () {
      * click Cancella Servizio
      */
     $('#cancella_servizio').click(function () {
-
         var fattura = $(this).data('fattura');
         alert(fattura);
-
-
     });
 
 
