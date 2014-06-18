@@ -177,9 +177,10 @@ $(document).ready(function () {
             cache: false,
             success: function (data) {
                 $('.btn').attr('disabled', false);
-                $("#lista-servizi").dataTable().fnDestroy();
+                // $("#lista-servizi").dataTable().fnDestroy();
                 $('#lista-servizi').dataTable({
                     ajax: '/servizi/' + data.fattura + '.json',
+                    bDestroy: true,
                     aLengthMenu: [
                         [3, 2, 1],
                         [3, 2, 1]
@@ -283,6 +284,7 @@ $(document).ready(function () {
      */
     $('#lista-servizi').dataTable({
         ajax: '/servizi/' + id_fattura + '.json',
+        bDestroy: true,
         aLengthMenu: [
             [3, 2, 1],
             [3, 2, 1]
@@ -342,6 +344,51 @@ $(document).ready(function () {
                 result.append($('<div/>').attr({
                     'class': 'alert alert-danger alert-dismissable'
                 }).append('<div/>').html(thrownError));
+            }
+        });
+        return false;
+    });
+
+    $('#modifica_servizi').submit(function () {
+        $.ajax({
+            url: '/modifica-servizi',
+            type: 'POST',
+            data: new FormData(this),
+            processData: false,
+            contentType: false,
+            dataType: 'json',
+            cache: false,
+            success: function (data) {
+                parent.location.reload();
+                parent.$.fancybox.close();
+                $('#lista-servizi').dataTable({
+                    ajax: '/servizi/' + data.fattura + '.json',
+                    bDestroy: true,
+                    aLengthMenu: [
+                        [3, 2, 1],
+                        [3, 2, 1]
+                    ],
+                    columns: [
+                        { data: 'codice' },
+                        { data: 'descrizione' },
+                        { data: 'prezzo' },
+                        { data: 'quantita' },
+                        { data: 'totale' },
+                        { data: 'iva' }
+                    ],
+                    columnDefs: [
+                        {
+                            targets: -6,
+                            data: 'codice',
+                            render: function (data, type, row) {
+                                return '<a href="/modifica-servizi/' + row.id + '?hideHeader=1" class="btn btn-default btn-xs open-box" data-fancybox-type="iframe">' + data + '</a>';
+                            }
+                        }
+                    ]
+                });
+            },
+            error: function (xhr, ajaxOptions, thrownError) {
+                alert(thrownError);
             }
         });
         return false;

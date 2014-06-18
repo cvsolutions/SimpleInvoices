@@ -251,8 +251,7 @@ $app->post('/aggiungi-servizi', function (Request $request) use ($DB, $app) {
 
     try {
 
-        $totale  = ($request->get('prezzo') * $request->get('quantita'));
-        $inclusa = $request->get('inclusa') == 1 ? 1 : 0;
+        $totale = ($request->get('prezzo') * $request->get('quantita'));
 
         $servizi = $DB->prepare('INSERT INTO servizi (id, codice, descrizione, quantita, prezzo, totale, iva, inclusa, id_fattura, attivo) VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, 0)');
         $servizi->bindParam(1, mt_rand(11111, 99999));
@@ -262,7 +261,7 @@ $app->post('/aggiungi-servizi', function (Request $request) use ($DB, $app) {
         $servizi->bindParam(5, $request->get('prezzo'));
         $servizi->bindParam(6, $totale);
         $servizi->bindParam(7, $request->get('iva'));
-        $servizi->bindParam(8, $inclusa);
+        $servizi->bindParam(8, $request->get('inclusa'));
         $servizi->bindParam(9, $request->get('id_fattura'));
         $servizi->execute();
 
@@ -413,8 +412,45 @@ $app->post('/modifica-fattura/{id}', function ($id, Request $request) use ($DB, 
  */
 $app->get('/modifica-servizi/{id}', function ($id) use ($DB, $tpl) {
 
+    $servizi = $DB->prepare('SELECT * FROM servizi WHERE id = ?');
+    $servizi->bindParam(1, $id);
+    $servizi->execute();
+
+    $tpl->assign('servizi', $servizi->fetch(PDO::FETCH_ASSOC));
     $tpl->display('modifica-servizi.tpl');
     return false;
+});
+
+$app->post('/modifica-servizi', function (Request $request) use ($DB, $app) {
+
+    try {
+
+        $totale = ($request->get('prezzo') * $request->get('quantita'));
+
+        $servizi = $DB->prepare('UPDATE servizi SET codice = ?, descrizione = ?, quantita = ?, prezzo = ?, totale = ?, iva = ?, inclusa = ? WHERE id = ?');
+        $servizi->bindParam(1, $request->get('codice'));
+        $servizi->bindParam(2, $request->get('descrizione'));
+        $servizi->bindParam(3, $request->get('quantita'));
+        $servizi->bindParam(4, $request->get('prezzo'));
+        $servizi->bindParam(5, $totale);
+        $servizi->bindParam(6, $request->get('iva'));
+        $servizi->bindParam(7, $request->get('inclusa'));
+        $servizi->bindParam(8, $request->get('id'));
+        $servizi->execute();
+
+        return $app->json(array(
+            'notice' => 'success',
+            'fattura' => $request->get('id'),
+            'messages' => SUCCESS_MESSAGE
+        ));
+
+    } catch (PDOException $Exception) {
+        return $app->json(array(
+            'notice' => 'danger',
+            'code' => $Exception->getCode(),
+            'messages' => $Exception->getMessage()
+        ));
+    }
 });
 
 /**
