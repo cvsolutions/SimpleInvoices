@@ -100,12 +100,12 @@ $app->post('/configurazione', function (Request $request) use ($DB, $app) {
 
             if ($type == 'image/jpeg') {
 
-                if (move_uploaded_file($tmp_name, 'data/logo.png')) {
+                if (move_uploaded_file($tmp_name, 'data/logo.jpg')) {
                     return $app->json(array(
                         'notice' => 'success',
                         'messages' => SUCCESS_MESSAGE,
                         'logo' => 1,
-                        'img' => '../data/logo.png'
+                        'img' => '../data/logo.jpg'
                     ));
                 }
 
@@ -379,11 +379,21 @@ $app->post('/cancella-servizo', function (Request $request) use ($DB, $app) {
  */
 $app->get('/pdf/{id}.pdf', function ($id) use ($DB, $tpl, $app) {
 
+    /**
+     * Recupero i parametri di configurazione
+     */
+    $configurazione = $DB->prepare('SELECT * FROM configurazione LIMIT 0,1');
+    $configurazione->execute();
+
+    $tpl->assign('configurazione', $configurazione->fetch(PDO::FETCH_ASSOC));
+
+    /** @var DOMPDF $dompdf */
     $dompdf = new DOMPDF();
     $dompdf->load_html($tpl->fetch('pdf.tpl'));
     $dompdf->render();
-    $dompdf->stream(sprintf('%d.pdf', $id), array('Attachment' => 0));
-    return true;
+    // $dompdf->stream(sprintf('%d.pdf', $id), array('Attachment' => 0));
+    $tpl->display('pdf.tpl');
+    return false;
 });
 
 $DB = null;
