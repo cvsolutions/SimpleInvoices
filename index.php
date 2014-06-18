@@ -305,6 +305,7 @@ $app->get('/servizi/{fattura}.json', function ($fattura) use ($DB, $app) {
     $obj = array();
     foreach ($servizi->fetchAll(PDO::FETCH_ASSOC) as $row) {
         $obj[] = array(
+            'id' => $row['id'],
             'codice' => $row['codice'],
             'descrizione' => $row['descrizione'],
             'prezzo' => $row['prezzo'],
@@ -336,6 +337,34 @@ $app->post('/servizio', function (Request $request) use ($DB, $app) {
     $servizi->bindParam(1, $request->get('id'));
     $servizi->execute();
     return $app->json($servizi->fetch(PDO::FETCH_ASSOC));
+});
+
+/**
+ * Cancello il servizio selezionato
+ */
+$app->post('/cancella-servizo', function (Request $request) use ($DB, $app) {
+
+    try {
+
+        $servizi = $DB->prepare('UPDATE servizi SET id_fattura = 0, attivo = 0 WHERE id_fattura = ?');
+        $servizi->bindParam(1, $request->get('id'));
+        $servizi->execute();
+
+        return $app->json(array(
+            'notice' => 'success',
+            'fattura' => $request->get('id_fattura'),
+            'messages' => SUCCESS_MESSAGE
+        ));
+
+    } catch (PDOException $Exception) {
+
+        return $app->json(array(
+            'notice' => 'danger',
+            'fattura' => $request->get('id_fattura'),
+            'code' => $Exception->getCode(),
+            'messages' => $Exception->getMessage()
+        ));
+    }
 });
 
 $DB = null;

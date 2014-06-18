@@ -170,12 +170,8 @@ $(document).ready(function () {
             },
             dataType: 'json',
             cache: false,
-            beforeSend: function () {
-                $('.btn').isLoading();
-            },
             success: function (data) {
-                $('.btn').isLoading('hide');
-                $('.btn').attr('readonly', false);
+                $('.btn').attr('disabled', false);
                 $("#lista-servizi").dataTable().fnDestroy();
                 $('#lista-servizi').dataTable({
                     ajax: '/servizi/' + data.fattura + '.json',
@@ -195,15 +191,25 @@ $(document).ready(function () {
                         {
                             targets: -6,
                             data: 'codice',
-                            render: function (data, type, full) {
-                                return '-';
+                            render: function (data, type, row) {
+                                return '<div class="btn-group">' +
+                                    '<a href="#" class="btn btn-default btn-xs">' + data + '</a>' +
+                                    '<button type="button" class="btn btn-default btn-xs dropdown-toggle" data-toggle="dropdown">' +
+                                    '<span class="caret"></span>' +
+                                    '<span class="sr-only">Toggle Dropdown</span>' +
+                                    '</button>' +
+                                    '<ul class="dropdown-menu" role="menu">' +
+                                    '<li><a href="#">Modifica</a></li>' +
+                                    '<li><a href="javascript:void(0)" id="cancella_servizio" data-fattura="' + row.id + '">Cancella</a></li>' +
+                                    '</ul>' +
+                                    '</div>';
                             }
                         }
                     ]
                 });
             },
             error: function (xhr, ajaxOptions, thrownError) {
-                $('.btn').isLoading('hide');
+                alert(thrownError);
             }
         });
         return false;
@@ -234,6 +240,7 @@ $(document).ready(function () {
                 $('#provincia').val(data.provincia);
             },
             error: function (xhr, ajaxOptions, thrownError) {
+                alert(thrownError);
             }
         });
         return false;
@@ -263,9 +270,21 @@ $(document).ready(function () {
                 $('#iva').val(data.iva);
             },
             error: function (xhr, ajaxOptions, thrownError) {
+                alert(thrownError);
             }
         });
         return false;
+    });
+
+    /**
+     * click Cancella Servizio
+     */
+    $('#cancella_servizio').click(function () {
+
+        var fattura = $(this).data('fattura');
+        alert(fattura);
+
+
     });
 
 
