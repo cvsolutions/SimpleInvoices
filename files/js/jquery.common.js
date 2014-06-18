@@ -44,9 +44,9 @@ $(document).ready(function () {
                         '<span class="sr-only">Toggle Dropdown</span>' +
                         '</button>' +
                         '<ul class="dropdown-menu" role="menu">' +
-                        '<li><a href="/pdf/' + row.id + '.pdf">Esporta in PDF</a></li>' +
+                        '<li><a href="/pdf/' + row.id + '.pdf"><span class="glyphicon glyphicon-download-alt"></span> Esporta in PDF</a></li>' +
                         '<li class="divider"></li>' +
-                        '<li><a href="/elimina-fattura/' + row.id + '">Cancella</a></li>' +
+                        '<li><a href="/elimina-fattura/' + row.id + '"><span class="glyphicon glyphicon-trash"></span> Cancella</a></li>' +
                         '</ul>' +
                         '</div>';
                 }
@@ -280,6 +280,10 @@ $(document).ready(function () {
         return false;
     });
 
+    /**
+     * kkk
+     * @type {*|jQuery}
+     */
     var id_fattura = $('#id').val();
     $('#lista-servizi').dataTable({
         ajax: '/servizi/' + id_fattura + '.json',
@@ -318,6 +322,47 @@ $(document).ready(function () {
                 }
             }
         ]
+    });
+
+    /**
+     * submit modifica fattura
+     */
+    $('#modifica_fattura').submit(function () {
+
+        var result = $('#result');
+        var id_fattura = $('#id').val();
+
+        $.ajax({
+            url: '/modifica-fattura/' + id_fattura,
+            type: 'POST',
+            data: new FormData(this),
+            processData: false,
+            contentType: false,
+            dataType: 'json',
+            cache: false,
+            beforeSend: function () {
+                $('.btn').isLoading();
+            },
+            success: function (data) {
+                $('.btn').isLoading('hide');
+                result.fadeIn().show();
+                result.append($('<div/>').attr({
+                    'class': 'alert alert-' + data.notice + ' alert-dismissable'
+                }).append('<div/>').html(data.messages));
+                setTimeout(function () {
+                    result.fadeOut();
+                    $('.alert-dismissable').remove();
+                }, delay);
+            },
+            error: function (xhr, ajaxOptions, thrownError) {
+                $('.btn').isLoading('hide');
+                result.fadeIn().show();
+                result.append($('<div/>').attr({
+                    'class': 'alert alert-danger alert-dismissable'
+                }).append('<div/>').html(thrownError));
+            }
+        });
+        return false;
     });
 
     //...

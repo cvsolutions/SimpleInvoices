@@ -31,12 +31,10 @@ define('IMAGES_ONLY_MESSAGE', 'È possibile inserire solo immagini!');
 /**
  * Homepage
  * Elenco Fatture
+ * Elimino i servizi non necessari
  */
 $app->get('/', function () use ($DB, $tpl) {
 
-    /**
-     * Elimino i servizi non necessari
-     */
     $servizi = $DB->prepare('DELETE FROM servizi WHERE attivo = 0');
     $servizi->execute();
 
@@ -45,8 +43,7 @@ $app->get('/', function () use ($DB, $tpl) {
 });
 
 /**
- * Restituisce tutte le fatture
- * in formato JSON
+ * Restituisce tutte le fatture in formato JSON
  */
 $app->get('/fatture.json', function () use ($DB, $app) {
 
@@ -74,9 +71,6 @@ $app->get('/fatture.json', function () use ($DB, $app) {
  */
 $app->get('/configurazione', function () use ($DB, $tpl) {
 
-    /**
-     * Recupero i parametri di configurazione
-     */
     $configurazione = $DB->prepare('SELECT * FROM configurazione LIMIT 0,1');
     $configurazione->execute();
 
@@ -87,7 +81,7 @@ $app->get('/configurazione', function () use ($DB, $tpl) {
 
 /**
  * POST Configurazione
- * aggiorno i dati nel database
+ * Aggiorno i dati nel database
  */
 $app->post('/configurazione', function (Request $request) use ($DB, $app) {
 
@@ -124,9 +118,6 @@ $app->post('/configurazione', function (Request $request) use ($DB, $app) {
 
         try {
 
-            /**
-             * Aggiorno i dati nel database
-             */
             $configurazione = $DB->prepare('UPDATE configurazione SET ragione_sociale = ?, codice_fiscale = ?, partita_iva = ?, indirizzo = ?, cap = ?, citta = ?, provincia = ?, telefono = ?, fax = ?, email = ?, pie_di_pagina = ?');
             $configurazione->bindParam(1, $request->get('ragione_sociale'));
             $configurazione->bindParam(2, $request->get('codice_fiscale'));
@@ -148,6 +139,7 @@ $app->post('/configurazione', function (Request $request) use ($DB, $app) {
             ));
 
         } catch (PDOException $Exception) {
+
             return $app->json(array(
                 'notice' => 'danger',
                 'logo' => 0,
@@ -163,21 +155,12 @@ $app->post('/configurazione', function (Request $request) use ($DB, $app) {
  */
 $app->get('/aggiungi-fattura', function () use ($DB, $tpl) {
 
-    /**
-     * Il prossimo numero della fattura
-     */
     $fatture = $DB->prepare('SELECT COUNT(numero) AS totale FROM fatture LIMIT 0,1');
     $fatture->execute();
 
-    /**
-     * Tutti i clienti registrati
-     */
     $clienti = $DB->prepare('SELECT * FROM clienti');
     $clienti->execute();
 
-    /**
-     * Tutti i servizi attivi
-     */
     $servizi = $DB->prepare('SELECT * FROM servizi WHERE attivo = 1');
     $servizi->execute();
 
@@ -199,9 +182,6 @@ $app->post('/aggiungi-fattura', function (Request $request) use ($DB, $app) {
 
     try {
 
-        /**
-         * Nuova fattura
-         */
         $fatture = $DB->prepare('INSERT INTO fatture (id, numero, anno, emissione, oggetto, pagamento, note, id_cliente) VALUES (?, ?, ?, ?, ?, ?, ?, ?)');
         $fatture->bindParam(1, $request->get('id'));
         $fatture->bindParam(2, $request->get('numero'));
@@ -255,6 +235,7 @@ $app->post('/aggiungi-fattura', function (Request $request) use ($DB, $app) {
         ));
 
     } catch (PDOException $Exception) {
+
         return $app->json(array(
             'notice' => 'danger',
             'code' => $Exception->getCode(),
@@ -349,32 +330,23 @@ $app->post('/servizio', function (Request $request) use ($DB, $app) {
 });
 
 
+/**
+ * Modifico la Fattura
+ */
 $app->get('/modifica-fattura/{id}', function ($id) use ($DB, $tpl) {
 
-    /**
-     * Il dettaglio della fattura
-     */
     $fatture = $DB->prepare('SELECT * FROM fatture WHERE id = ? LIMIT 0,1');
     $fatture->bindParam(1, $id);
     $fatture->execute();
     $row = $fatture->fetch(PDO::FETCH_ASSOC);
 
-    /**
-     * Il dettaglio del cliente
-     */
     $cliente = $DB->prepare('SELECT * FROM clienti WHERE id = ? LIMIT 0,1');
     $cliente->bindParam(1, $row['id_cliente']);
     $cliente->execute();
 
-    /**
-     * Tutti i clienti registrati
-     */
     $clienti = $DB->prepare('SELECT * FROM clienti');
     $clienti->execute();
 
-    /**
-     * Tutti i servizi attivi
-     */
     $servizi = $DB->prepare('SELECT * FROM servizi WHERE attivo = 1');
     $servizi->execute();
 
@@ -386,12 +358,56 @@ $app->get('/modifica-fattura/{id}', function ($id) use ($DB, $tpl) {
     return false;
 });
 
-/**
- * Modifico la fattura
- */
-$app->post('/modifica-fattura', function () use ($DB, $tpl) {
 
-    return false;
+/**
+ * POST Modifico la Fattura
+ */
+$app->post('/modifica-fattura/{id}', function ($id, Request $request) use ($DB, $app) {
+
+    try {
+
+        $fatture = $DB->prepare('UPDATE fatture SET numero = ?, emissione = ?, oggetto = ?, pagamento = ?, note = ?, id_cliente = ? WHERE id = ?');
+        $fatture->bindParam(1, $request->get('numero'));
+        $fatture->bindParam(2, $request->get('emissione'));
+        $fatture->bindParam(3, $request->get('oggetto'));
+        $fatture->bindParam(4, $request->get('pagamento'));
+        $fatture->bindParam(5, $request->get('note'));
+        $fatture->bindParam(6, $request->get('id_cliente'));
+        $fatture->bindParam(7, $id);
+        $fatture->execute();
+
+        $clienti = $DB->prepare('UPDATE clienti SET ragione_sociale = ?, codice_fiscale = ?, partita_iva = ?, indirizzo = ?, cap = ?, citta = ?, provincia = ? WHERE id = ?');
+        $clienti->bindParam(1, $request->get('ragione_sociale'));
+        $clienti->bindParam(2, $request->get('codice_fiscale'));
+        $clienti->bindParam(3, $request->get('partita_iva'));
+        $clienti->bindParam(4, $request->get('indirizzo'));
+        $clienti->bindParam(5, $request->get('cap'));
+        $clienti->bindParam(6, $request->get('citta'));
+        $clienti->bindParam(7, $request->get('provincia'));
+        $clienti->bindParam(8, $request->get('id_cliente'));
+        $clienti->execute();
+
+        /**
+         * Dopo aver salvato la fattura
+         * abilito i servizi attivi
+         */
+        $servizi = $DB->prepare('UPDATE servizi SET attivo = 1 WHERE id_fattura = ? AND attivo = 0');
+        $servizi->bindParam(1, $id);
+        $servizi->execute();
+
+        return $app->json(array(
+            'notice' => 'success',
+            'fattura' => $id,
+            'messages' => SUCCESS_MESSAGE
+        ));
+
+    } catch (PDOException $Exception) {
+        return $app->json(array(
+            'notice' => 'danger',
+            'code' => $Exception->getCode(),
+            'messages' => $Exception->getMessage()
+        ));
+    }
 });
 
 /**
