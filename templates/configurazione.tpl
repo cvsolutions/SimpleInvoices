@@ -129,7 +129,7 @@
 
                                     <div class="row">
                                         <div class="col-xs-4">
-                                            <img src="../data/logo.png" id="logo" class="img-responsive img-thumbnail" alt=""/>
+                                            <img src="../data/logo.jpg" id="logo" class="img-responsive img-thumbnail" alt=""/>
                                         </div>
                                         <div class="col-xs-8">
                                             <div class="form-group">
