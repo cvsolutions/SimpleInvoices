@@ -7,6 +7,12 @@ $(document).ready(function () {
     var delay = 3000;
 
     /**
+     * id fattura
+     * @type {*|jQuery}
+     */
+    var id_fattura = $('#id').val();
+
+    /**
      * filestyle
      */
     $(':file').filestyle();
@@ -55,7 +61,7 @@ $(document).ready(function () {
     });
 
     /**
-     * submit configurazione
+     * Submit Configurazione
      */
     $('#configurazione').submit(function () {
 
@@ -102,7 +108,7 @@ $(document).ready(function () {
     });
 
     /**
-     * submit fattura
+     * Submit Aggiungi Fattura
      */
     $('#aggiungi_fattura').submit(function () {
 
@@ -142,7 +148,7 @@ $(document).ready(function () {
     });
 
     /**
-     * submit servizi
+     * Submit Servizi
      */
     $('#servizi').click(function () {
 
@@ -192,21 +198,7 @@ $(document).ready(function () {
                             targets: -6,
                             data: 'codice',
                             render: function (data, type, row) {
-                                return '<a href="#" class="btn btn-default btn-xs" data-toggle="modal" data-target="#editModal-' + row.id + '">' + data + '</a>' +
-                                    '<div class="modal fade" id="editModal-' + row.id + '" tabindex="-1" role="dialog" aria-labelledby="" aria-hidden="true">' +
-                                    '<div class="modal-dialog">' +
-                                    '<div class="modal-content">' +
-                                    '<div class="modal-header">' +
-                                    '<button type="button" class="close" data-dismiss="modal" aria-hidden="true">&times;</button>' +
-                                    '<h4 class="modal-title" id="">Modifica Servizio</h4>' +
-                                    '</div>' +
-                                    '<div class="modal-body"></div>' +
-                                    '<div class="modal-footer">' +
-                                    '<button id="pippo" class="btn btn-success">Save</button>' +
-                                    '</div>' +
-                                    '</div>' +
-                                    '</div>' +
-                                    '</div>';
+                                return '<a href="/modifica-servizi/' + row.id + '" class="btn btn-default btn-xs open-box" data-fancybox-type="iframe">' + data + '</a>';
                             }
                         }
                     ]
@@ -220,7 +212,7 @@ $(document).ready(function () {
     });
 
     /**
-     * change Ragione Sociale
+     * Change Ragione Sociale
      */
     $('#id_cliente').change(function () {
 
@@ -251,7 +243,7 @@ $(document).ready(function () {
     });
 
     /**
-     * change Aggiungi Servizio
+     * Change Servizio
      */
     $('#id_servizio').change(function () {
 
@@ -281,10 +273,9 @@ $(document).ready(function () {
     });
 
     /**
-     * kkk
-     * @type {*|jQuery}
+     * dataTable
+     * Tutti i servizi della Fattura
      */
-    var id_fattura = $('#id').val();
     $('#lista-servizi').dataTable({
         ajax: '/servizi/' + id_fattura + '.json',
         aLengthMenu: [
@@ -304,28 +295,14 @@ $(document).ready(function () {
                 targets: -6,
                 data: 'codice',
                 render: function (data, type, row) {
-                    return '<a href="#" class="btn btn-default btn-xs" data-toggle="modal" data-target="#editModal-' + row.id + '">' + data + '</a>' +
-                        '<div class="modal fade" id="editModal-' + row.id + '" tabindex="-1" role="dialog" aria-labelledby="" aria-hidden="true">' +
-                        '<div class="modal-dialog">' +
-                        '<div class="modal-content">' +
-                        '<div class="modal-header">' +
-                        '<button type="button" class="close" data-dismiss="modal" aria-hidden="true">&times;</button>' +
-                        '<h4 class="modal-title" id="">Modifica Servizio</h4>' +
-                        '</div>' +
-                        '<div class="modal-body"></div>' +
-                        '<div class="modal-footer">' +
-                        '<button id="pippo" class="btn btn-success">Save</button>' +
-                        '</div>' +
-                        '</div>' +
-                        '</div>' +
-                        '</div>';
+                    return '<a href="/modifica-servizi/' + row.id + '" class="btn btn-default btn-xs open-box" data-fancybox-type="iframe">' + data + '</a>';
                 }
             }
         ]
     });
 
     /**
-     * submit modifica fattura
+     * Submit Modifica Fattura
      */
     $('#modifica_fattura').submit(function () {
 
@@ -363,6 +340,21 @@ $(document).ready(function () {
             }
         });
         return false;
+    });
+
+    /**
+     * fancybox
+     */
+    $('.open-box').fancybox({
+        maxWidth: 800,
+        maxHeight: 600,
+        fitToView: false,
+        width: '70%',
+        height: '70%',
+        autoSize: false,
+        closeClick: false,
+        openEffect: 'none',
+        closeEffect: 'none'
     });
 
     //...

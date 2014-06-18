@@ -24,7 +24,6 @@ $app['debug'] = true;
 /**
  * define var
  */
-
 define('SUCCESS_MESSAGE', 'Operazione eseguita con successo!');
 define('IMAGES_ONLY_MESSAGE', 'È possibile inserire solo immagini!');
 
@@ -329,7 +328,6 @@ $app->post('/servizio', function (Request $request) use ($DB, $app) {
     return $app->json($servizi->fetch(PDO::FETCH_ASSOC));
 });
 
-
 /**
  * Modifico la Fattura
  */
@@ -357,7 +355,6 @@ $app->get('/modifica-fattura/{id}', function ($id) use ($DB, $tpl) {
     $tpl->display('modifica-fattura.tpl');
     return false;
 });
-
 
 /**
  * POST Modifico la Fattura
@@ -408,6 +405,15 @@ $app->post('/modifica-fattura/{id}', function ($id, Request $request) use ($DB, 
             'messages' => $Exception->getMessage()
         ));
     }
+});
+
+/**
+ * Modifica Servizi
+ */
+$app->get('/modifica-servizi/{id}', function ($id) use ($DB, $tpl) {
+
+    $tpl->display('modifica-servizi.tpl');
+    return false;
 });
 
 /**

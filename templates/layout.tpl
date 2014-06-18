@@ -9,6 +9,7 @@
     <link rel="stylesheet" href="../files/css/bootstrap-theme.css">
     <link rel="stylesheet" href="../files/css/jquery.dataTables.css">
     <link rel="stylesheet" href="../files/css/datepicker.css">
+    <link rel="stylesheet" href="../files/fancybox/jquery.fancybox.css">
     <link rel="stylesheet" href="../files/css/style.css">
 
     <!--[if lt IE 9]>
@@ -50,6 +51,8 @@
 <script src="../files/js/bootstrap-filestyle.js"></script>
 <script src="../files/js/bootstrap-datepicker.js"></script>
 <script src="../files/js/jquery.isloading.js"></script>
+<script src="../files/fancybox/jquery.fancybox.pack.js"></script>
+<script src="../files/fancybox/jquery.fancybox.js"></script>
 <script src="../files/js/jquery.common.js"></script>
 
 </body>
