@@ -52,6 +52,7 @@ $app->get('/fatture.json', function () use ($DB, $app) {
 
     $fatture = $DB->prepare('SELECT fatture.*, clienti.ragione_sociale  FROM fatture, clienti WHERE fatture.id_cliente = clienti.id');
     $fatture->execute();
+
     $obj = array();
     foreach ($fatture->fetchAll(PDO::FETCH_ASSOC) as $row) {
         $obj[] = array(
@@ -184,7 +185,7 @@ $app->get('/aggiungi-fattura', function () use ($DB, $tpl) {
     $tpl->assign('clienti', $clienti->fetchAll(PDO::FETCH_ASSOC));
     $tpl->assign('servizi', $servizi->fetchAll(PDO::FETCH_ASSOC));
     $tpl->assign('id', mt_rand(11111, 99999));
-    $tpl->display('fattura.tpl');
+    $tpl->display('aggiungi-fattura.tpl');
     return false;
 });
 
@@ -309,6 +310,7 @@ $app->get('/servizi/{fattura}.json', function ($fattura) use ($DB, $app) {
     $servizi = $DB->prepare('SELECT * FROM servizi WHERE id_fattura = ?');
     $servizi->bindParam(1, $fattura);
     $servizi->execute();
+
     $obj = array();
     foreach ($servizi->fetchAll(PDO::FETCH_ASSOC) as $row) {
         $obj[] = array(
@@ -346,32 +348,66 @@ $app->post('/servizio', function (Request $request) use ($DB, $app) {
     return $app->json($servizi->fetch(PDO::FETCH_ASSOC));
 });
 
+
+$app->get('/modifica-fattura/{id}', function ($id) use ($DB, $tpl) {
+
+    /**
+     * Il dettaglio della fattura
+     */
+    $fatture = $DB->prepare('SELECT * FROM fatture WHERE id = ? LIMIT 0,1');
+    $fatture->bindParam(1, $id);
+    $fatture->execute();
+    $row = $fatture->fetch(PDO::FETCH_ASSOC);
+
+    /**
+     * Il dettaglio del cliente
+     */
+    $cliente = $DB->prepare('SELECT * FROM clienti WHERE id = ? LIMIT 0,1');
+    $cliente->bindParam(1, $row['id_cliente']);
+    $cliente->execute();
+
+    /**
+     * Tutti i clienti registrati
+     */
+    $clienti = $DB->prepare('SELECT * FROM clienti');
+    $clienti->execute();
+
+    /**
+     * Tutti i servizi attivi
+     */
+    $servizi = $DB->prepare('SELECT * FROM servizi WHERE attivo = 1');
+    $servizi->execute();
+
+    $tpl->assign('clienti', $clienti->fetchAll(PDO::FETCH_ASSOC));
+    $tpl->assign('servizi', $servizi->fetchAll(PDO::FETCH_ASSOC));
+    $tpl->assign('cliente', $cliente->fetch(PDO::FETCH_ASSOC));
+    $tpl->assign('fatture', $row);
+    $tpl->display('modifica-fattura.tpl');
+    return false;
+});
+
 /**
- * Cancello il servizio selezionato
+ * Modifico la fattura
  */
-$app->post('/cancella-servizo', function (Request $request) use ($DB, $app) {
+$app->post('/modifica-fattura', function () use ($DB, $tpl) {
 
-    try {
+    return false;
+});
 
-        $servizi = $DB->prepare('UPDATE servizi SET id_fattura = 0, attivo = 0 WHERE id_fattura = ?');
-        $servizi->bindParam(1, $request->get('id'));
-        $servizi->execute();
+/**
+ * Elimino la fattura
+ */
+$app->get('/elimina-fattura/{id}', function ($id) use ($DB, $app) {
 
-        return $app->json(array(
-            'notice' => 'success',
-            'fattura' => $request->get('id_fattura'),
-            'messages' => SUCCESS_MESSAGE
-        ));
+    $fatture = $DB->prepare('DELETE FROM fatture WHERE id = ?');
+    $fatture->bindParam(1, $id);
+    $fatture->execute();
 
-    } catch (PDOException $Exception) {
+    $servizi = $DB->prepare('DELETE FROM servizi WHERE id_fattura = ?');
+    $servizi->bindParam(1, $id);
+    $servizi->execute();
+    return $app->redirect('/');
 
-        return $app->json(array(
-            'notice' => 'danger',
-            'fattura' => $request->get('id_fattura'),
-            'code' => $Exception->getCode(),
-            'messages' => $Exception->getMessage()
-        ));
-    }
 });
 
 /**
@@ -379,18 +415,30 @@ $app->post('/cancella-servizo', function (Request $request) use ($DB, $app) {
  */
 $app->get('/pdf/{id}.pdf', function ($id) use ($DB, $tpl, $app) {
 
+    /**
+     * Recupero i parametri di configurazione
+     */
     $configurazione = $DB->prepare('SELECT * FROM configurazione LIMIT 0,1');
     $configurazione->execute();
 
+    /**
+     * Il dettaglio della fattura
+     */
     $fatture = $DB->prepare('SELECT * FROM fatture WHERE id = ? LIMIT 0,1');
     $fatture->bindParam(1, $id);
     $fatture->execute();
     $row = $fatture->fetch(PDO::FETCH_ASSOC);
 
+    /**
+     * Il dettaglio del cliente
+     */
     $clienti = $DB->prepare('SELECT * FROM clienti WHERE id = ? LIMIT 0,1');
     $clienti->bindParam(1, $row['id_cliente']);
     $clienti->execute();
 
+    /**
+     * Tutti i servizi della fattura
+     */
     $servizi = $DB->prepare('SELECT * FROM servizi WHERE id_fattura = ?');
     $servizi->bindParam(1, $row['id']);
     $servizi->execute();

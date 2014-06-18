@@ -9,7 +9,7 @@
                 </div>
                 <div class="panel-body">
 
-                    <form id="fattura" role="form" autocomplete="off" method="post">
+                    <form id="aggiungi_fattura" role="form" autocomplete="off" method="post">
 
                         <div class="row">
                             <div class="col-xs-12">
@@ -237,7 +237,7 @@
                                                 <label>IVA</label>
                                                 <select class="form-control input-sm" name="iva" id="iva">
                                                     <option value="0">-</option>
-                                                    {for $foo=1 to 99}
+                                                    {for $foo=1 to 100}
                                                         <option value="{$foo}">{$foo}%</option>
                                                     {/for}
                                                 </select>

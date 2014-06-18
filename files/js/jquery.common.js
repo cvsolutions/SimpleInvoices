@@ -46,7 +46,7 @@ $(document).ready(function () {
                         '<ul class="dropdown-menu" role="menu">' +
                         '<li><a href="/pdf/' + row.id + '.pdf">Esporta in PDF</a></li>' +
                         '<li class="divider"></li>' +
-                        '<li><a href="#">Cancella</a></li>' +
+                        '<li><a href="/elimina-fattura/' + row.id + '">Cancella</a></li>' +
                         '</ul>' +
                         '</div>';
                 }
@@ -104,7 +104,7 @@ $(document).ready(function () {
     /**
      * submit fattura
      */
-    $('#fattura').submit(function () {
+    $('#aggiungi_fattura').submit(function () {
 
         var result = $('#result');
 
@@ -278,6 +278,46 @@ $(document).ready(function () {
             }
         });
         return false;
+    });
+
+    var id_fattura = $('#id').val();
+    $('#lista-servizi').dataTable({
+        ajax: '/servizi/' + id_fattura + '.json',
+        aLengthMenu: [
+            [3, 2, 1],
+            [3, 2, 1]
+        ],
+        columns: [
+            { data: 'codice' },
+            { data: 'descrizione' },
+            { data: 'prezzo' },
+            { data: 'quantita' },
+            { data: 'totale' },
+            { data: 'iva' }
+        ],
+        columnDefs: [
+            {
+                targets: -6,
+                data: 'codice',
+                render: function (data, type, row) {
+                    return '<a href="#" class="btn btn-default btn-xs" data-toggle="modal" data-target="#editModal-' + row.id + '">' + data + '</a>' +
+                        '<div class="modal fade" id="editModal-' + row.id + '" tabindex="-1" role="dialog" aria-labelledby="" aria-hidden="true">' +
+                        '<div class="modal-dialog">' +
+                        '<div class="modal-content">' +
+                        '<div class="modal-header">' +
+                        '<button type="button" class="close" data-dismiss="modal" aria-hidden="true">&times;</button>' +
+                        '<h4 class="modal-title" id="">Modifica Servizio</h4>' +
+                        '</div>' +
+                        '<div class="modal-body"></div>' +
+                        '<div class="modal-footer">' +
+                        '<button id="pippo" class="btn btn-success">Save</button>' +
+                        '</div>' +
+                        '</div>' +
+                        '</div>' +
+                        '</div>';
+                }
+            }
+        ]
     });
 
     //...
