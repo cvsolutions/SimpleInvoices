@@ -24,7 +24,14 @@ define('IMAGES_ONLY_MESSAGE', 'È possibile inserire solo immagini!');
 /**
  * Homepage
  */
-$app->get('/', function () use ($tpl) {
+$app->get('/', function () use ($DB, $tpl) {
+
+    /**
+     * Elimino i servizi non necessari
+     */
+    $servizi = $DB->prepare('DELETE FROM servizi WHERE attivo = 0');
+    $servizi->execute();
+
     $tpl->display('index.tpl');
     return false;
 });
@@ -56,6 +63,9 @@ $app->get('/fatture.json', function () use ($DB, $app) {
  */
 $app->get('/configurazione', function () use ($DB, $tpl) {
 
+    /**
+     * Recupero i parametri di configurazione
+     */
     $configurazione = $DB->prepare('SELECT * FROM configurazione LIMIT 0,1');
     $configurazione->execute();
 
@@ -102,6 +112,9 @@ $app->post('/configurazione', function (Request $request) use ($DB, $app) {
 
         try {
 
+            /**
+             * Aggiorno la configurazione
+             */
             $configurazione = $DB->prepare('UPDATE configurazione SET ragione_sociale = ?, codice_fiscale = ?, partita_iva = ?, indirizzo = ?, cap = ?, citta = ?, provincia = ?, telefono = ?, fax = ?, email = ?, pie_di_pagina = ?');
             $configurazione->bindParam(1, $request->get('ragione_sociale'));
             $configurazione->bindParam(2, $request->get('codice_fiscale'));
@@ -114,8 +127,8 @@ $app->post('/configurazione', function (Request $request) use ($DB, $app) {
             $configurazione->bindParam(9, $request->get('fax'));
             $configurazione->bindParam(10, $request->get('email'));
             $configurazione->bindParam(11, $request->get('pie_di_pagina'));
-
             $configurazione->execute();
+
             return $app->json(array(
                 'notice' => 'success',
                 'logo' => 0,
@@ -138,13 +151,22 @@ $app->post('/configurazione', function (Request $request) use ($DB, $app) {
  */
 $app->get('/aggiungi-fattura', function () use ($DB, $tpl) {
 
+    /**
+     * Il prossimo numero della fattura
+     */
     $fatture = $DB->prepare('SELECT COUNT(numero) AS totale FROM fatture LIMIT 0,1');
     $fatture->execute();
 
+    /**
+     * Tutti i clienti registrati
+     */
     $clienti = $DB->prepare('SELECT * FROM clienti');
     $clienti->execute();
 
-    $servizi = $DB->prepare('SELECT * FROM servizi');
+    /**
+     * Tutti i servizi attivi
+     */
+    $servizi = $DB->prepare('SELECT * FROM servizi WHERE attivo = 1');
     $servizi->execute();
 
     $tpl->assign('fatture', $fatture->fetch(PDO::FETCH_ASSOC));
@@ -165,6 +187,9 @@ $app->post('/aggiungi-fattura', function (Request $request) use ($DB, $app) {
 
     try {
 
+        /**
+         * Nuova fattura
+         */
         $fatture = $DB->prepare('INSERT INTO fatture (id, numero, anno, emissione, oggetto, pagamento, note, id_cliente) VALUES (?, ?, ?, ?, ?, ?, ?, ?)');
         $fatture->bindParam(1, $request->get('id'));
         $fatture->bindParam(2, $request->get('numero'));
@@ -174,6 +199,7 @@ $app->post('/aggiungi-fattura', function (Request $request) use ($DB, $app) {
         $fatture->bindParam(6, $request->get('pagamento'));
         $fatture->bindParam(7, $request->get('note'));
         $fatture->bindParam(8, $id_cliente);
+        $fatture->execute();
 
         if ($cliente == 0) {
             $clienti = $DB->prepare('INSERT INTO clienti (id, ragione_sociale, codice_fiscale, partita_iva, indirizzo, cap, citta, provincia) VALUES (?, ?, ?, ?, ?, ?, ?, ?)');
@@ -188,7 +214,14 @@ $app->post('/aggiungi-fattura', function (Request $request) use ($DB, $app) {
             $clienti->execute();
         }
 
-        $fatture->execute();
+        /**
+         * Dopo aver salvato la fattura
+         * abilito i servizi attivi
+         */
+        $servizi = $DB->prepare('UPDATE servizi SET attivo = 1 WHERE id_fattura = ?');
+        $servizi->bindParam(1, $request->get('id'));
+        $servizi->execute();
+
         return $app->json(array(
             'notice' => 'success',
             'fattura' => $request->get('id'),
@@ -210,17 +243,9 @@ $app->post('/aggiungi-fattura', function (Request $request) use ($DB, $app) {
  */
 $app->post('/aggiungi-servizi', function (Request $request) use ($DB, $app) {
 
-    $servizi = $DB->prepare('INSERT INTO servizi (codice, descrizione, quantita, prezzo, iva, inclusa, id_fattura, attivo) VALUES (?, ?, ?, ?, ?, ?, ?, 0)');
-    $servizi->bindParam(1, $request->get('codice'));
-    $servizi->bindParam(2, $request->get('descrizione'));
-    $servizi->bindParam(3, $request->get('quantita'));
-    $servizi->bindParam(4, $request->get('prezzo'));
-    $servizi->bindParam(5, $request->get('iva'));
-    $servizi->bindParam(6, $request->get('inclusa'));
-    $servizi->bindParam(7, $request->get('id_fattura'));
+    try {
 
-    if ($request->get('id_servizio') > 0) {
-        $servizi = $DB->prepare('UPDATE servizi SET codice = ?, descrizione = ?, quantita = ?, prezzo = ?, iva = ?, inclusa = ?, id_fattura = ? WHERE id = ?');
+        $servizi = $DB->prepare('INSERT INTO servizi (codice, descrizione, quantita, prezzo, iva, inclusa, id_fattura, attivo) VALUES (?, ?, ?, ?, ?, ?, ?, 0)');
         $servizi->bindParam(1, $request->get('codice'));
         $servizi->bindParam(2, $request->get('descrizione'));
         $servizi->bindParam(3, $request->get('quantita'));
@@ -228,14 +253,21 @@ $app->post('/aggiungi-servizi', function (Request $request) use ($DB, $app) {
         $servizi->bindParam(5, $request->get('iva'));
         $servizi->bindParam(6, $request->get('inclusa'));
         $servizi->bindParam(7, $request->get('id_fattura'));
-        $servizi->bindParam(8, $request->get('id_servizio'));
         $servizi->execute();
-    }
 
+        if ($request->get('id_servizio') > 0) {
+            $servizi = $DB->prepare('UPDATE servizi SET codice = ?, descrizione = ?, quantita = ?, prezzo = ?, iva = ?, inclusa = ?, id_fattura = ? WHERE id = ?');
+            $servizi->bindParam(1, $request->get('codice'));
+            $servizi->bindParam(2, $request->get('descrizione'));
+            $servizi->bindParam(3, $request->get('quantita'));
+            $servizi->bindParam(4, $request->get('prezzo'));
+            $servizi->bindParam(5, $request->get('iva'));
+            $servizi->bindParam(6, $request->get('inclusa'));
+            $servizi->bindParam(7, $request->get('id_fattura'));
+            $servizi->bindParam(8, $request->get('id_servizio'));
+            $servizi->execute();
+        }
 
-    try {
-
-        $servizi->execute();
         return $app->json(array(
             'notice' => 'success',
             'fattura' => $request->get('id_fattura'),
