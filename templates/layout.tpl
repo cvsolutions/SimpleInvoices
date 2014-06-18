@@ -22,24 +22,29 @@
 
 <div class="container">
 
-    <div class="row">
-        <div class="col-xs-6">
-            <h1><img src="../files/folder-invoices-icon.png" alt=""/> Simple invoices 1.0</h1>
-        </div>
-        <div class="col-xs-6">
-            <br/>
+    {if not $smarty.get.hideHeader}
+        <div class="row">
+            <div class="col-xs-6">
+                <h1><img src="../files/folder-invoices-icon.png" alt=""/> Simple invoices 1.0</h1>
+            </div>
+            <div class="col-xs-6">
+                <br/>
 
-            <div class="btn-group pull-right">
-                <a href="/aggiungi-fattura" class="btn btn-default"><span class="glyphicon glyphicon-plus"></span> Aggiungi Fattura</a>
-                <a href="/" class="btn btn-default"><span class="glyphicon glyphicon-th-list"></span> Elenco Fatture</a>
-                <a href="/configurazione" class="btn btn-default"><span class="glyphicon glyphicon-user"></span> Configurazione</a>
+                <div class="btn-group pull-right">
+                    <a href="/aggiungi-fattura" class="btn btn-default"><span class="glyphicon glyphicon-plus"></span> Aggiungi Fattura</a>
+                    <a href="/" class="btn btn-default"><span class="glyphicon glyphicon-th-list"></span> Elenco Fatture</a>
+                    <a href="/configurazione" class="btn btn-default"><span class="glyphicon glyphicon-user"></span> Configurazione</a>
+                </div>
             </div>
         </div>
-    </div>
-
-    <div class="row">
-        <div class="col-xs-12">&nbsp;</div>
-    </div>
+        <div class="row">
+            <div class="col-xs-12">&nbsp;</div>
+        </div>
+    {else}
+        <div class="row">
+            <div class="col-xs-12">&nbsp;</div>
+        </div>
+    {/if}
 
     {block name="container"}{/block}
 

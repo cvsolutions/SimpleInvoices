@@ -197,7 +197,7 @@ $(document).ready(function () {
                             targets: -6,
                             data: 'codice',
                             render: function (data, type, row) {
-                                return '<a href="/modifica-servizi/' + row.id + '" class="btn btn-default btn-xs open-box" data-fancybox-type="iframe">' + data + '</a>';
+                                return '<a href="/modifica-servizi/' + row.id + '?hideHeader=1" class="btn btn-default btn-xs open-box" data-fancybox-type="iframe">' + data + '</a>';
                             }
                         }
                     ]
@@ -300,7 +300,7 @@ $(document).ready(function () {
                 targets: -6,
                 data: 'codice',
                 render: function (data, type, row) {
-                    return '<a href="/modifica-servizi/' + row.id + '" class="btn btn-default btn-xs open-box" data-fancybox-type="iframe">' + data + '</a>';
+                    return '<a href="/modifica-servizi/' + row.id + '?hideHeader=1" class="btn btn-default btn-xs open-box" data-fancybox-type="iframe">' + data + '</a>';
                 }
             }
         ]
@@ -351,8 +351,8 @@ $(document).ready(function () {
      * fancybox
      */
     $('.open-box').fancybox({
-        maxWidth: 800,
-        maxHeight: 600,
+        maxWidth: 640,
+        maxHeight: 480,
         fitToView: false,
         width: '70%',
         height: '70%',
