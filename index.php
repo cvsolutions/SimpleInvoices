@@ -391,8 +391,8 @@ $app->get('/pdf/{id}.pdf', function ($id) use ($DB, $tpl, $app) {
     $dompdf = new DOMPDF();
     $dompdf->load_html($tpl->fetch('pdf.tpl'));
     $dompdf->render();
-    // $dompdf->stream(sprintf('%d.pdf', $id), array('Attachment' => 0));
-    $tpl->display('pdf.tpl');
+    $dompdf->stream(sprintf('%d.pdf', $id), array('Attachment' => 0));
+    // $tpl->display('pdf.tpl');
     return false;
 });
 
