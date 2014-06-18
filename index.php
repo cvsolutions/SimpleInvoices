@@ -253,7 +253,7 @@ $app->post('/aggiungi-servizi', function (Request $request) use ($DB, $app) {
 
         $totale = ($request->get('prezzo') * $request->get('quantita'));
 
-        $servizi = $DB->prepare('INSERT INTO servizi (id, codice, descrizione, quantita, prezzo, totale, iva, inclusa, id_fattura, attivo) VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, 0)');
+        $servizi = $DB->prepare('INSERT INTO servizi (id, codice, descrizione, quantita, prezzo, totale, iva, id_fattura, attivo) VALUES (?, ?, ?, ?, ?, ?, ?, ?, 0)');
         $servizi->bindParam(1, mt_rand(11111, 99999));
         $servizi->bindParam(2, $request->get('codice'));
         $servizi->bindParam(3, $request->get('descrizione'));
@@ -261,8 +261,7 @@ $app->post('/aggiungi-servizi', function (Request $request) use ($DB, $app) {
         $servizi->bindParam(5, $request->get('prezzo'));
         $servizi->bindParam(6, $totale);
         $servizi->bindParam(7, $request->get('iva'));
-        $servizi->bindParam(8, $request->get('inclusa'));
-        $servizi->bindParam(9, $request->get('id_fattura'));
+        $servizi->bindParam(8, $request->get('id_fattura'));
         $servizi->execute();
 
         return $app->json(array(
@@ -421,22 +420,36 @@ $app->get('/modifica-servizi/{id}', function ($id) use ($DB, $tpl) {
     return false;
 });
 
+/**
+ * POST Modifica Servizi
+ */
 $app->post('/modifica-servizi', function (Request $request) use ($DB, $app) {
 
     try {
 
-        $totale = ($request->get('prezzo') * $request->get('quantita'));
+        switch ($request->get('action')) {
 
-        $servizi = $DB->prepare('UPDATE servizi SET codice = ?, descrizione = ?, quantita = ?, prezzo = ?, totale = ?, iva = ?, inclusa = ? WHERE id = ?');
-        $servizi->bindParam(1, $request->get('codice'));
-        $servizi->bindParam(2, $request->get('descrizione'));
-        $servizi->bindParam(3, $request->get('quantita'));
-        $servizi->bindParam(4, $request->get('prezzo'));
-        $servizi->bindParam(5, $totale);
-        $servizi->bindParam(6, $request->get('iva'));
-        $servizi->bindParam(7, $request->get('inclusa'));
-        $servizi->bindParam(8, $request->get('id'));
-        $servizi->execute();
+            case 1:
+                $totale = ($request->get('prezzo') * $request->get('quantita'));
+
+                $servizi = $DB->prepare('UPDATE servizi SET codice = ?, descrizione = ?, quantita = ?, prezzo = ?, totale = ?, iva = ? WHERE id = ?');
+                $servizi->bindParam(1, $request->get('codice'));
+                $servizi->bindParam(2, $request->get('descrizione'));
+                $servizi->bindParam(3, $request->get('quantita'));
+                $servizi->bindParam(4, $request->get('prezzo'));
+                $servizi->bindParam(5, $totale);
+                $servizi->bindParam(6, $request->get('iva'));
+                $servizi->bindParam(7, $request->get('id'));
+                $servizi->execute();
+                break;
+
+            case 2:
+                $servizi = $DB->prepare('UPDATE servizi SET id_fattura = 0, attivo = 0 WHERE id = ?');
+                $servizi->bindParam(1, $request->get('id'));
+                $servizi->execute();
+                break;
+
+        }
 
         return $app->json(array(
             'notice' => 'success',

@@ -169,7 +169,6 @@ $(document).ready(function () {
                 quantita: quantita,
                 prezzo: prezzo,
                 iva: iva,
-                inclusa: $('#inclusa').is(':checked') ? 1 : 0,
                 id_fattura: id_fattura,
                 id_servizio: id_servizio
             },
@@ -262,13 +261,6 @@ $(document).ready(function () {
                 $('#descrizione').val(data.descrizione);
                 $('#quantita').val(data.quantita);
                 $('#prezzo').val(data.prezzo);
-
-                if (data.inclusa == 1) {
-                    $('#inclusa').attr('checked', true);
-                } else {
-                    $('#inclusa').attr('checked', false);
-                }
-
                 $('#iva').val(data.iva);
             },
             error: function (xhr, ajaxOptions, thrownError) {
@@ -349,6 +341,9 @@ $(document).ready(function () {
         return false;
     });
 
+    /**
+     * submit Modifica Servizi
+     */
     $('#modifica_servizi').submit(function () {
         $.ajax({
             url: '/modifica-servizi',

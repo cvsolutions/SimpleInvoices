@@ -221,9 +221,6 @@
                                                 <label>Prezzo</label>
                                                 <input type="text" class="form-control input-sm" name="prezzo" id="prezzo" value="">
                                             </div>
-                                            <div class="checkbox">
-                                                <label><input type="checkbox" name="inclusa" id="inclusa" value="1"> IVA inclusa</label>
-                                            </div>
                                         </div>
 
                                         <div class="col-xs-1">

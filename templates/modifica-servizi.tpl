@@ -39,9 +39,6 @@
                                     <label>Prezzo</label>
                                     <input type="text" class="form-control input-sm" name="prezzo" id="prezzo" value="{$servizi.prezzo}">
                                 </div>
-                                <div class="checkbox">
-                                    <label><input type="checkbox" name="inclusa" id="inclusa" {if $servizi.inclusa eq 1}checked{/if} value="1"> IVA inclusa</label>
-                                </div>
                             </div>
 
                             <div class="col-xs-3">
@@ -52,6 +49,18 @@
                                         {for $foo=1 to 100}
                                             <option value="{$foo}" {if $foo eq $servizi.iva}selected{/if}>{$foo}%</option>
                                         {/for}
+                                    </select>
+                                </div>
+                            </div>
+                        </div>
+
+                        <div class="row">
+                            <div class="col-xs-12">
+                                <div class="form-group">
+                                    <label>Operazione</label>
+                                    <select class="form-control input-sm" name="action" id="action">
+                                        <option value="1">Modifica</option>
+                                        <option value="2">Cancella</option>
                                     </select>
                                 </div>
                             </div>
