@@ -29,9 +29,9 @@
             <br/>
 
             <div class="btn-group pull-right">
+                <a href="/aggiungi-fattura" class="btn btn-default"><span class="glyphicon glyphicon-plus"></span> Aggiungi Fattura</a>
+                <a href="/" class="btn btn-default"><span class="glyphicon glyphicon-th-list"></span> Elenco Fatture</a>
                 <a href="/configurazione" class="btn btn-default"><span class="glyphicon glyphicon-user"></span> Configurazione</a>
-                <a href="/aggiungi-fattura" class="btn btn-default"><span class="glyphicon glyphicon-plus"></span> Nuova Fattura</a>
-                <a href="/" class="btn btn-default"><span class="glyphicon glyphicon-th-list"></span> Fatture</a>
             </div>
         </div>
     </div>

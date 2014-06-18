@@ -39,13 +39,13 @@ $app->get('/fatture.json', function () use ($DB, $app) {
     $obj = array();
     foreach ($fatture->fetchAll(PDO::FETCH_ASSOC) as $row) {
         $obj[] = array(
-            0,
-            $row['numero'],
-            $row['anno'],
-            $row['emissione'],
-            $row['ragione_sociale'],
-            0,
-            0
+            'id' => $row['id'],
+            'numero' => $row['numero'],
+            'anno' => $row['anno'],
+            'emissione' => $row['emissione'],
+            'ragione_sociale' => $row['ragione_sociale'],
+            'totale' => 0,
+            'iva' => 0
         );
     }
     return $app->json(array('aaData' => $obj));

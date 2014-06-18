@@ -22,8 +22,36 @@ $(document).ready(function () {
      * dataTable
      */
     $('#fatture').dataTable({
-        bProcessing: true,
-        sAjaxSource: "/fatture.json"
+        ajax: '/fatture.json',
+        columns: [
+            { data: 'id' },
+            { data: 'numero' },
+            { data: 'anno' },
+            { data: 'emissione' },
+            { data: 'ragione_sociale' },
+            { data: 'totale' },
+            { data: 'iva' }
+        ],
+        columnDefs: [
+            {
+                targets: -7,
+                data: 'id',
+                render: function (data, type, full) {
+                    return '<div class="btn-group">' +
+                        '<a href="/modifica-fattura/' + data + '" class="btn btn-default">Modifica</a>' +
+                        '<button type="button" class="btn btn-default dropdown-toggle" data-toggle="dropdown">' +
+                        '<span class="caret"></span>' +
+                        '<span class="sr-only">Toggle Dropdown</span>' +
+                        '</button>' +
+                        '<ul class="dropdown-menu" role="menu">' +
+                        '<li><a href="#">Esporta in PDF</a></li>' +
+                        '<li class="divider"></li>' +
+                        '<li><a href="#">Cancella</a></li>' +
+                        '</ul>' +
+                        '</div>';
+                }
+            }
+        ]
     });
 
     /**
@@ -42,12 +70,10 @@ $(document).ready(function () {
             dataType: 'json',
             cache: false,
             beforeSend: function () {
-                $.isLoading({
-                    text: 'Loading...'
-                });
+                $('.btn').isLoading();
             },
             success: function (data) {
-                $.isLoading('hide');
+                $('.btn').isLoading('hide');
                 result.fadeIn().show();
 
                 if (data.img) {
@@ -65,7 +91,7 @@ $(document).ready(function () {
                 }, delay);
             },
             error: function (xhr, ajaxOptions, thrownError) {
-                $.isLoading('hide');
+                $('.btn').isLoading('hide');
                 result.fadeIn().show();
                 result.append($('<div/>').attr({
                     'class': 'alert alert-danger alert-dismissable'
@@ -91,12 +117,10 @@ $(document).ready(function () {
             dataType: 'json',
             cache: false,
             beforeSend: function () {
-                $.isLoading({
-                    text: 'Loading...'
-                });
+                $('.btn').isLoading();
             },
             success: function (data) {
-                $.isLoading('hide');
+                $('.btn').isLoading('hide');
                 result.fadeIn().show();
                 result.append($('<div/>').attr({
                     'class': 'alert alert-' + data.notice + ' alert-dismissable'
@@ -107,7 +131,7 @@ $(document).ready(function () {
                 }, delay);
             },
             error: function (xhr, ajaxOptions, thrownError) {
-                $.isLoading('hide');
+                $('.btn').isLoading('hide');
                 result.fadeIn().show();
                 result.append($('<div/>').attr({
                     'class': 'alert alert-danger alert-dismissable'
@@ -145,19 +169,17 @@ $(document).ready(function () {
             dataType: 'json',
             cache: false,
             beforeSend: function () {
-                $.isLoading({
-                    text: 'Loading...'
-                });
+                $('.btn').isLoading();
             },
             success: function (data) {
-                $.isLoading('hide');
+                $('.btn').isLoading('hide');
                 $('#myTable').dataTable({
                     'bProcessing': true,
                     'sAjaxSource': '/servizi/' + data.fattura + '.json'
                 });
             },
             error: function (xhr, ajaxOptions, thrownError) {
-                $.isLoading('hide');
+                $('.btn').isLoading('hide');
             }
         });
         return false;
