@@ -11,7 +11,7 @@
                     <table id="fatture" class="table">
                         <thead>
                         <tr>
-                            <th>Action</th>
+                            <th>Operazione</th>
                             <th>Numero</th>
                             <th>Anno</th>
                             <th>Data</th>

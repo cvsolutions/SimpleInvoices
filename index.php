@@ -144,8 +144,12 @@ $app->get('/aggiungi-fattura', function () use ($DB, $tpl) {
     $clienti = $DB->prepare('SELECT * FROM clienti');
     $clienti->execute();
 
+    $servizi = $DB->prepare('SELECT * FROM servizi');
+    $servizi->execute();
+
     $tpl->assign('fatture', $fatture->fetch(PDO::FETCH_ASSOC));
     $tpl->assign('clienti', $clienti->fetchAll(PDO::FETCH_ASSOC));
+    $tpl->assign('servizi', $servizi->fetchAll(PDO::FETCH_ASSOC));
     $tpl->assign('id', mt_rand(11111, 99999));
     $tpl->display('fattura.tpl');
     return false;
@@ -206,7 +210,7 @@ $app->post('/aggiungi-fattura', function (Request $request) use ($DB, $app) {
  */
 $app->post('/aggiungi-servizi', function (Request $request) use ($DB, $app) {
 
-    $servizi = $DB->prepare('INSERT INTO servizi (codice, descrizione, quantita, prezzo, iva, inclusa, id_fattura) VALUES (?, ?, ?, ?, ?, ?, ?)');
+    $servizi = $DB->prepare('INSERT INTO servizi (codice, descrizione, quantita, prezzo, iva, inclusa, id_fattura, attivo) VALUES (?, ?, ?, ?, ?, ?, ?, 0)');
     $servizi->bindParam(1, $request->get('codice'));
     $servizi->bindParam(2, $request->get('descrizione'));
     $servizi->bindParam(3, $request->get('quantita'));
@@ -214,6 +218,20 @@ $app->post('/aggiungi-servizi', function (Request $request) use ($DB, $app) {
     $servizi->bindParam(5, $request->get('iva'));
     $servizi->bindParam(6, $request->get('inclusa'));
     $servizi->bindParam(7, $request->get('id_fattura'));
+
+    if ($request->get('id_servizio') > 0) {
+        $servizi = $DB->prepare('UPDATE servizi SET codice = ?, descrizione = ?, quantita = ?, prezzo = ?, iva = ?, inclusa = ?, id_fattura = ? WHERE id = ?');
+        $servizi->bindParam(1, $request->get('codice'));
+        $servizi->bindParam(2, $request->get('descrizione'));
+        $servizi->bindParam(3, $request->get('quantita'));
+        $servizi->bindParam(4, $request->get('prezzo'));
+        $servizi->bindParam(5, $request->get('iva'));
+        $servizi->bindParam(6, $request->get('inclusa'));
+        $servizi->bindParam(7, $request->get('id_fattura'));
+        $servizi->bindParam(8, $request->get('id_servizio'));
+        $servizi->execute();
+    }
+
 
     try {
 
@@ -225,6 +243,7 @@ $app->post('/aggiungi-servizi', function (Request $request) use ($DB, $app) {
         ));
 
     } catch (PDOException $Exception) {
+
         return $app->json(array(
             'notice' => 'danger',
             'fattura' => $request->get('id_fattura'),
@@ -245,12 +264,12 @@ $app->get('/servizi/{fattura}.json', function ($fattura) use ($DB, $app) {
     $obj = array();
     foreach ($servizi->fetchAll(PDO::FETCH_ASSOC) as $row) {
         $obj[] = array(
-            $row['codice'],
-            $row['descrizione'],
-            $row['prezzo'],
-            $row['quantita'],
-            0,
-            $row['iva']
+            'codice' => $row['codice'],
+            'descrizione' => $row['descrizione'],
+            'prezzo' => $row['prezzo'],
+            'quantita' => $row['quantita'],
+            'totale' => 0,
+            'iva' => $row['iva']
         );
     }
     return $app->json(array('aaData' => $obj));
@@ -261,7 +280,18 @@ $app->get('/servizi/{fattura}.json', function ($fattura) use ($DB, $app) {
  */
 $app->post('/cliente', function (Request $request) use ($DB, $app) {
 
-    $servizi = $DB->prepare('SELECT * FROM clienti WHERE id = ?');
+    $clienti = $DB->prepare('SELECT * FROM clienti WHERE id = ? LIMIT 0,1');
+    $clienti->bindParam(1, $request->get('id'));
+    $clienti->execute();
+    return $app->json($clienti->fetch(PDO::FETCH_ASSOC));
+});
+
+/**
+ * Servizio JSON
+ */
+$app->post('/servizio', function (Request $request) use ($DB, $app) {
+
+    $servizi = $DB->prepare('SELECT * FROM servizi WHERE id = ? LIMIT 0,1');
     $servizi->bindParam(1, $request->get('id'));
     $servizi->execute();
     return $app->json($servizi->fetch(PDO::FETCH_ASSOC));

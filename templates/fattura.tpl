@@ -60,7 +60,6 @@
                                                 </div>
                                             </div>
 
-
                                             <div class="row">
                                                 <div class="col-xs-4">
                                                     <div class="form-group">
@@ -133,29 +132,18 @@
                             <div class="col-xs-6">
 
                                 <div class="row">
-
                                     <div class="col-xs-6">
-                                        <div class="row">
-                                            <div class="col-xs-12">
-                                                <div class="form-group">
-                                                    <label>Pagamento</label>
-                                                    <textarea rows="5" class="form-control input-sm" name="pagamento"></textarea>
-                                                </div>
-                                            </div>
+                                        <div class="form-group">
+                                            <label>Pagamento</label>
+                                            <textarea rows="5" class="form-control input-sm" name="pagamento"></textarea>
                                         </div>
                                     </div>
-
                                     <div class="col-xs-6">
-                                        <div class="row">
-                                            <div class="col-xs-12">
-                                                <div class="form-group">
-                                                    <label>Note</label>
-                                                    <textarea rows="5" class="form-control input-sm" name="note"></textarea>
-                                                </div>
-                                            </div>
+                                        <div class="form-group">
+                                            <label>Note</label>
+                                            <textarea rows="5" class="form-control input-sm" name="note"></textarea>
                                         </div>
                                     </div>
-
                                 </div>
 
                                 <div class="row">
@@ -197,89 +185,68 @@
                                     <div class="row">
 
                                         <div class="col-xs-1">
-                                            <div class="row">
-                                                <div class="col-xs-12">
-                                                    <div class="form-group">
-                                                        <br/>
-                                                        <select class="form-control input-sm"></select>
-                                                    </div>
-                                                </div>
+                                            <div class="form-group">
+                                                <br/>
+                                                <select class="form-control input-sm" name="id_servizio" id="id_servizio">
+                                                    <option value="0">-</option>
+                                                    {foreach from=$servizi item=row}
+                                                        <option value="{$row.id}">{$row.codice}</option>
+                                                    {/foreach}
+                                                </select>
                                             </div>
                                         </div>
 
                                         <div class="col-xs-1">
-                                            <div class="row">
-                                                <div class="col-xs-12">
-                                                    <div class="form-group">
-                                                        <label>Codice</label>
-                                                        <input type="text" class="form-control input-sm" name="codice" id="codice" value="">
-                                                    </div>
-                                                </div>
+                                            <div class="form-group">
+                                                <label>Codice</label>
+                                                <input type="text" class="form-control input-sm" name="codice" id="codice" value="">
                                             </div>
                                         </div>
 
                                         <div class="col-xs-4">
-                                            <div class="row">
-                                                <div class="col-xs-12">
-                                                    <div class="form-group">
-                                                        <label>Descrizione</label>
-                                                        <textarea class="form-control input-sm" name="descrizione" id="descrizione"></textarea>
-                                                    </div>
-                                                </div>
+                                            <div class="form-group">
+                                                <label>Descrizione</label>
+                                                <textarea class="form-control input-sm" name="descrizione" id="descrizione"></textarea>
                                             </div>
                                         </div>
 
                                         <div class="col-xs-1">
-                                            <div class="row">
-                                                <div class="col-xs-12">
-                                                    <div class="form-group">
-                                                        <label>Quantità</label>
-                                                        <input type="text" class="form-control input-sm" name="quantita" id="quantita" value="">
-                                                    </div>
-                                                </div>
+                                            <div class="form-group">
+                                                <label>Quantità</label>
+                                                <input type="text" class="form-control input-sm" name="quantita" id="quantita" value="">
                                             </div>
                                         </div>
 
                                         <div class="col-xs-2">
-                                            <div class="row">
-                                                <div class="col-xs-12">
-                                                    <div class="form-group">
-                                                        <label>Prezzo</label>
+                                            <div class="form-group">
+                                                <label>Prezzo</label>
 
-                                                        <div class="input-group">
-                                                            <input type="text" class="form-control input-sm" name="prezzo" id="prezzo" value="">
-                                                            <span class="input-group-addon">.00</span>
-                                                        </div>
-                                                    </div>
-                                                    <div class="checkbox">
-                                                        <label>
-                                                            <input type="checkbox" name="inclusa" id="inclusa" value="1"> IVA inclusa
-                                                        </label>
-                                                    </div>
+                                                <div class="input-group">
+                                                    <input type="text" class="form-control input-sm" name="prezzo" id="prezzo" value="">
+                                                    <span class="input-group-addon">.00</span>
                                                 </div>
+                                            </div>
+                                            <div class="">
+                                                <label class="checkbox-inline"><input type="radio" name="inclusa" id="inclusa" value="1"> <small>IVA inc.</small></label>
+                                                <label class="checkbox-inline"><input type="radio" name="inclusa" id="inclusa" value="1"> <small>NO</small></label>
                                             </div>
                                         </div>
 
                                         <div class="col-xs-1">
-                                            <div class="row">
-                                                <div class="col-xs-12">
-                                                    <div class="form-group">
-                                                        <label>IVA</label>
-                                                        <select class="form-control input-sm" name="iva" id="iva">
-                                                            <option value="0">-</option>
-                                                        </select>
-                                                    </div>
-                                                </div>
+                                            <div class="form-group">
+                                                <label>IVA</label>
+                                                <select class="form-control input-sm" name="iva" id="iva">
+                                                    <option value="0">-</option>
+                                                    {for $foo=1 to 99}
+                                                        <option value="{$foo}">{$foo}%</option>
+                                                    {/for}
+                                                </select>
                                             </div>
                                         </div>
 
                                         <div class="col-xs-2">
-                                            <div class="row">
-                                                <div class="col-xs-12">
-                                                    <br/>
-                                                    <a href="javascript:void(0)" id="servizi" class="btn btn-default btn-block"><span class="glyphicon glyphicon-plus"></span> Aggiungi</a>
-                                                </div>
-                                            </div>
+                                            <br/>
+                                            <a href="javascript:void(0)" id="servizi" class="btn btn-default btn-block"><span class="glyphicon glyphicon-plus"></span> Aggiungi</a>
                                         </div>
                                     </div>
 

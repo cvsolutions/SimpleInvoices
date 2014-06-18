@@ -15,7 +15,7 @@ $(document).ready(function () {
      * datepicker
      */
     $('.datepicker').datepicker({
-        dateFormat: 'yy-mm-dd'
+        format: 'yyyy-mm-dd'
     });
 
     /**
@@ -153,6 +153,7 @@ $(document).ready(function () {
         var iva = $('#iva').val();
         var inclusa = $('#inclusa').val();
         var id_fattura = $('#id').val();
+        var id_servizio = $('#id_servizio').val();
 
         $.ajax({
             url: '/aggiungi-servizi',
@@ -164,7 +165,8 @@ $(document).ready(function () {
                 prezzo: prezzo,
                 iva: iva,
                 inclusa: inclusa,
-                id_fattura: id_fattura
+                id_fattura: id_fattura,
+                id_servizio: id_servizio
             },
             dataType: 'json',
             cache: false,
@@ -173,9 +175,26 @@ $(document).ready(function () {
             },
             success: function (data) {
                 $('.btn').isLoading('hide');
+                $("#myTable").dataTable().fnDestroy();
                 $('#myTable').dataTable({
-                    'bProcessing': true,
-                    'sAjaxSource': '/servizi/' + data.fattura + '.json'
+                    ajax: '/servizi/' + data.fattura + '.json',
+                    columns: [
+                        { data: 'codice' },
+                        { data: 'descrizione' },
+                        { data: 'prezzo' },
+                        { data: 'quantita' },
+                        { data: 'totale' },
+                        { data: 'iva' }
+                    ],
+                    columnDefs: [
+                        {
+                            targets: -6,
+                            data: 'codice',
+                            render: function (data, type, full) {
+                                return '-';
+                            }
+                        }
+                    ]
                 });
             },
             error: function (xhr, ajaxOptions, thrownError) {
@@ -185,7 +204,9 @@ $(document).ready(function () {
         return false;
     });
 
-
+    /**
+     * change Ragione Sociale
+     */
     $('#id_cliente').change(function () {
 
         var id = $(this).val();
@@ -212,6 +233,36 @@ $(document).ready(function () {
         });
         return false;
     });
+
+    /**
+     * change Aggiungi Servizio
+     */
+    $('#id_servizio').change(function () {
+
+        var id = $(this).val();
+
+        $.ajax({
+            url: '/servizio',
+            type: 'POST',
+            data: {
+                id: id
+            },
+            dataType: 'json',
+            cache: false,
+            success: function (data) {
+                $('#codice').val(data.codice);
+                $('#descrizione').val(data.descrizione);
+                $('#quantita').val(data.quantita);
+                $('#prezzo').val(data.prezzo);
+                $('#inclusa').val(data.inclusa);
+                $('#iva').val(data.iva);
+            },
+            error: function (xhr, ajaxOptions, thrownError) {
+            }
+        });
+        return false;
+    });
+
 
     //...
 });
