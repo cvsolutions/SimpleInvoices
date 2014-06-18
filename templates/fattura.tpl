@@ -156,13 +156,13 @@
                                     <div class="col-xs-12">
                                         <div class="panel panel-default">
                                             <div class="panel-body">
-                                                <table id="myTable" class="table">
+                                                <table id="lista-servizi" class="table">
                                                     <thead>
                                                     <tr>
                                                         <th>Codice</th>
                                                         <th>Descrizione</th>
                                                         <th>Prezzo</th>
-                                                        <th>Qnt</th>
+                                                        <th>Qta</th>
                                                         <th>Totale</th>
                                                         <th>IVA</th>
                                                     </tr>
@@ -228,7 +228,7 @@
                                             </div>
                                             <div class="">
                                                 <label class="checkbox-inline"><input type="radio" name="inclusa" id="inclusa" value="1"> <small>IVA inc.</small></label>
-                                                <label class="checkbox-inline"><input type="radio" name="inclusa" id="inclusa" value="1"> <small>NO</small></label>
+                                                <label class="checkbox-inline"><input type="radio" name="inclusa" id="inclusa" value="0"> <small>NO</small></label>
                                             </div>
                                         </div>
 
@@ -258,7 +258,7 @@
                             <div class="col-xs-12">
                                 <hr/>
                                 <input type="hidden" name="id" id="id" value="{$id}">
-                                <input type="submit" class="btn btn-default" value="Salva">
+                                <input type="submit" class="btn btn-default" disabled value="Salva">
                             </div>
                         </div>
 

@@ -175,9 +175,14 @@ $(document).ready(function () {
             },
             success: function (data) {
                 $('.btn').isLoading('hide');
-                $("#myTable").dataTable().fnDestroy();
-                $('#myTable').dataTable({
+                $('.btn').attr('readonly', false);
+                $("#lista-servizi").dataTable().fnDestroy();
+                $('#lista-servizi').dataTable({
                     ajax: '/servizi/' + data.fattura + '.json',
+                    aLengthMenu: [
+                        [3, 2, 1],
+                        [3, 2, 1]
+                    ],
                     columns: [
                         { data: 'codice' },
                         { data: 'descrizione' },
