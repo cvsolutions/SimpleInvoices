@@ -379,20 +379,33 @@ $app->post('/cancella-servizo', function (Request $request) use ($DB, $app) {
  */
 $app->get('/pdf/{id}.pdf', function ($id) use ($DB, $tpl, $app) {
 
-    /**
-     * Recupero i parametri di configurazione
-     */
     $configurazione = $DB->prepare('SELECT * FROM configurazione LIMIT 0,1');
     $configurazione->execute();
 
+    $fatture = $DB->prepare('SELECT * FROM fatture WHERE id = ? LIMIT 0,1');
+    $fatture->bindParam(1, $id);
+    $fatture->execute();
+    $row = $fatture->fetch(PDO::FETCH_ASSOC);
+
+    $clienti = $DB->prepare('SELECT * FROM clienti WHERE id = ? LIMIT 0,1');
+    $clienti->bindParam(1, $row['id_cliente']);
+    $clienti->execute();
+
+    $servizi = $DB->prepare('SELECT * FROM servizi WHERE id_fattura = ?');
+    $servizi->bindParam(1, $row['id']);
+    $servizi->execute();
+
     $tpl->assign('configurazione', $configurazione->fetch(PDO::FETCH_ASSOC));
+    $tpl->assign('fatture', $row);
+    $tpl->assign('clienti', $clienti->fetch(PDO::FETCH_ASSOC));
+    $tpl->assign('servizi', $servizi->fetchAll(PDO::FETCH_ASSOC));
 
     /** @var DOMPDF $dompdf */
     $dompdf = new DOMPDF();
     $dompdf->load_html($tpl->fetch('pdf.tpl'));
     $dompdf->render();
     $dompdf->stream(sprintf('%d.pdf', $id), array('Attachment' => 0));
-    // $tpl->display('pdf.tpl');
+    //$tpl->display('pdf.tpl');
     return false;
 });
 

@@ -192,16 +192,20 @@ $(document).ready(function () {
                             targets: -6,
                             data: 'codice',
                             render: function (data, type, row) {
-                                return '<div class="btn-group">' +
-                                    '<a href="#" class="btn btn-default btn-xs">' + data + '</a>' +
-                                    '<button type="button" class="btn btn-default btn-xs dropdown-toggle" data-toggle="dropdown">' +
-                                    '<span class="caret"></span>' +
-                                    '<span class="sr-only">Toggle Dropdown</span>' +
-                                    '</button>' +
-                                    '<ul class="dropdown-menu" role="menu">' +
-                                    '<li><a href="#">Modifica</a></li>' +
-                                    '<li><a href="javascript:void(0)" id="cancella_servizio" data-fattura="' + row.id + '">Cancella</a></li>' +
-                                    '</ul>' +
+                                return '<a href="#" class="btn btn-default btn-xs" data-toggle="modal" data-target="#editModal-' + row.id + '">' + data + '</a>' +
+                                    '<div class="modal fade" id="editModal-' + row.id + '" tabindex="-1" role="dialog" aria-labelledby="" aria-hidden="true">' +
+                                    '<div class="modal-dialog">' +
+                                    '<div class="modal-content">' +
+                                    '<div class="modal-header">' +
+                                    '<button type="button" class="close" data-dismiss="modal" aria-hidden="true">&times;</button>' +
+                                    '<h4 class="modal-title" id="">Modifica Servizio</h4>' +
+                                    '</div>' +
+                                    '<div class="modal-body"></div>' +
+                                    '<div class="modal-footer">' +
+                                    '<button id="pippo" class="btn btn-success">Save</button>' +
+                                    '</div>' +
+                                    '</div>' +
+                                    '</div>' +
                                     '</div>';
                             }
                         }
@@ -275,15 +279,6 @@ $(document).ready(function () {
         });
         return false;
     });
-
-    /**
-     * click Cancella Servizio
-     */
-    $('#cancella_servizio').click(function () {
-        var fattura = $(this).data('fattura');
-        alert(fattura);
-    });
-
 
     //...
 });
