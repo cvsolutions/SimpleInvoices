@@ -219,15 +219,10 @@
                                         <div class="col-xs-2">
                                             <div class="form-group">
                                                 <label>Prezzo</label>
-
-                                                <div class="input-group">
-                                                    <input type="text" class="form-control input-sm" name="prezzo" id="prezzo" value="">
-                                                    <span class="input-group-addon">.00</span>
-                                                </div>
+                                                <input type="text" class="form-control input-sm" name="prezzo" id="prezzo" value="">
                                             </div>
-                                            <div class="">
-                                                <label class="checkbox-inline"><input type="radio" name="inclusa" id="inclusa" value="1"> <small>IVA inc.</small></label>
-                                                <label class="checkbox-inline"><input type="radio" name="inclusa" id="inclusa" value="0"> <small>NO</small></label>
+                                            <div class="checkbox">
+                                                <label><input type="checkbox" name="inclusa" id="inclusa" value="1"> IVA inclusa</label>
                                             </div>
                                         </div>
 

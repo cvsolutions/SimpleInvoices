@@ -251,7 +251,8 @@ $app->post('/aggiungi-servizi', function (Request $request) use ($DB, $app) {
 
     try {
 
-        $totale = ($request->get('prezzo') * $request->get('quantita'));
+        $totale  = ($request->get('prezzo') * $request->get('quantita'));
+        $inclusa = $request->get('inclusa') == 1 ? 1 : 0;
 
         $servizi = $DB->prepare('INSERT INTO servizi (id, codice, descrizione, quantita, prezzo, totale, iva, inclusa, id_fattura, attivo) VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, 0)');
         $servizi->bindParam(1, mt_rand(11111, 99999));
@@ -261,7 +262,7 @@ $app->post('/aggiungi-servizi', function (Request $request) use ($DB, $app) {
         $servizi->bindParam(5, $request->get('prezzo'));
         $servizi->bindParam(6, $totale);
         $servizi->bindParam(7, $request->get('iva'));
-        $servizi->bindParam(8, $request->get('inclusa'));
+        $servizi->bindParam(8, $inclusa);
         $servizi->bindParam(9, $request->get('id_fattura'));
         $servizi->execute();
 
