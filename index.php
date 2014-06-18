@@ -160,7 +160,7 @@ $app->get('/aggiungi-fattura', function () use ($DB, $tpl) {
     $clienti = $DB->prepare('SELECT * FROM clienti');
     $clienti->execute();
 
-    $servizi = $DB->prepare('SELECT * FROM servizi WHERE attivo = 1');
+    $servizi = $DB->prepare('SELECT * FROM servizi');
     $servizi->execute();
 
     $tpl->assign('fatture', $fatture->fetch(PDO::FETCH_ASSOC));
@@ -295,7 +295,7 @@ $app->get('/servizi/{fattura}.json', function ($fattura) use ($DB, $app) {
         $obj[] = array(
             'id' => $row['id'],
             'codice' => $row['codice'],
-            'descrizione' => $row['descrizione'],
+            'descrizione' => sprintf('%s...', substr($row['descrizione'], 0, 17)),
             'prezzo' => $row['prezzo'],
             'quantita' => $row['quantita'],
             'totale' => $row['totale'],

@@ -94,6 +94,7 @@ $(document).ready(function () {
                 setTimeout(function () {
                     result.fadeOut();
                     $('.alert-dismissable').remove();
+                    location.reload();
                 }, delay);
             },
             error: function (xhr, ajaxOptions, thrownError) {
@@ -134,6 +135,7 @@ $(document).ready(function () {
                 setTimeout(function () {
                     result.fadeOut();
                     $('.alert-dismissable').remove();
+                    location.reload();
                 }, delay);
             },
             error: function (xhr, ajaxOptions, thrownError) {
@@ -328,6 +330,7 @@ $(document).ready(function () {
                 setTimeout(function () {
                     result.fadeOut();
                     $('.alert-dismissable').remove();
+                    location.reload();
                 }, delay);
             },
             error: function (xhr, ajaxOptions, thrownError) {

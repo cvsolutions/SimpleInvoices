@@ -15,7 +15,7 @@
                             <div class="col-xs-12">
                                 <div class="form-group">
                                     <label>Descrizione</label>
-                                    <textarea class="form-control input-sm" name="descrizione" id="descrizione">{$servizi.descrizione}</textarea>
+                                    <textarea class="form-control" rows="3" name="descrizione" id="descrizione">{$servizi.descrizione}</textarea>
                                 </div>
                             </div>
                         </div>
@@ -24,27 +24,27 @@
                             <div class="col-xs-3">
                                 <div class="form-group">
                                     <label>Codice</label>
-                                    <input type="text" class="form-control input-sm" name="codice" value="{$servizi.codice}">
+                                    <input type="text" class="form-control" name="codice" value="{$servizi.codice}">
                                 </div>
                             </div>
                             <div class="col-xs-3">
                                 <div class="form-group">
                                     <label>Quantità</label>
-                                    <input type="text" class="form-control input-sm" name="quantita" id="quantita" value="{$servizi.quantita}">
+                                    <input type="text" class="form-control" name="quantita" id="quantita" value="{$servizi.quantita}">
                                 </div>
                             </div>
 
                             <div class="col-xs-3">
                                 <div class="form-group">
                                     <label>Prezzo</label>
-                                    <input type="text" class="form-control input-sm" name="prezzo" id="prezzo" value="{$servizi.prezzo}">
+                                    <input type="text" class="form-control" name="prezzo" id="prezzo" value="{$servizi.prezzo}">
                                 </div>
                             </div>
 
                             <div class="col-xs-3">
                                 <div class="form-group">
                                     <label>IVA</label>
-                                    <select class="form-control input-sm" name="iva" id="iva">
+                                    <select class="form-control" name="iva" id="iva">
                                         <option value="0">-</option>
                                         {for $foo=1 to 100}
                                             <option value="{$foo}" {if $foo eq $servizi.iva}selected{/if}>{$foo}%</option>
@@ -58,7 +58,7 @@
                             <div class="col-xs-12">
                                 <div class="form-group">
                                     <label>Operazione</label>
-                                    <select class="form-control input-sm" name="action" id="action">
+                                    <select class="form-control" name="action" id="action">
                                         <option value="1">Modifica</option>
                                         <option value="2">Cancella</option>
                                     </select>
