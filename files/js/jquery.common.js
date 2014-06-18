@@ -36,7 +36,7 @@ $(document).ready(function () {
             {
                 targets: -7,
                 data: 'id',
-                render: function (data, type, full) {
+                render: function (data, type, row) {
                     return '<div class="btn-group">' +
                         '<a href="/modifica-fattura/' + data + '" class="btn btn-default">Modifica</a>' +
                         '<button type="button" class="btn btn-default dropdown-toggle" data-toggle="dropdown">' +
@@ -44,7 +44,7 @@ $(document).ready(function () {
                         '<span class="sr-only">Toggle Dropdown</span>' +
                         '</button>' +
                         '<ul class="dropdown-menu" role="menu">' +
-                        '<li><a href="#">Esporta in PDF</a></li>' +
+                        '<li><a href="/pdf/' + row.id + '.pdf">Esporta in PDF</a></li>' +
                         '<li class="divider"></li>' +
                         '<li><a href="#">Cancella</a></li>' +
                         '</ul>' +

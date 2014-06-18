@@ -1,7 +1,13 @@
 <?php
+error_reporting(E_ALL);
+ini_set('display_errors', 0);
+
 use Symfony\Component\HttpFoundation\Request;
 
 require_once __DIR__ . '/vendor/autoload.php';
+
+define('DOMPDF_ENABLE_AUTOLOAD', false);
+require_once __DIR__ . '/vendor/dompdf/dompdf/dompdf_config.inc.php';
 
 /** @var PDO $DB */
 $DB = new PDO('sqlite:data/fatture.db');
@@ -18,6 +24,7 @@ $app['debug'] = true;
 /**
  * define var
  */
+
 define('SUCCESS_MESSAGE', 'Operazione eseguita con successo!');
 define('IMAGES_ONLY_MESSAGE', 'È possibile inserire solo immagini!');
 
@@ -365,6 +372,18 @@ $app->post('/cancella-servizo', function (Request $request) use ($DB, $app) {
             'messages' => $Exception->getMessage()
         ));
     }
+});
+
+/**
+ * PDF Fattura
+ */
+$app->get('/pdf/{id}.pdf', function ($id) use ($DB, $tpl, $app) {
+
+    $dompdf = new DOMPDF();
+    $dompdf->load_html($tpl->fetch('pdf.tpl'));
+    $dompdf->render();
+    $dompdf->stream(sprintf('%d.pdf', $id), array('Attachment' => 0));
+    return true;
 });
 
 $DB = null;
