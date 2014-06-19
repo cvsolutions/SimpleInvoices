@@ -8,7 +8,7 @@
     <link rel="stylesheet" href="../files/css/bootstrap.css">
     <link rel="stylesheet" href="../files/css/bootstrap-theme.css">
     <link rel="stylesheet" href="../files/css/jquery.dataTables.css">
-    <link rel="stylesheet" href="../files/css/datepicker.css">
+    <link rel="stylesheet" href="../files/css/bootstrap-datetimepicker.css">
     <link rel="stylesheet" href="../files/fancybox/jquery.fancybox.css">
     <link rel="stylesheet" href="../files/css/style.css">
 
@@ -52,9 +52,11 @@
 
 <script src="../files/js/jquery.js"></script>
 <script src="../files/js/bootstrap.js"></script>
+<script src="../files/js/moment.js"></script>
 <script src="../files/js/jquery.dataTables.js"></script>
 <script src="../files/js/bootstrap-filestyle.js"></script>
-<script src="../files/js/bootstrap-datepicker.js"></script>
+<script src="../files/js/bootstrap-datetimepicker.js"></script>
+<script src="../files/js/bootstrap-datetimepicker.it.js"></script>
 <script src="../files/js/jquery.isloading.js"></script>
 <script src="../files/js/jquery.validate.js"></script>
 <script src="../files/js/messages_it.js"></script>

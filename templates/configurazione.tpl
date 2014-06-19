@@ -123,20 +123,19 @@
 
                                     <div class="row">
                                         <div class="col-xs-12">
-                                            <label>Logo</label>
-                                        </div>
-                                    </div>
-
-                                    <div class="row">
-                                        <div class="col-xs-4">
-                                            <img src="../data/logo.jpg" id="logo" class="img-responsive img-thumbnail" alt=""/>
-                                        </div>
-                                        <div class="col-xs-8">
                                             <div class="form-group">
+                                                <label>Logo</label>
                                                 <input type="file" accept="image/jpeg" name="logo">
 
                                                 <p class="help-block">Selezionare un file immagine</p>
                                             </div>
+
+                                        </div>
+                                    </div>
+
+                                    <div class="row">
+                                        <div class="col-xs-6">
+                                            <p><img src="../data/logo.jpg" class="img-responsive img-thumbnail" alt=""/></p>
                                         </div>
                                     </div>
 
@@ -145,8 +144,12 @@
 
                         </div>
 
-                        <hr/>
-                        <input type="submit" class="btn btn-default" value="Salva">
+                        <div class="row">
+                            <div class="col-xs-12">
+                                <hr/>
+                                <input type="submit" class="btn btn-default" value="Salva">
+                            </div>
+                        </div>
 
                     </form>
                 </div>

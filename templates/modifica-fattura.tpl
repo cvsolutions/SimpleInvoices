@@ -28,12 +28,13 @@
                                             <input type="number" class="form-control" name="numero" required="" value="{$fatture.numero}">
                                         </div>
                                     </div>
+
                                     <div class="col-xs-6">
                                         <div class="form-group">
                                             <label><span class="text-danger">*</span> Data</label>
 
-                                            <div class="input-group">
-                                                <input type="text" class="form-control datepicker" name="emissione" required="" value="{$fatture.emissione}" readonly>
+                                            <div class="input-group date" id="datetimepicker1" data-date-format="YYYY-MM-DD">
+                                                <input type="text" class="form-control" name="emissione" required="" value="{$fatture.emissione}" readonly>
                                                 <span class="input-group-addon"><span class="glyphicon glyphicon-calendar"></span></span>
                                             </div>
                                         </div>

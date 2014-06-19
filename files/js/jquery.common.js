@@ -15,13 +15,17 @@ $(document).ready(function () {
     /**
      * filestyle
      */
-    $(':file').filestyle();
+    $(":file").filestyle({
+        buttonText: 'Cerca...'
+    });
 
     /**
      * datepicker
      */
-    $('.datepicker').datepicker({
-        format: 'yyyy-mm-dd'
+    $('#datetimepicker1').datetimepicker({
+        language: 'it',
+        minDate: new Date(),
+        pickTime: false
     });
 
     /**
@@ -33,13 +37,13 @@ $(document).ready(function () {
             url: '/files/Italian.json'
         },
         columns: [
-            { data: 'id' },
-            { data: 'numero' },
-            { data: 'anno' },
-            { data: 'emissione' },
-            { data: 'ragione_sociale' },
-            { data: 'totale' },
-            { data: 'iva' }
+            {data: 'id'},
+            {data: 'numero'},
+            {data: 'anno'},
+            {data: 'emissione'},
+            {data: 'ragione_sociale'},
+            {data: 'totale'},
+            {data: 'iva'}
         ],
         columnDefs: [
             {
@@ -206,12 +210,12 @@ $(document).ready(function () {
                             [3, 2, 1]
                         ],
                         columns: [
-                            { data: 'codice' },
-                            { data: 'descrizione' },
-                            { data: 'prezzo' },
-                            { data: 'quantita' },
-                            { data: 'totale' },
-                            { data: 'iva' }
+                            {data: 'codice' },
+                            {data: 'descrizione'},
+                            {data: 'prezzo' },
+                            {data: 'quantita'},
+                            {data: 'totale'},
+                            {data: 'iva'}
                         ],
                         columnDefs: [
                             {
@@ -312,12 +316,12 @@ $(document).ready(function () {
             [3, 2, 1]
         ],
         columns: [
-            { data: 'codice' },
-            { data: 'descrizione' },
-            { data: 'prezzo' },
-            { data: 'quantita' },
-            { data: 'totale' },
-            { data: 'iva' }
+            {data: 'codice' },
+            {data: 'descrizione'},
+            {data: 'prezzo' },
+            {data: 'quantita'},
+            {data: 'totale'},
+            {data: 'iva'}
         ],
         columnDefs: [
             {
@@ -403,12 +407,12 @@ $(document).ready(function () {
                             [3, 2, 1]
                         ],
                         columns: [
-                            { data: 'codice' },
-                            { data: 'descrizione' },
-                            { data: 'prezzo' },
-                            { data: 'quantita' },
-                            { data: 'totale' },
-                            { data: 'iva' }
+                            {data: 'codice' },
+                            {data: 'descrizione'},
+                            {data: 'prezzo' },
+                            {data: 'quantita'},
+                            {data: 'totale'},
+                            {data: 'iva'}
                         ],
                         columnDefs: [
                             {
