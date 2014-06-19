@@ -209,28 +209,28 @@
                                         <div class="col-xs-1">
                                             <div class="form-group">
                                                 <label>Codice</label>
-                                                <input type="text" class="form-control" name="codice" id="codice" value="">
+                                                <input type="text" class="form-control ignore" name="codice" id="codice" required="" value="">
                                             </div>
                                         </div>
 
                                         <div class="col-xs-4">
                                             <div class="form-group">
                                                 <label>Descrizione</label>
-                                                <textarea class="form-control" name="descrizione" id="descrizione"></textarea>
+                                                <textarea class="form-control ignore" name="descrizione" required="" id="descrizione"></textarea>
                                             </div>
                                         </div>
 
                                         <div class="col-xs-1">
                                             <div class="form-group">
                                                 <label>Quantità</label>
-                                                <input type="text" class="form-control" name="quantita" id="quantita" value="">
+                                                <input type="text" class="form-control ignore" name="quantita" required="" id="quantita" value="">
                                             </div>
                                         </div>
 
                                         <div class="col-xs-2">
                                             <div class="form-group">
                                                 <label>Prezzo</label>
-                                                <input type="text" class="form-control" name="prezzo" id="prezzo" value="">
+                                                <input type="text" class="form-control ignore" name="prezzo" required="" id="prezzo" value="">
                                             </div>
                                         </div>
 

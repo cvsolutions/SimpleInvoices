@@ -38,3 +38,7 @@ body {
     top: 10%;
     z-index: 9000;
 }
+
+.error {
+    color: red;
+}

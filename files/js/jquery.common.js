@@ -24,7 +24,6 @@ $(document).ready(function () {
         format: 'yyyy-mm-dd'
     });
 
-
     /**
      * dataTable
      */
@@ -116,6 +115,7 @@ $(document).ready(function () {
      * Aggiungi Fattura
      */
     $('#aggiungi_fattura').validate({
+        ignore: '.ignore',
         submitHandler: function (form) {
 
             var result = $('#result');
@@ -155,68 +155,80 @@ $(document).ready(function () {
         }
     });
 
-
     /**
      * Submit Servizi
      */
     $('#servizi').click(function () {
 
-        var codice = $('#codice').val();
-        var descrizione = $('#descrizione').val();
-        var quantita = $('#quantita').val();
-        var prezzo = $('#prezzo').val();
-        var iva = $('#iva').val();
-        var id_fattura = $('#id').val();
-        var id_servizio = $('#id_servizio').val();
+        var _codice = $('#codice').valid();
+        var _descrizione = $('#descrizione').valid();
+        var _quantita = $('#quantita').valid();
+        var _prezzo = $('#prezzo').valid();
 
-        $.ajax({
-            url: '/aggiungi-servizi',
-            type: 'POST',
-            data: {
-                codice: codice,
-                descrizione: descrizione,
-                quantita: quantita,
-                prezzo: prezzo,
-                iva: iva,
-                id_fattura: id_fattura,
-                id_servizio: id_servizio
-            },
-            dataType: 'json',
-            cache: false,
-            success: function (data) {
-                $('.btn').attr('disabled', false);
-                // $("#lista-servizi").dataTable().fnDestroy();
-                $('#lista-servizi').dataTable({
-                    ajax: '/servizi/' + data.fattura + '.json',
-                    bDestroy: true,
-                    aLengthMenu: [
-                        [3, 2, 1],
-                        [3, 2, 1]
-                    ],
-                    columns: [
-                        { data: 'codice' },
-                        { data: 'descrizione' },
-                        { data: 'prezzo' },
-                        { data: 'quantita' },
-                        { data: 'totale' },
-                        { data: 'iva' }
-                    ],
-                    columnDefs: [
-                        {
-                            targets: -6,
-                            data: 'codice',
-                            render: function (data, type, row) {
-                                return '<a href="/modifica-servizi/' + row.id + '?hideHeader=1" class="btn btn-default btn-xs open-box" data-fancybox-type="iframe">' + data + '</a>';
+        if (_codice && _descrizione && _quantita && _prezzo) {
+
+            var codice = $('#codice').val();
+            var descrizione = $('#descrizione').val();
+            var quantita = $('#quantita').val();
+            var prezzo = $('#prezzo').val();
+            var iva = $('#iva').val();
+            var id_fattura = $('#id').val();
+            var id_servizio = $('#id_servizio').val();
+
+            $.ajax({
+                url: '/aggiungi-servizi',
+                type: 'POST',
+                data: {
+                    codice: codice,
+                    descrizione: descrizione,
+                    quantita: quantita,
+                    prezzo: prezzo,
+                    iva: iva,
+                    id_fattura: id_fattura,
+                    id_servizio: id_servizio
+                },
+                dataType: 'json',
+                cache: false,
+                success: function (data) {
+                    $('.btn').attr('disabled', false);
+                    // $("#lista-servizi").dataTable().fnDestroy();
+                    $('#lista-servizi').dataTable({
+                        ajax: '/servizi/' + data.fattura + '.json',
+                        bDestroy: true,
+                        aLengthMenu: [
+                            [3, 2, 1],
+                            [3, 2, 1]
+                        ],
+                        columns: [
+                            { data: 'codice' },
+                            { data: 'descrizione' },
+                            { data: 'prezzo' },
+                            { data: 'quantita' },
+                            { data: 'totale' },
+                            { data: 'iva' }
+                        ],
+                        columnDefs: [
+                            {
+                                targets: -6,
+                                data: 'codice',
+                                render: function (data, type, row) {
+                                    return '<a href="/modifica-servizi/' + row.id + '?hideHeader=1" class="btn btn-default btn-xs open-box" data-fancybox-type="iframe">' + data + '</a>';
+                                }
                             }
-                        }
-                    ]
-                });
-            },
-            error: function (xhr, ajaxOptions, thrownError) {
-                alert(thrownError);
-            }
-        });
-        return false;
+                        ]
+                    });
+                },
+                error: function (xhr, ajaxOptions, thrownError) {
+                    alert(thrownError);
+                }
+            });
+
+            return false;
+
+        } else {
+
+            return false;
+        }
     });
 
     /**
@@ -313,6 +325,7 @@ $(document).ready(function () {
      * Modifica Fattura
      */
     $('#modifica_fattura').validate({
+        ignore: '.ignore',
         submitHandler: function (form) {
 
             var result = $('#result');
