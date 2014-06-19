@@ -1,12 +1,15 @@
 <?php
-error_reporting(E_ALL);
-ini_set('display_errors', 0);
-
 use Symfony\Component\HttpFoundation\Request;
 
-require_once __DIR__ . '/vendor/autoload.php';
-
+/**
+ * Defines a named constant
+ */
+define('SUCCESS_MESSAGE', 'Operazione eseguita con successo!');
+define('IMAGES_ONLY_MESSAGE', 'È possibile inserire solo immagini!');
 define('DOMPDF_ENABLE_AUTOLOAD', false);
+define('ID_RAND', mt_rand(11111, 99999));
+
+require_once __DIR__ . '/vendor/autoload.php';
 require_once __DIR__ . '/vendor/dompdf/dompdf/dompdf_config.inc.php';
 
 /** @var PDO $DB */
@@ -18,25 +21,15 @@ $tpl            = new Smarty();
 $tpl->debugging = false;
 
 /** @var \Silex\Application $app */
-$app          = new Silex\Application();
+$app          = new \Silex\Application();
 $app['debug'] = true;
 
 /**
- * define var
- */
-define('SUCCESS_MESSAGE', 'Operazione eseguita con successo!');
-define('IMAGES_ONLY_MESSAGE', 'È possibile inserire solo immagini!');
-
-/**
- * Homepage
  * Elenco Fatture
- * Elimino i servizi non necessari
  */
 $app->get('/', function () use ($DB, $tpl) {
 
-    $servizi = $DB->prepare('DELETE FROM servizi WHERE attivo = 0');
-    $servizi->execute();
-
+    $DB->exec('DELETE FROM servizi WHERE attivo = 0');
     $tpl->display('index.tpl');
     return false;
 });
@@ -66,7 +59,6 @@ $app->get('/fatture.json', function () use ($DB, $app) {
 
 /**
  * Configurazione
- * Intestatario Fatture & Layout pagina
  */
 $app->get('/configurazione', function () use ($DB, $tpl) {
 
@@ -163,21 +155,22 @@ $app->get('/aggiungi-fattura', function () use ($DB, $tpl) {
     $servizi = $DB->prepare('SELECT * FROM servizi');
     $servizi->execute();
 
-    $tpl->assign('fatture', $fatture->fetch(PDO::FETCH_ASSOC));
+    $tpl->assign('fatture', $fatture->fetchColumn());
     $tpl->assign('clienti', $clienti->fetchAll(PDO::FETCH_ASSOC));
     $tpl->assign('servizi', $servizi->fetchAll(PDO::FETCH_ASSOC));
-    $tpl->assign('id', mt_rand(11111, 99999));
+    $tpl->assign('id', ID_RAND);
     $tpl->display('aggiungi-fattura.tpl');
     return false;
 });
 
 /**
  * POST Aggiungi Fattura
+ * Aggiorno i dati nel database
  */
 $app->post('/aggiungi-fattura', function (Request $request) use ($DB, $app) {
 
     $cliente    = $request->get('id_cliente');
-    $id_cliente = $cliente == 0 ? mt_rand(11111, 99999) : $cliente;
+    $id_cliente = $cliente == 0 ? ID_RAND : $cliente;
 
     try {
 
@@ -220,8 +213,7 @@ $app->post('/aggiungi-fattura', function (Request $request) use ($DB, $app) {
         $clienti->execute();
 
         /**
-         * Dopo aver salvato la fattura
-         * abilito i servizi attivi
+         * UPDATE Servizi
          */
         $servizi = $DB->prepare('UPDATE servizi SET attivo = 1 WHERE id_fattura = ? AND attivo = 0');
         $servizi->bindParam(1, $request->get('id'));
@@ -245,21 +237,20 @@ $app->post('/aggiungi-fattura', function (Request $request) use ($DB, $app) {
 });
 
 /**
- * POST Aggiungi Servizi Fattura
+ * POST Aggiungi Servizio
+ * Aggiorno i dati nel database
  */
 $app->post('/aggiungi-servizi', function (Request $request) use ($DB, $app) {
 
     try {
 
-        $totale = ($request->get('prezzo') * $request->get('quantita'));
-
         $servizi = $DB->prepare('INSERT INTO servizi (id, codice, descrizione, quantita, prezzo, totale, iva, id_fattura, attivo) VALUES (?, ?, ?, ?, ?, ?, ?, ?, 0)');
-        $servizi->bindParam(1, mt_rand(11111, 99999));
+        $servizi->bindValue(1, ID_RAND);
         $servizi->bindParam(2, $request->get('codice'));
         $servizi->bindParam(3, $request->get('descrizione'));
         $servizi->bindParam(4, $request->get('quantita'));
         $servizi->bindParam(5, $request->get('prezzo'));
-        $servizi->bindParam(6, $totale);
+        $servizi->bindValue(6, ($request->get('prezzo') * $request->get('quantita')));
         $servizi->bindParam(7, $request->get('iva'));
         $servizi->bindParam(8, $request->get('id_fattura'));
         $servizi->execute();
@@ -299,7 +290,7 @@ $app->get('/servizi/{fattura}.json', function ($fattura) use ($DB, $app) {
             'prezzo' => $row['prezzo'],
             'quantita' => $row['quantita'],
             'totale' => $row['totale'],
-            'iva' => sprintf('%s%%', $row['iva'])
+            'iva' => sprintf('%d%%', $row['iva'])
         );
     }
     return $app->json(array('aaData' => $obj));
@@ -357,6 +348,7 @@ $app->get('/modifica-fattura/{id}', function ($id) use ($DB, $tpl) {
 
 /**
  * POST Modifico la Fattura
+ * Aggiorno i dati nel database
  */
 $app->post('/modifica-fattura/{id}', function ($id, Request $request) use ($DB, $app) {
 
@@ -384,8 +376,7 @@ $app->post('/modifica-fattura/{id}', function ($id, Request $request) use ($DB, 
         $clienti->execute();
 
         /**
-         * Dopo aver salvato la fattura
-         * abilito i servizi attivi
+         * UPDATE Servizi
          */
         $servizi = $DB->prepare('UPDATE servizi SET attivo = 1 WHERE id_fattura = ? AND attivo = 0');
         $servizi->bindParam(1, $id);
@@ -398,6 +389,7 @@ $app->post('/modifica-fattura/{id}', function ($id, Request $request) use ($DB, 
         ));
 
     } catch (PDOException $Exception) {
+
         return $app->json(array(
             'notice' => 'danger',
             'code' => $Exception->getCode(),
@@ -411,7 +403,7 @@ $app->post('/modifica-fattura/{id}', function ($id, Request $request) use ($DB, 
  */
 $app->get('/modifica-servizi/{id}', function ($id) use ($DB, $tpl) {
 
-    $servizi = $DB->prepare('SELECT * FROM servizi WHERE id = ?');
+    $servizi = $DB->prepare('SELECT * FROM servizi WHERE id = ? LIMIT 0,1');
     $servizi->bindParam(1, $id);
     $servizi->execute();
 
@@ -422,6 +414,7 @@ $app->get('/modifica-servizi/{id}', function ($id) use ($DB, $tpl) {
 
 /**
  * POST Modifica Servizi
+ * Aggiorno i dati nel database
  */
 $app->post('/modifica-servizi', function (Request $request) use ($DB, $app) {
 
@@ -430,14 +423,12 @@ $app->post('/modifica-servizi', function (Request $request) use ($DB, $app) {
         switch ($request->get('action')) {
 
             case 1:
-                $totale = ($request->get('prezzo') * $request->get('quantita'));
-
                 $servizi = $DB->prepare('UPDATE servizi SET codice = ?, descrizione = ?, quantita = ?, prezzo = ?, totale = ?, iva = ? WHERE id = ?');
                 $servizi->bindParam(1, $request->get('codice'));
                 $servizi->bindParam(2, $request->get('descrizione'));
                 $servizi->bindParam(3, $request->get('quantita'));
                 $servizi->bindParam(4, $request->get('prezzo'));
-                $servizi->bindParam(5, $totale);
+                $servizi->bindValue(5, ($request->get('prezzo') * $request->get('quantita')));
                 $servizi->bindParam(6, $request->get('iva'));
                 $servizi->bindParam(7, $request->get('id'));
                 $servizi->execute();
@@ -458,6 +449,7 @@ $app->post('/modifica-servizi', function (Request $request) use ($DB, $app) {
         ));
 
     } catch (PDOException $Exception) {
+
         return $app->json(array(
             'notice' => 'danger',
             'code' => $Exception->getCode(),
@@ -488,13 +480,13 @@ $app->get('/elimina-fattura/{id}', function ($id) use ($DB, $app) {
 $app->get('/pdf/{id}.pdf', function ($id) use ($DB, $tpl, $app) {
 
     /**
-     * Recupero i parametri di configurazione
+     * SELECT configurazione
      */
     $configurazione = $DB->prepare('SELECT * FROM configurazione LIMIT 0,1');
     $configurazione->execute();
 
     /**
-     * Il dettaglio della fattura
+     * SELECT fatture
      */
     $fatture = $DB->prepare('SELECT * FROM fatture WHERE id = ? LIMIT 0,1');
     $fatture->bindParam(1, $id);
@@ -502,14 +494,14 @@ $app->get('/pdf/{id}.pdf', function ($id) use ($DB, $tpl, $app) {
     $row = $fatture->fetch(PDO::FETCH_ASSOC);
 
     /**
-     * Il dettaglio del cliente
+     * SELECT clienti
      */
     $clienti = $DB->prepare('SELECT * FROM clienti WHERE id = ? LIMIT 0,1');
     $clienti->bindParam(1, $row['id_cliente']);
     $clienti->execute();
 
     /**
-     * Tutti i servizi della fattura
+     * SELECT servizi
      */
     $servizi = $DB->prepare('SELECT * FROM servizi WHERE id_fattura = ?');
     $servizi->bindParam(1, $row['id']);
