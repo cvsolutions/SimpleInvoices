@@ -29,6 +29,9 @@ $(document).ready(function () {
      */
     $('#fatture').dataTable({
         ajax: '/fatture.json',
+        language: {
+            url: '/files/Italian.json'
+        },
         columns: [
             { data: 'id' },
             { data: 'numero' },
@@ -194,6 +197,9 @@ $(document).ready(function () {
                     // $("#lista-servizi").dataTable().fnDestroy();
                     $('#lista-servizi').dataTable({
                         ajax: '/servizi/' + data.fattura + '.json',
+                        language: {
+                            url: '/files/Italian.json'
+                        },
                         bDestroy: true,
                         aLengthMenu: [
                             [3, 2, 1],
@@ -297,6 +303,9 @@ $(document).ready(function () {
      */
     $('#lista-servizi').dataTable({
         ajax: '/servizi/' + id_fattura + '.json',
+        language: {
+            url: '/files/Italian.json'
+        },
         bDestroy: true,
         aLengthMenu: [
             [3, 2, 1],
@@ -385,6 +394,9 @@ $(document).ready(function () {
                     parent.$.fancybox.close();
                     $('#lista-servizi').dataTable({
                         ajax: '/servizi/' + data.fattura + '.json',
+                        language: {
+                            url: '/files/Italian.json'
+                        },
                         bDestroy: true,
                         aLengthMenu: [
                             [3, 2, 1],

@@ -14,8 +14,8 @@
 
                             <div class="col-xs-12">
                                 <div class="form-group">
-                                    <label>Descrizione</label>
-                                    <textarea class="form-control" rows="3" name="descrizione" id="descrizione">{$servizi.descrizione}</textarea>
+                                    <label><span class="text-danger">*</span> Descrizione</label>
+                                    <textarea class="form-control" rows="3" name="descrizione" required="" id="descrizione">{$servizi.descrizione}</textarea>
                                 </div>
                             </div>
                         </div>
@@ -23,21 +23,21 @@
                         <div class="row">
                             <div class="col-xs-3">
                                 <div class="form-group">
-                                    <label>Codice</label>
-                                    <input type="text" class="form-control" name="codice" value="{$servizi.codice}">
+                                    <label><span class="text-danger">*</span> Codice</label>
+                                    <input type="text" class="form-control" name="codice" required="" value="{$servizi.codice}">
                                 </div>
                             </div>
                             <div class="col-xs-3">
                                 <div class="form-group">
-                                    <label>Quantità</label>
-                                    <input type="text" class="form-control" name="quantita" id="quantita" value="{$servizi.quantita}">
+                                    <label><span class="text-danger">*</span> Quantità</label>
+                                    <input type="text" class="form-control" name="quantita" required="" id="quantita" value="{$servizi.quantita}">
                                 </div>
                             </div>
 
                             <div class="col-xs-3">
                                 <div class="form-group">
-                                    <label>Prezzo</label>
-                                    <input type="text" class="form-control" name="prezzo" id="prezzo" value="{$servizi.prezzo}">
+                                    <label><span class="text-danger">*</span> Prezzo</label>
+                                    <input type="text" class="form-control" name="prezzo" required="" id="prezzo" value="{$servizi.prezzo}">
                                 </div>
                             </div>
 
