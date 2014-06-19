@@ -24,13 +24,13 @@
                             <div class="col-xs-3">
                                 <div class="form-group">
                                     <label><span class="text-danger">*</span> Codice</label>
-                                    <input type="text" class="form-control" name="codice" required="" value="{$servizi.codice}">
+                                    <input type="text" class="form-control" name="codice" required="" maxlength="5" value="{$servizi.codice}">
                                 </div>
                             </div>
                             <div class="col-xs-3">
                                 <div class="form-group">
                                     <label><span class="text-danger">*</span> Quantità</label>
-                                    <input type="text" class="form-control" name="quantita" required="" id="quantita" value="{$servizi.quantita}">
+                                    <input type="text" class="form-control" name="quantita" required="" id="quantita" maxlength="3" value="{$servizi.quantita}">
                                 </div>
                             </div>
 

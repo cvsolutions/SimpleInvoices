@@ -111,17 +111,17 @@ $app->post('/configurazione', function (Request $request) use ($DB, $app) {
         try {
 
             $configurazione = $DB->prepare('UPDATE configurazione SET ragione_sociale = ?, codice_fiscale = ?, partita_iva = ?, indirizzo = ?, cap = ?, citta = ?, provincia = ?, telefono = ?, fax = ?, email = ?, pie_di_pagina = ?');
-            $configurazione->bindParam(1, $request->get('ragione_sociale'));
-            $configurazione->bindParam(2, $request->get('codice_fiscale'));
-            $configurazione->bindParam(3, $request->get('partita_iva'));
-            $configurazione->bindParam(4, $request->get('indirizzo'));
-            $configurazione->bindParam(5, $request->get('cap'));
-            $configurazione->bindParam(6, $request->get('citta'));
-            $configurazione->bindParam(7, $request->get('provincia'));
-            $configurazione->bindParam(8, $request->get('telefono'));
-            $configurazione->bindParam(9, $request->get('fax'));
-            $configurazione->bindParam(10, $request->get('email'));
-            $configurazione->bindParam(11, $request->get('pie_di_pagina'));
+            $configurazione->bindParam(1, $request->get('ragione_sociale'), PDO::PARAM_STR);
+            $configurazione->bindParam(2, $request->get('codice_fiscale'), PDO::PARAM_STR);
+            $configurazione->bindParam(3, $request->get('partita_iva'), PDO::PARAM_STR);
+            $configurazione->bindParam(4, $request->get('indirizzo'), PDO::PARAM_STR);
+            $configurazione->bindParam(5, $request->get('cap'), PDO::PARAM_STR);
+            $configurazione->bindParam(6, $request->get('citta'), PDO::PARAM_STR);
+            $configurazione->bindParam(7, $request->get('provincia'), PDO::PARAM_STR);
+            $configurazione->bindParam(8, $request->get('telefono'), PDO::PARAM_STR);
+            $configurazione->bindParam(9, $request->get('fax'), PDO::PARAM_STR);
+            $configurazione->bindParam(10, $request->get('email'), PDO::PARAM_STR);
+            $configurazione->bindParam(11, $request->get('pie_di_pagina'), PDO::PARAM_STR);
             $configurazione->execute();
 
             return $app->json(array(
@@ -177,40 +177,40 @@ $app->post('/aggiungi-fattura', function (Request $request) use ($DB, $app) {
     try {
 
         $fatture = $DB->prepare('INSERT INTO fatture (id, numero, anno, emissione, oggetto, pagamento, note, id_cliente, pubblicazione) VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?)');
-        $fatture->bindParam(1, $request->get('id'));
-        $fatture->bindParam(2, $request->get('numero'));
+        $fatture->bindParam(1, $request->get('id'), PDO::PARAM_INT);
+        $fatture->bindParam(2, $request->get('numero'), PDO::PARAM_INT);
         $fatture->bindParam(3, $date->format('Y'));
-        $fatture->bindParam(4, $request->get('emissione'));
-        $fatture->bindParam(5, $request->get('oggetto'));
-        $fatture->bindParam(6, $request->get('pagamento'));
-        $fatture->bindParam(7, $request->get('note'));
-        $fatture->bindParam(8, $id_cliente);
+        $fatture->bindParam(4, $request->get('emissione'), PDO::PARAM_STR);
+        $fatture->bindParam(5, $request->get('oggetto'), PDO::PARAM_STR);
+        $fatture->bindParam(6, $request->get('pagamento'), PDO::PARAM_STR);
+        $fatture->bindParam(7, $request->get('note'), PDO::PARAM_STR);
+        $fatture->bindParam(8, $id_cliente, PDO::PARAM_INT);
         $fatture->bindParam(9, $date->format('Y-m-d H:i:s'));
         $fatture->execute();
 
         if ($cliente == 0) {
 
             $clienti = $DB->prepare('INSERT INTO clienti (id, ragione_sociale, codice_fiscale, partita_iva, indirizzo, cap, citta, provincia) VALUES (?, ?, ?, ?, ?, ?, ?, ?)');
-            $clienti->bindParam(1, $id_cliente);
-            $clienti->bindParam(2, $request->get('ragione_sociale'));
-            $clienti->bindParam(3, $request->get('codice_fiscale'));
-            $clienti->bindParam(4, $request->get('partita_iva'));
-            $clienti->bindParam(5, $request->get('indirizzo'));
-            $clienti->bindParam(6, $request->get('cap'));
-            $clienti->bindParam(7, $request->get('citta'));
-            $clienti->bindParam(8, $request->get('provincia'));
+            $clienti->bindParam(1, $id_cliente, PDO::PARAM_INT);
+            $clienti->bindParam(2, $request->get('ragione_sociale'), PDO::PARAM_STR);
+            $clienti->bindParam(3, $request->get('codice_fiscale'), PDO::PARAM_STR);
+            $clienti->bindParam(4, $request->get('partita_iva'), PDO::PARAM_STR);
+            $clienti->bindParam(5, $request->get('indirizzo'), PDO::PARAM_STR);
+            $clienti->bindParam(6, $request->get('cap'), PDO::PARAM_STR);
+            $clienti->bindParam(7, $request->get('citta'), PDO::PARAM_STR);
+            $clienti->bindParam(8, $request->get('provincia'), PDO::PARAM_STR);
 
         } else {
 
             $clienti = $DB->prepare('UPDATE clienti SET ragione_sociale = ?, codice_fiscale = ?, partita_iva = ?, indirizzo = ?, cap = ?, citta = ?, provincia = ? WHERE id = ?');
-            $clienti->bindParam(1, $request->get('ragione_sociale'));
-            $clienti->bindParam(2, $request->get('codice_fiscale'));
-            $clienti->bindParam(3, $request->get('partita_iva'));
-            $clienti->bindParam(4, $request->get('indirizzo'));
-            $clienti->bindParam(5, $request->get('cap'));
-            $clienti->bindParam(6, $request->get('citta'));
-            $clienti->bindParam(7, $request->get('provincia'));
-            $clienti->bindParam(8, $id_cliente);
+            $clienti->bindParam(1, $request->get('ragione_sociale'), PDO::PARAM_STR);
+            $clienti->bindParam(2, $request->get('codice_fiscale'), PDO::PARAM_STR);
+            $clienti->bindParam(3, $request->get('partita_iva'), PDO::PARAM_STR);
+            $clienti->bindParam(4, $request->get('indirizzo'), PDO::PARAM_STR);
+            $clienti->bindParam(5, $request->get('cap'), PDO::PARAM_STR);
+            $clienti->bindParam(6, $request->get('citta'), PDO::PARAM_STR);
+            $clienti->bindParam(7, $request->get('provincia'), PDO::PARAM_STR);
+            $clienti->bindParam(8, $id_cliente, PDO::PARAM_INT);
         }
 
         $clienti->execute();
@@ -219,7 +219,7 @@ $app->post('/aggiungi-fattura', function (Request $request) use ($DB, $app) {
          * UPDATE Servizi
          */
         $servizi = $DB->prepare('UPDATE servizi SET attivo = 1 WHERE id_fattura = ? AND attivo = 0');
-        $servizi->bindParam(1, $request->get('id'));
+        $servizi->bindParam(1, $request->get('id'), PDO::PARAM_INT);
         $servizi->execute();
 
         return $app->json(array(
@@ -251,13 +251,13 @@ $app->post('/aggiungi-servizi', function (Request $request) use ($DB, $app) {
 
         $servizi = $DB->prepare('INSERT INTO servizi (id, codice, descrizione, quantita, prezzo, totale, iva, id_fattura, attivo, pubblicazione) VALUES (?, ?, ?, ?, ?, ?, ?, ?, 0, ?)');
         $servizi->bindValue(1, ID_RAND);
-        $servizi->bindParam(2, $request->get('codice'));
-        $servizi->bindParam(3, $request->get('descrizione'));
-        $servizi->bindParam(4, $request->get('quantita'));
-        $servizi->bindParam(5, $request->get('prezzo'));
-        $servizi->bindValue(6, ($request->get('prezzo') * $request->get('quantita')));
-        $servizi->bindParam(7, $request->get('iva'));
-        $servizi->bindParam(8, $request->get('id_fattura'));
+        $servizi->bindParam(2, $request->get('codice'), PDO::PARAM_STR);
+        $servizi->bindParam(3, $request->get('descrizione'), PDO::PARAM_STR);
+        $servizi->bindParam(4, $request->get('quantita'), PDO::PARAM_INT);
+        $servizi->bindParam(5, $request->get('prezzo'), PDO::PARAM_STR);
+        $servizi->bindValue(6, ($request->get('prezzo') * $request->get('quantita')), PDO::PARAM_STR);
+        $servizi->bindParam(7, $request->get('iva'), PDO::PARAM_INT);
+        $servizi->bindParam(8, $request->get('id_fattura'), PDO::PARAM_INT);
         $servizi->bindParam(9, $date->format('Y-m-d H:i:s'));
         $servizi->execute();
 
@@ -284,7 +284,7 @@ $app->post('/aggiungi-servizi', function (Request $request) use ($DB, $app) {
 $app->get('/servizi/{fattura}.json', function ($fattura) use ($DB, $app) {
 
     $servizi = $DB->prepare('SELECT * FROM servizi WHERE id_fattura = ? ORDER BY pubblicazione DESC');
-    $servizi->bindParam(1, $fattura);
+    $servizi->bindParam(1, $fattura, PDO::PARAM_INT);
     $servizi->execute();
 
     $obj = array();
@@ -308,7 +308,7 @@ $app->get('/servizi/{fattura}.json', function ($fattura) use ($DB, $app) {
 $app->post('/cliente', function (Request $request) use ($DB, $app) {
 
     $clienti = $DB->prepare('SELECT * FROM clienti WHERE id = ? LIMIT 0,1');
-    $clienti->bindParam(1, $request->get('id'));
+    $clienti->bindParam(1, $request->get('id'), PDO::PARAM_INT);
     $clienti->execute();
     return $app->json($clienti->fetch(PDO::FETCH_ASSOC));
 });
@@ -319,7 +319,7 @@ $app->post('/cliente', function (Request $request) use ($DB, $app) {
 $app->post('/servizio', function (Request $request) use ($DB, $app) {
 
     $servizi = $DB->prepare('SELECT * FROM servizi WHERE id = ? LIMIT 0,1');
-    $servizi->bindParam(1, $request->get('id'));
+    $servizi->bindParam(1, $request->get('id'), PDO::PARAM_INT);
     $servizi->execute();
     return $app->json($servizi->fetch(PDO::FETCH_ASSOC));
 });
@@ -330,12 +330,12 @@ $app->post('/servizio', function (Request $request) use ($DB, $app) {
 $app->get('/modifica-fattura/{id}', function ($id) use ($DB, $tpl) {
 
     $fatture = $DB->prepare('SELECT * FROM fatture WHERE id = ? LIMIT 0,1');
-    $fatture->bindParam(1, $id);
+    $fatture->bindParam(1, $id, PDO::PARAM_INT);
     $fatture->execute();
     $row = $fatture->fetch(PDO::FETCH_ASSOC);
 
     $cliente = $DB->prepare('SELECT * FROM clienti WHERE id = ? LIMIT 0,1');
-    $cliente->bindParam(1, $row['id_cliente']);
+    $cliente->bindParam(1, $row['id_cliente'], PDO::PARAM_INT);
     $cliente->execute();
 
     $clienti = $DB->prepare('SELECT * FROM clienti ORDER BY ragione_sociale ASC');
@@ -363,32 +363,32 @@ $app->post('/modifica-fattura/{id}', function ($id, Request $request) use ($DB, 
         $date = new DateTime('NOW');
 
         $fatture = $DB->prepare('UPDATE fatture SET numero = ?, emissione = ?, oggetto = ?, pagamento = ?, note = ?, id_cliente = ? , pubblicazione = ? WHERE id = ?');
-        $fatture->bindParam(1, $request->get('numero'));
-        $fatture->bindParam(2, $request->get('emissione'));
-        $fatture->bindParam(3, $request->get('oggetto'));
-        $fatture->bindParam(4, $request->get('pagamento'));
-        $fatture->bindParam(5, $request->get('note'));
-        $fatture->bindParam(6, $request->get('id_cliente'));
+        $fatture->bindParam(1, $request->get('numero'), PDO::PARAM_INT);
+        $fatture->bindParam(2, $request->get('emissione'), PDO::PARAM_STR);
+        $fatture->bindParam(3, $request->get('oggetto'), PDO::PARAM_STR);
+        $fatture->bindParam(4, $request->get('pagamento'), PDO::PARAM_STR);
+        $fatture->bindParam(5, $request->get('note'), PDO::PARAM_STR);
+        $fatture->bindParam(6, $request->get('id_cliente'), PDO::PARAM_INT);
         $fatture->bindParam(7, $date->format('Y-m-d H:i:s'));
-        $fatture->bindParam(8, $id);
+        $fatture->bindParam(8, $id, PDO::PARAM_INT);
         $fatture->execute();
 
         $clienti = $DB->prepare('UPDATE clienti SET ragione_sociale = ?, codice_fiscale = ?, partita_iva = ?, indirizzo = ?, cap = ?, citta = ?, provincia = ? WHERE id = ?');
-        $clienti->bindParam(1, $request->get('ragione_sociale'));
-        $clienti->bindParam(2, $request->get('codice_fiscale'));
-        $clienti->bindParam(3, $request->get('partita_iva'));
-        $clienti->bindParam(4, $request->get('indirizzo'));
-        $clienti->bindParam(5, $request->get('cap'));
-        $clienti->bindParam(6, $request->get('citta'));
-        $clienti->bindParam(7, $request->get('provincia'));
-        $clienti->bindParam(8, $request->get('id_cliente'));
+        $clienti->bindParam(1, $request->get('ragione_sociale'), PDO::PARAM_STR);
+        $clienti->bindParam(2, $request->get('codice_fiscale'), PDO::PARAM_STR);
+        $clienti->bindParam(3, $request->get('partita_iva'), PDO::PARAM_STR);
+        $clienti->bindParam(4, $request->get('indirizzo'), PDO::PARAM_STR);
+        $clienti->bindParam(5, $request->get('cap'), PDO::PARAM_STR);
+        $clienti->bindParam(6, $request->get('citta'), PDO::PARAM_STR);
+        $clienti->bindParam(7, $request->get('provincia'), PDO::PARAM_STR);
+        $clienti->bindParam(8, $request->get('id_cliente'), PDO::PARAM_INT);
         $clienti->execute();
 
         /**
          * UPDATE Servizi
          */
         $servizi = $DB->prepare('UPDATE servizi SET attivo = 1 WHERE id_fattura = ? AND attivo = 0');
-        $servizi->bindParam(1, $id);
+        $servizi->bindParam(1, $id, PDO::PARAM_INT);
         $servizi->execute();
 
         return $app->json(array(
@@ -413,7 +413,7 @@ $app->post('/modifica-fattura/{id}', function ($id, Request $request) use ($DB, 
 $app->get('/modifica-servizi/{id}', function ($id) use ($DB, $tpl) {
 
     $servizi = $DB->prepare('SELECT * FROM servizi WHERE id = ? LIMIT 0,1');
-    $servizi->bindParam(1, $id);
+    $servizi->bindParam(1, $id, PDO::PARAM_INT);
     $servizi->execute();
 
     $tpl->assign('servizi', $servizi->fetch(PDO::FETCH_ASSOC));
@@ -435,20 +435,20 @@ $app->post('/modifica-servizi', function (Request $request) use ($DB, $app) {
 
             case 1:
                 $servizi = $DB->prepare('UPDATE servizi SET codice = ?, descrizione = ?, quantita = ?, prezzo = ?, totale = ?, iva = ?, pubblicazione = ? WHERE id = ?');
-                $servizi->bindParam(1, $request->get('codice'));
-                $servizi->bindParam(2, $request->get('descrizione'));
-                $servizi->bindParam(3, $request->get('quantita'));
-                $servizi->bindParam(4, $request->get('prezzo'));
-                $servizi->bindValue(5, ($request->get('prezzo') * $request->get('quantita')));
-                $servizi->bindParam(6, $request->get('iva'));
+                $servizi->bindParam(1, $request->get('codice'), PDO::PARAM_STR);
+                $servizi->bindParam(2, $request->get('descrizione'), PDO::PARAM_STR);
+                $servizi->bindParam(3, $request->get('quantita'), PDO::PARAM_INT);
+                $servizi->bindParam(4, $request->get('prezzo'), PDO::PARAM_STR);
+                $servizi->bindValue(5, ($request->get('prezzo') * $request->get('quantita')), PDO::PARAM_STR);
+                $servizi->bindParam(6, $request->get('iva'), PDO::PARAM_INT);
                 $servizi->bindParam(7, $date->format('Y-m-d H:i:s'));
-                $servizi->bindParam(8, $request->get('id'));
+                $servizi->bindParam(8, $request->get('id'), PDO::PARAM_INT);
                 $servizi->execute();
                 break;
 
             case 2:
                 $servizi = $DB->prepare('UPDATE servizi SET id_fattura = 0, attivo = 0 WHERE id = ?');
-                $servizi->bindParam(1, $request->get('id'));
+                $servizi->bindParam(1, $request->get('id'), PDO::PARAM_INT);
                 $servizi->execute();
                 break;
 
@@ -476,7 +476,7 @@ $app->post('/modifica-servizi', function (Request $request) use ($DB, $app) {
 $app->get('/elimina-fattura/{id}', function ($id) use ($DB, $app) {
 
     $fatture = $DB->prepare('DELETE FROM fatture WHERE id = ?');
-    $fatture->bindParam(1, $id);
+    $fatture->bindParam(1, $id, PDO::PARAM_INT);
     $fatture->execute();
 
     $servizi = $DB->prepare('DELETE FROM servizi WHERE id_fattura = ?');
@@ -501,7 +501,7 @@ $app->get('/pdf/{id}.pdf', function ($id) use ($DB, $tpl, $app) {
      * SELECT fatture
      */
     $fatture = $DB->prepare('SELECT * FROM fatture WHERE id = ? LIMIT 0,1');
-    $fatture->bindParam(1, $id);
+    $fatture->bindParam(1, $id, PDO::PARAM_INT);
     $fatture->execute();
     $row = $fatture->fetch(PDO::FETCH_ASSOC);
 
@@ -509,14 +509,14 @@ $app->get('/pdf/{id}.pdf', function ($id) use ($DB, $tpl, $app) {
      * SELECT clienti
      */
     $clienti = $DB->prepare('SELECT * FROM clienti WHERE id = ? LIMIT 0,1');
-    $clienti->bindParam(1, $row['id_cliente']);
+    $clienti->bindParam(1, $row['id_cliente'], PDO::PARAM_INT);
     $clienti->execute();
 
     /**
      * SELECT servizi
      */
     $servizi = $DB->prepare('SELECT * FROM servizi WHERE id_fattura = ?');
-    $servizi->bindParam(1, $row['id']);
+    $servizi->bindParam(1, $row['id'], PDO::PARAM_INT);
     $servizi->execute();
 
     $tpl->assign('configurazione', $configurazione->fetch(PDO::FETCH_ASSOC));

@@ -209,7 +209,7 @@
                                         <div class="col-xs-1">
                                             <div class="form-group">
                                                 <label><span class="text-danger">*</span> Codice</label>
-                                                <input type="text" class="form-control ignore" name="codice" id="codice" required="" value="">
+                                                <input type="text" class="form-control ignore" name="codice" id="codice" required="" maxlength="5" value="">
                                             </div>
                                         </div>
 
@@ -223,7 +223,7 @@
                                         <div class="col-xs-1">
                                             <div class="form-group">
                                                 <label><span class="text-danger">*</span> Qta</label>
-                                                <input type="text" class="form-control ignore" name="quantita" required="" id="quantita" value="">
+                                                <input type="text" class="form-control ignore" name="quantita" required="" maxlength="3" id="quantita" value="">
                                             </div>
                                         </div>
 
