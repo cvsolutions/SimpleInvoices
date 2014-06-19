@@ -30,7 +30,7 @@
                             <div class="col-xs-3">
                                 <div class="form-group">
                                     <label><span class="text-danger">*</span> Quantità</label>
-                                    <input type="text" class="form-control" name="quantita" required="" id="quantita" maxlength="3" value="{$servizi.quantita}">
+                                    <input type="number" class="form-control" name="quantita" required="" id="quantita" maxlength="3" value="{$servizi.quantita}">
                                 </div>
                             </div>
 

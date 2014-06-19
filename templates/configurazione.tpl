@@ -79,13 +79,13 @@
                                         <div class="col-xs-6">
                                             <div class="form-group">
                                                 <label><span class="text-danger">*</span> Telefono</label>
-                                                <input type="text" class="form-control" name="telefono" required="" value="{$row.telefono}">
+                                                <input type="tel" class="form-control" name="telefono" required="" value="{$row.telefono}">
                                             </div>
                                         </div>
                                         <div class="col-xs-6">
                                             <div class="form-group">
                                                 <label>FAX</label>
-                                                <input type="text" class="form-control" name="fax" value="{$row.fax}">
+                                                <input type="tel" class="form-control" name="fax" value="{$row.fax}">
                                             </div>
                                         </div>
                                     </div>

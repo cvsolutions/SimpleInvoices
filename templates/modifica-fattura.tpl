@@ -25,7 +25,7 @@
                                     <div class="col-xs-6">
                                         <div class="form-group">
                                             <label><span class="text-danger">*</span> Fattura N.</label>
-                                            <input type="text" class="form-control" name="numero" required="" value="{$fatture.numero}">
+                                            <input type="number" class="form-control" name="numero" required="" value="{$fatture.numero}">
                                         </div>
                                     </div>
                                     <div class="col-xs-6">
@@ -222,7 +222,7 @@
                                         <div class="col-xs-1">
                                             <div class="form-group">
                                                 <label><span class="text-danger">*</span> Qta</label>
-                                                <input type="text" class="form-control ignore" name="quantita" required="" maxlength="3" id="quantita" value="">
+                                                <input type="number" class="form-control ignore" name="quantita" required="" maxlength="3" id="quantita" value="">
                                             </div>
                                         </div>
 

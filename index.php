@@ -29,7 +29,8 @@ $app['debug'] = true;
  */
 $app->get('/', function () use ($DB, $tpl) {
 
-    $DB->exec('DELETE FROM servizi WHERE attivo = 0');
+    $servizi = $DB->prepare('DELETE FROM servizi WHERE attivo = 0');
+    $servizi->execute();
     $tpl->display('index.tpl');
     return false;
 });
