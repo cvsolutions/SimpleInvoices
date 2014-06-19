@@ -25,7 +25,7 @@
                                     <div class="col-xs-6">
                                         <div class="form-group">
                                             <label>Fattura N.</label>
-                                            <input type="text" class="form-control" name="numero" value="{$fatture.totale + 1}">
+                                            <input type="text" class="form-control" name="numero" required="" value="{$fatture.totale + 1}">
                                         </div>
                                     </div>
                                     <div class="col-xs-6">
@@ -33,7 +33,7 @@
                                             <label>Data</label>
 
                                             <div class="input-group">
-                                                <input type="text" class="form-control datepicker" name="emissione" value="{$smarty.now|date_format:"%Y-%m-%d"}" readonly>
+                                                <input type="text" class="form-control datepicker" name="emissione" required="" value="{$smarty.now|date_format:"%Y-%m-%d"}" readonly>
                                                 <span class="input-group-addon"><span class="glyphicon glyphicon-calendar"></span></span>
                                             </div>
                                         </div>
@@ -73,7 +73,7 @@
                                                 </div>
                                                 <div class="col-xs-8">
                                                     <div class="form-group">
-                                                        <input type="text" class="form-control" name="ragione_sociale" id="ragione_sociale" value="">
+                                                        <input type="text" class="form-control" name="ragione_sociale" required="" id="ragione_sociale" value="">
                                                     </div>
                                                 </div>
                                             </div>
@@ -97,7 +97,7 @@
                                                 <div class="col-xs-12">
                                                     <div class="form-group">
                                                         <label>Indirizzo</label>
-                                                        <input type="text" class="form-control name="indirizzo" id="indirizzo" value="">
+                                                        <input type="text" class="form-control" name="indirizzo" id="indirizzo" value="">
                                                     </div>
                                                 </div>
                                             </div>
@@ -259,7 +259,7 @@
                         <div class="row">
                             <div class="col-xs-12">
                                 <hr/>
-                                <input type="hidden" name="id" id="id" value="{$id}">
+                                <input type="hidden" name="id" id="id" required="" value="{$id}">
                                 <input type="submit" class="btn btn-default" disabled value="Salva">
                             </div>
                         </div>

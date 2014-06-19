@@ -5,7 +5,7 @@
         <div class="col-xs-12">
             <div class="panel panel-default">
                 <div class="panel-heading">
-                    <h3 class="panel-title">Aggiungi Fattura</h3>
+                    <h3 class="panel-title">Modifica Fattura</h3>
                 </div>
                 <div class="panel-body">
 
@@ -25,7 +25,7 @@
                                     <div class="col-xs-6">
                                         <div class="form-group">
                                             <label>Fattura N.</label>
-                                            <input type="text" class="form-control" name="numero" value="{$fatture.numero}">
+                                            <input type="text" class="form-control" name="numero" required="" value="{$fatture.numero}">
                                         </div>
                                     </div>
                                     <div class="col-xs-6">
@@ -33,7 +33,7 @@
                                             <label>Data</label>
 
                                             <div class="input-group">
-                                                <input type="text" class="form-control datepicker" name="emissione" value="{$fatture.emissione}" readonly>
+                                                <input type="text" class="form-control datepicker" name="emissione" required="" value="{$fatture.emissione}" readonly>
                                                 <span class="input-group-addon"><span class="glyphicon glyphicon-calendar"></span></span>
                                             </div>
                                         </div>
@@ -72,7 +72,7 @@
                                                 </div>
                                                 <div class="col-xs-8">
                                                     <div class="form-group">
-                                                        <input type="text" class="form-control" name="ragione_sociale" id="ragione_sociale" value="{$cliente.ragione_sociale}">
+                                                        <input type="text" class="form-control" name="ragione_sociale" id="ragione_sociale" required="" value="{$cliente.ragione_sociale}">
                                                     </div>
                                                 </div>
                                             </div>
@@ -258,7 +258,7 @@
                         <div class="row">
                             <div class="col-xs-12">
                                 <hr/>
-                                <input type="hidden" name="id" id="id" value="{$fatture.id}">
+                                <input type="hidden" name="id" id="id" required="" value="{$fatture.id}">
                                 <input type="submit" class="btn btn-default" value="Salva">
                             </div>
                         </div>

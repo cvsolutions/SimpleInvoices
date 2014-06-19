@@ -24,6 +24,7 @@ $(document).ready(function () {
         format: 'yyyy-mm-dd'
     });
 
+
     /**
      * dataTable
      */
@@ -61,93 +62,99 @@ $(document).ready(function () {
     });
 
     /**
-     * Submit Configurazione
+     * Configurazione
      */
-    $('#configurazione').submit(function () {
+    $('#configurazione').validate({
+        submitHandler: function (form) {
 
-        var result = $('#result');
+            var result = $('#result');
 
-        $.ajax({
-            url: '/configurazione',
-            type: 'POST',
-            data: new FormData(this),
-            processData: false,
-            contentType: false,
-            dataType: 'json',
-            cache: false,
-            beforeSend: function () {
-                $('.btn').isLoading();
-            },
-            success: function (data) {
-                $('.btn').isLoading('hide');
-                result.fadeIn().show();
+            $.ajax({
+                url: '/configurazione',
+                type: 'POST',
+                data: new FormData(form),
+                processData: false,
+                contentType: false,
+                dataType: 'json',
+                cache: false,
+                beforeSend: function () {
+                    $('.btn').isLoading();
+                },
+                success: function (data) {
+                    $('.btn').isLoading('hide');
+                    result.fadeIn().show();
 
-                if (data.img) {
-                    $('#logo').attr({
-                        'src': data.img
-                    });
+                    if (data.img) {
+                        $('#logo').attr({
+                            'src': data.img
+                        });
+                    }
+
+                    result.append($('<div/>').attr({
+                        'class': 'alert alert-' + data.notice + ' alert-dismissable'
+                    }).append('<div/>').html(data.messages));
+                    setTimeout(function () {
+                        result.fadeOut();
+                        $('.alert-dismissable').remove();
+                        location.reload();
+                    }, delay);
+                },
+                error: function (xhr, ajaxOptions, thrownError) {
+                    $('.btn').isLoading('hide');
+                    result.fadeIn().show();
+                    result.append($('<div/>').attr({
+                        'class': 'alert alert-danger alert-dismissable'
+                    }).append('<div/>').html(thrownError));
                 }
-
-                result.append($('<div/>').attr({
-                    'class': 'alert alert-' + data.notice + ' alert-dismissable'
-                }).append('<div/>').html(data.messages));
-                setTimeout(function () {
-                    result.fadeOut();
-                    $('.alert-dismissable').remove();
-                    location.reload();
-                }, delay);
-            },
-            error: function (xhr, ajaxOptions, thrownError) {
-                $('.btn').isLoading('hide');
-                result.fadeIn().show();
-                result.append($('<div/>').attr({
-                    'class': 'alert alert-danger alert-dismissable'
-                }).append('<div/>').html(thrownError));
-            }
-        });
-        return false;
+            });
+            // form.submit();
+            return false;
+        }
     });
 
     /**
-     * Submit Aggiungi Fattura
+     * Aggiungi Fattura
      */
-    $('#aggiungi_fattura').submit(function () {
+    $('#aggiungi_fattura').validate({
+        submitHandler: function (form) {
 
-        var result = $('#result');
+            var result = $('#result');
 
-        $.ajax({
-            url: '/aggiungi-fattura',
-            type: 'POST',
-            data: new FormData(this),
-            processData: false,
-            contentType: false,
-            dataType: 'json',
-            cache: false,
-            beforeSend: function () {
-                $('.btn').isLoading();
-            },
-            success: function (data) {
-                $('.btn').isLoading('hide');
-                result.fadeIn().show();
-                result.append($('<div/>').attr({
-                    'class': 'alert alert-' + data.notice + ' alert-dismissable'
-                }).append('<div/>').html(data.messages));
-                setTimeout(function () {
-                    result.fadeOut();
-                    $('.alert-dismissable').remove();
-                    location.reload();
-                }, delay);
-            },
-            error: function (xhr, ajaxOptions, thrownError) {
-                $('.btn').isLoading('hide');
-                result.fadeIn().show();
-                result.append($('<div/>').attr({
-                    'class': 'alert alert-danger alert-dismissable'
-                }).append('<div/>').html(thrownError));
-            }
-        });
-        return false;
+            $.ajax({
+                url: '/aggiungi-fattura',
+                type: 'POST',
+                data: new FormData(form),
+                processData: false,
+                contentType: false,
+                dataType: 'json',
+                cache: false,
+                beforeSend: function () {
+                    $('.btn').isLoading();
+                },
+                success: function (data) {
+                    $('.btn').isLoading('hide');
+                    result.fadeIn().show();
+                    result.append($('<div/>').attr({
+                        'class': 'alert alert-' + data.notice + ' alert-dismissable'
+                    }).append('<div/>').html(data.messages));
+                    setTimeout(function () {
+                        result.fadeOut();
+                        $('.alert-dismissable').remove();
+                        location.reload();
+                    }, delay);
+                },
+                error: function (xhr, ajaxOptions, thrownError) {
+                    $('.btn').isLoading('hide');
+                    result.fadeIn().show();
+                    result.append($('<div/>').attr({
+                        'class': 'alert alert-danger alert-dismissable'
+                    }).append('<div/>').html(thrownError));
+                }
+            });
+            return false;
+        }
     });
+
 
     /**
      * Submit Servizi
@@ -303,94 +310,98 @@ $(document).ready(function () {
     });
 
     /**
-     * Submit Modifica Fattura
+     * Modifica Fattura
      */
-    $('#modifica_fattura').submit(function () {
+    $('#modifica_fattura').validate({
+        submitHandler: function (form) {
 
-        var result = $('#result');
-        var id_fattura = $('#id').val();
+            var result = $('#result');
+            var id_fattura = $('#id').val();
 
-        $.ajax({
-            url: '/modifica-fattura/' + id_fattura,
-            type: 'POST',
-            data: new FormData(this),
-            processData: false,
-            contentType: false,
-            dataType: 'json',
-            cache: false,
-            beforeSend: function () {
-                $('.btn').isLoading();
-            },
-            success: function (data) {
-                $('.btn').isLoading('hide');
-                result.fadeIn().show();
-                result.append($('<div/>').attr({
-                    'class': 'alert alert-' + data.notice + ' alert-dismissable'
-                }).append('<div/>').html(data.messages));
-                setTimeout(function () {
-                    result.fadeOut();
-                    $('.alert-dismissable').remove();
-                    // location.reload();
-                    location.assign('/');
-                }, delay);
-            },
-            error: function (xhr, ajaxOptions, thrownError) {
-                $('.btn').isLoading('hide');
-                result.fadeIn().show();
-                result.append($('<div/>').attr({
-                    'class': 'alert alert-danger alert-dismissable'
-                }).append('<div/>').html(thrownError));
-            }
-        });
-        return false;
+            $.ajax({
+                url: '/modifica-fattura/' + id_fattura,
+                type: 'POST',
+                data: new FormData(form),
+                processData: false,
+                contentType: false,
+                dataType: 'json',
+                cache: false,
+                beforeSend: function () {
+                    $('.btn').isLoading();
+                },
+                success: function (data) {
+                    $('.btn').isLoading('hide');
+                    result.fadeIn().show();
+                    result.append($('<div/>').attr({
+                        'class': 'alert alert-' + data.notice + ' alert-dismissable'
+                    }).append('<div/>').html(data.messages));
+                    setTimeout(function () {
+                        result.fadeOut();
+                        $('.alert-dismissable').remove();
+                        // location.reload();
+                        location.assign('/');
+                    }, delay);
+                },
+                error: function (xhr, ajaxOptions, thrownError) {
+                    $('.btn').isLoading('hide');
+                    result.fadeIn().show();
+                    result.append($('<div/>').attr({
+                        'class': 'alert alert-danger alert-dismissable'
+                    }).append('<div/>').html(thrownError));
+                }
+            });
+            return false;
+        }
     });
 
     /**
-     * submit Modifica Servizi
+     * Modifica Servizio
      */
-    $('#modifica_servizi').submit(function () {
-        $.ajax({
-            url: '/modifica-servizi',
-            type: 'POST',
-            data: new FormData(this),
-            processData: false,
-            contentType: false,
-            dataType: 'json',
-            cache: false,
-            success: function (data) {
-                parent.location.reload();
-                parent.$.fancybox.close();
-                $('#lista-servizi').dataTable({
-                    ajax: '/servizi/' + data.fattura + '.json',
-                    bDestroy: true,
-                    aLengthMenu: [
-                        [3, 2, 1],
-                        [3, 2, 1]
-                    ],
-                    columns: [
-                        { data: 'codice' },
-                        { data: 'descrizione' },
-                        { data: 'prezzo' },
-                        { data: 'quantita' },
-                        { data: 'totale' },
-                        { data: 'iva' }
-                    ],
-                    columnDefs: [
-                        {
-                            targets: -6,
-                            data: 'codice',
-                            render: function (data, type, row) {
-                                return '<a href="/modifica-servizi/' + row.id + '?hideHeader=1" class="btn btn-default btn-xs open-box" data-fancybox-type="iframe">' + data + '</a>';
+    $('#modifica_servizi').validate({
+        submitHandler: function (form) {
+            $.ajax({
+                url: '/modifica-servizi',
+                type: 'POST',
+                data: new FormData(form),
+                processData: false,
+                contentType: false,
+                dataType: 'json',
+                cache: false,
+                success: function (data) {
+                    parent.location.reload();
+                    parent.$.fancybox.close();
+                    $('#lista-servizi').dataTable({
+                        ajax: '/servizi/' + data.fattura + '.json',
+                        bDestroy: true,
+                        aLengthMenu: [
+                            [3, 2, 1],
+                            [3, 2, 1]
+                        ],
+                        columns: [
+                            { data: 'codice' },
+                            { data: 'descrizione' },
+                            { data: 'prezzo' },
+                            { data: 'quantita' },
+                            { data: 'totale' },
+                            { data: 'iva' }
+                        ],
+                        columnDefs: [
+                            {
+                                targets: -6,
+                                data: 'codice',
+                                render: function (data, type, row) {
+                                    return '<a href="/modifica-servizi/' + row.id + '?hideHeader=1" class="btn btn-default btn-xs open-box" data-fancybox-type="iframe">' + data + '</a>';
+                                }
                             }
-                        }
-                    ]
-                });
-            },
-            error: function (xhr, ajaxOptions, thrownError) {
-                alert(thrownError);
-            }
-        });
-        return false;
+                        ]
+                    });
+                },
+                error: function (xhr, ajaxOptions, thrownError) {
+                    alert(thrownError);
+                }
+            });
+            return false;
+        }
     });
 
     /**

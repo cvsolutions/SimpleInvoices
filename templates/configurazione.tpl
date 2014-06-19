@@ -25,7 +25,7 @@
                                         <div class="col-xs-12">
                                             <div class="form-group">
                                                 <label>Ragione Sociale</label>
-                                                <input type="text" class="form-control" name="ragione_sociale" value="{$row.ragione_sociale}">
+                                                <input type="text" class="form-control" name="ragione_sociale" required="" value="{$row.ragione_sociale}">
                                             </div>
                                         </div>
                                     </div>
@@ -34,13 +34,13 @@
                                         <div class="col-xs-6">
                                             <div class="form-group">
                                                 <label>Codice Fiscale</label>
-                                                <input type="text" class="form-control" name="codice_fiscale" value="{$row.codice_fiscale}">
+                                                <input type="text" class="form-control" name="codice_fiscale" required="" value="{$row.codice_fiscale}">
                                             </div>
                                         </div>
                                         <div class="col-xs-6">
                                             <div class="form-group">
                                                 <label>Partita IVA</label>
-                                                <input type="text" class="form-control" name="partita_iva" value="{$row.partita_iva}">
+                                                <input type="text" class="form-control" name="partita_iva" required="" value="{$row.partita_iva}">
                                             </div>
                                         </div>
                                     </div>
@@ -49,7 +49,7 @@
                                         <div class="col-xs-12">
                                             <div class="form-group">
                                                 <label>Indirizzo</label>
-                                                <input type="text" class="form-control" name="indirizzo" value="{$row.indirizzo}">
+                                                <input type="text" class="form-control" name="indirizzo" required="" value="{$row.indirizzo}">
                                             </div>
                                         </div>
                                     </div>
@@ -58,19 +58,19 @@
                                         <div class="col-xs-3">
                                             <div class="form-group">
                                                 <label>CAP</label>
-                                                <input type="text" class="form-control" name="cap" value="{$row.cap}">
+                                                <input type="text" class="form-control" name="cap" required="" value="{$row.cap}">
                                             </div>
                                         </div>
                                         <div class="col-xs-3">
                                             <div class="form-group">
                                                 <label>Città</label>
-                                                <input type="text" class="form-control" name="citta" value="{$row.citta}">
+                                                <input type="text" class="form-control" name="citta" required="" value="{$row.citta}">
                                             </div>
                                         </div>
                                         <div class="col-xs-6">
                                             <div class="form-group">
                                                 <label>Provincia</label>
-                                                <input type="text" class="form-control" name="provincia" value="{$row.provincia}">
+                                                <input type="text" class="form-control" name="provincia" required="" value="{$row.provincia}">
                                             </div>
                                         </div>
                                     </div>
@@ -79,7 +79,7 @@
                                         <div class="col-xs-6">
                                             <div class="form-group">
                                                 <label>Telefono</label>
-                                                <input type="text" class="form-control" name="telefono" value="{$row.telefono}">
+                                                <input type="text" class="form-control" name="telefono" required="" value="{$row.telefono}">
                                             </div>
                                         </div>
                                         <div class="col-xs-6">
@@ -94,7 +94,7 @@
                                         <div class="col-xs-12">
                                             <div class="form-group">
                                                 <label>Indirizzo E-mail</label>
-                                                <input type="text" class="form-control" name="email" value="{$row.email}">
+                                                <input type="text" class="form-control" name="email" required="" value="{$row.email}">
                                             </div>
                                         </div>
                                     </div>
