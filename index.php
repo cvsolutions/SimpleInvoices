@@ -39,16 +39,17 @@ $app->get('/', function () use ($DB, $tpl) {
  */
 $app->get('/fatture.json', function () use ($DB, $app) {
 
-    $fatture = $DB->prepare('SELECT fatture.*, clienti.ragione_sociale  FROM fatture, clienti WHERE fatture.id_cliente = clienti.id');
+    $fatture = $DB->prepare('SELECT fatture.*, clienti.ragione_sociale FROM fatture, clienti WHERE fatture.id_cliente = clienti.id ORDER BY fatture.pubblicazione DESC');
     $fatture->execute();
 
     $obj = array();
     foreach ($fatture->fetchAll(PDO::FETCH_ASSOC) as $row) {
+        $date  = new DateTime($row['emissione']);
         $obj[] = array(
             'id' => $row['id'],
             'numero' => $row['numero'],
             'anno' => $row['anno'],
-            'emissione' => $row['emissione'],
+            'emissione' => $date->format('d/m/Y'),
             'ragione_sociale' => $row['ragione_sociale'],
             'totale' => 0,
             'iva' => 0
@@ -136,7 +137,7 @@ $app->post('/configurazione', function (Request $request) use ($DB, $app) {
                 'logo' => 0,
                 'code' => $Exception->getCode(),
                 'messages' => $Exception->getMessage()
-            ));
+            ), 500);
         }
     }
 });
@@ -149,10 +150,10 @@ $app->get('/aggiungi-fattura', function () use ($DB, $tpl) {
     $fatture = $DB->prepare('SELECT COUNT(numero) AS totale FROM fatture LIMIT 0,1');
     $fatture->execute();
 
-    $clienti = $DB->prepare('SELECT * FROM clienti');
+    $clienti = $DB->prepare('SELECT * FROM clienti ORDER BY ragione_sociale ASC');
     $clienti->execute();
 
-    $servizi = $DB->prepare('SELECT * FROM servizi');
+    $servizi = $DB->prepare('SELECT * FROM servizi ORDER BY pubblicazione DESC');
     $servizi->execute();
 
     $tpl->assign('fatture', $fatture->fetchColumn());
@@ -171,18 +172,20 @@ $app->post('/aggiungi-fattura', function (Request $request) use ($DB, $app) {
 
     $cliente    = $request->get('id_cliente');
     $id_cliente = $cliente == 0 ? ID_RAND : $cliente;
+    $date       = new DateTime('NOW');
 
     try {
 
-        $fatture = $DB->prepare('INSERT INTO fatture (id, numero, anno, emissione, oggetto, pagamento, note, id_cliente) VALUES (?, ?, ?, ?, ?, ?, ?, ?)');
+        $fatture = $DB->prepare('INSERT INTO fatture (id, numero, anno, emissione, oggetto, pagamento, note, id_cliente, pubblicazione) VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?)');
         $fatture->bindParam(1, $request->get('id'));
         $fatture->bindParam(2, $request->get('numero'));
-        $fatture->bindParam(3, date('Y', time()));
+        $fatture->bindParam(3, $date->format('Y'));
         $fatture->bindParam(4, $request->get('emissione'));
         $fatture->bindParam(5, $request->get('oggetto'));
         $fatture->bindParam(6, $request->get('pagamento'));
         $fatture->bindParam(7, $request->get('note'));
         $fatture->bindParam(8, $id_cliente);
+        $fatture->bindParam(9, $date->format('Y-m-d H:i:s'));
         $fatture->execute();
 
         if ($cliente == 0) {
@@ -231,7 +234,7 @@ $app->post('/aggiungi-fattura', function (Request $request) use ($DB, $app) {
             'notice' => 'danger',
             'code' => $Exception->getCode(),
             'messages' => $Exception->getMessage()
-        ));
+        ), 500);
     }
 
 });
@@ -244,7 +247,9 @@ $app->post('/aggiungi-servizi', function (Request $request) use ($DB, $app) {
 
     try {
 
-        $servizi = $DB->prepare('INSERT INTO servizi (id, codice, descrizione, quantita, prezzo, totale, iva, id_fattura, attivo) VALUES (?, ?, ?, ?, ?, ?, ?, ?, 0)');
+        $date = new DateTime('NOW');
+
+        $servizi = $DB->prepare('INSERT INTO servizi (id, codice, descrizione, quantita, prezzo, totale, iva, id_fattura, attivo, pubblicazione) VALUES (?, ?, ?, ?, ?, ?, ?, ?, 0, ?)');
         $servizi->bindValue(1, ID_RAND);
         $servizi->bindParam(2, $request->get('codice'));
         $servizi->bindParam(3, $request->get('descrizione'));
@@ -253,6 +258,7 @@ $app->post('/aggiungi-servizi', function (Request $request) use ($DB, $app) {
         $servizi->bindValue(6, ($request->get('prezzo') * $request->get('quantita')));
         $servizi->bindParam(7, $request->get('iva'));
         $servizi->bindParam(8, $request->get('id_fattura'));
+        $servizi->bindParam(9, $date->format('Y-m-d H:i:s'));
         $servizi->execute();
 
         return $app->json(array(
@@ -268,7 +274,7 @@ $app->post('/aggiungi-servizi', function (Request $request) use ($DB, $app) {
             'fattura' => $request->get('id_fattura'),
             'code' => $Exception->getCode(),
             'messages' => $Exception->getMessage()
-        ));
+        ), 500);
     }
 });
 
@@ -277,7 +283,7 @@ $app->post('/aggiungi-servizi', function (Request $request) use ($DB, $app) {
  */
 $app->get('/servizi/{fattura}.json', function ($fattura) use ($DB, $app) {
 
-    $servizi = $DB->prepare('SELECT * FROM servizi WHERE id_fattura = ?');
+    $servizi = $DB->prepare('SELECT * FROM servizi WHERE id_fattura = ? ORDER BY pubblicazione DESC');
     $servizi->bindParam(1, $fattura);
     $servizi->execute();
 
@@ -332,10 +338,10 @@ $app->get('/modifica-fattura/{id}', function ($id) use ($DB, $tpl) {
     $cliente->bindParam(1, $row['id_cliente']);
     $cliente->execute();
 
-    $clienti = $DB->prepare('SELECT * FROM clienti');
+    $clienti = $DB->prepare('SELECT * FROM clienti ORDER BY ragione_sociale ASC');
     $clienti->execute();
 
-    $servizi = $DB->prepare('SELECT * FROM servizi WHERE attivo = 1');
+    $servizi = $DB->prepare('SELECT * FROM servizi WHERE attivo = 1 ORDER BY pubblicazione DESC');
     $servizi->execute();
 
     $tpl->assign('clienti', $clienti->fetchAll(PDO::FETCH_ASSOC));
@@ -354,14 +360,17 @@ $app->post('/modifica-fattura/{id}', function ($id, Request $request) use ($DB, 
 
     try {
 
-        $fatture = $DB->prepare('UPDATE fatture SET numero = ?, emissione = ?, oggetto = ?, pagamento = ?, note = ?, id_cliente = ? WHERE id = ?');
+        $date = new DateTime('NOW');
+
+        $fatture = $DB->prepare('UPDATE fatture SET numero = ?, emissione = ?, oggetto = ?, pagamento = ?, note = ?, id_cliente = ? , pubblicazione = ? WHERE id = ?');
         $fatture->bindParam(1, $request->get('numero'));
         $fatture->bindParam(2, $request->get('emissione'));
         $fatture->bindParam(3, $request->get('oggetto'));
         $fatture->bindParam(4, $request->get('pagamento'));
         $fatture->bindParam(5, $request->get('note'));
         $fatture->bindParam(6, $request->get('id_cliente'));
-        $fatture->bindParam(7, $id);
+        $fatture->bindParam(7, $date->format('Y-m-d H:i:s'));
+        $fatture->bindParam(8, $id);
         $fatture->execute();
 
         $clienti = $DB->prepare('UPDATE clienti SET ragione_sociale = ?, codice_fiscale = ?, partita_iva = ?, indirizzo = ?, cap = ?, citta = ?, provincia = ? WHERE id = ?');
@@ -394,7 +403,7 @@ $app->post('/modifica-fattura/{id}', function ($id, Request $request) use ($DB, 
             'notice' => 'danger',
             'code' => $Exception->getCode(),
             'messages' => $Exception->getMessage()
-        ));
+        ), 500);
     }
 });
 
@@ -420,17 +429,20 @@ $app->post('/modifica-servizi', function (Request $request) use ($DB, $app) {
 
     try {
 
+        $date = new DateTime('NOW');
+
         switch ($request->get('action')) {
 
             case 1:
-                $servizi = $DB->prepare('UPDATE servizi SET codice = ?, descrizione = ?, quantita = ?, prezzo = ?, totale = ?, iva = ? WHERE id = ?');
+                $servizi = $DB->prepare('UPDATE servizi SET codice = ?, descrizione = ?, quantita = ?, prezzo = ?, totale = ?, iva = ?, pubblicazione = ? WHERE id = ?');
                 $servizi->bindParam(1, $request->get('codice'));
                 $servizi->bindParam(2, $request->get('descrizione'));
                 $servizi->bindParam(3, $request->get('quantita'));
                 $servizi->bindParam(4, $request->get('prezzo'));
                 $servizi->bindValue(5, ($request->get('prezzo') * $request->get('quantita')));
                 $servizi->bindParam(6, $request->get('iva'));
-                $servizi->bindParam(7, $request->get('id'));
+                $servizi->bindParam(7, $date->format('Y-m-d H:i:s'));
+                $servizi->bindParam(8, $request->get('id'));
                 $servizi->execute();
                 break;
 
@@ -454,7 +466,7 @@ $app->post('/modifica-servizi', function (Request $request) use ($DB, $app) {
             'notice' => 'danger',
             'code' => $Exception->getCode(),
             'messages' => $Exception->getMessage()
-        ));
+        ), 500);
     }
 });
 

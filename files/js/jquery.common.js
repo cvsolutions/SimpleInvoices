@@ -330,7 +330,8 @@ $(document).ready(function () {
                 setTimeout(function () {
                     result.fadeOut();
                     $('.alert-dismissable').remove();
-                    location.reload();
+                    // location.reload();
+                    location.assign('/');
                 }, delay);
             },
             error: function (xhr, ajaxOptions, thrownError) {
