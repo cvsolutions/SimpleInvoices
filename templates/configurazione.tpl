@@ -24,7 +24,7 @@
                                     <div class="row">
                                         <div class="col-xs-12">
                                             <div class="form-group">
-                                                <label>Ragione Sociale</label>
+                                                <label><span class="text-danger">*</span> Ragione Sociale</label>
                                                 <input type="text" class="form-control" name="ragione_sociale" required="" value="{$row.ragione_sociale}">
                                             </div>
                                         </div>
@@ -33,13 +33,13 @@
                                     <div class="row">
                                         <div class="col-xs-6">
                                             <div class="form-group">
-                                                <label>Codice Fiscale</label>
+                                                <label><span class="text-danger">*</span> Codice Fiscale</label>
                                                 <input type="text" class="form-control" name="codice_fiscale" required="" value="{$row.codice_fiscale}">
                                             </div>
                                         </div>
                                         <div class="col-xs-6">
                                             <div class="form-group">
-                                                <label>Partita IVA</label>
+                                                <label><span class="text-danger">*</span> Partita IVA</label>
                                                 <input type="text" class="form-control" name="partita_iva" required="" value="{$row.partita_iva}">
                                             </div>
                                         </div>
@@ -48,7 +48,7 @@
                                     <div class="row">
                                         <div class="col-xs-12">
                                             <div class="form-group">
-                                                <label>Indirizzo</label>
+                                                <label><span class="text-danger">*</span> Indirizzo</label>
                                                 <input type="text" class="form-control" name="indirizzo" required="" value="{$row.indirizzo}">
                                             </div>
                                         </div>
@@ -57,19 +57,19 @@
                                     <div class="row">
                                         <div class="col-xs-3">
                                             <div class="form-group">
-                                                <label>CAP</label>
+                                                <label><span class="text-danger">*</span> CAP</label>
                                                 <input type="text" class="form-control" name="cap" required="" value="{$row.cap}">
                                             </div>
                                         </div>
                                         <div class="col-xs-3">
                                             <div class="form-group">
-                                                <label>Città</label>
+                                                <label><span class="text-danger">*</span> Città</label>
                                                 <input type="text" class="form-control" name="citta" required="" value="{$row.citta}">
                                             </div>
                                         </div>
                                         <div class="col-xs-6">
                                             <div class="form-group">
-                                                <label>Provincia</label>
+                                                <label><span class="text-danger">*</span> Provincia</label>
                                                 <input type="text" class="form-control" name="provincia" required="" value="{$row.provincia}">
                                             </div>
                                         </div>
@@ -78,7 +78,7 @@
                                     <div class="row">
                                         <div class="col-xs-6">
                                             <div class="form-group">
-                                                <label>Telefono</label>
+                                                <label><span class="text-danger">*</span> Telefono</label>
                                                 <input type="text" class="form-control" name="telefono" required="" value="{$row.telefono}">
                                             </div>
                                         </div>
@@ -93,8 +93,8 @@
                                     <div class="row">
                                         <div class="col-xs-12">
                                             <div class="form-group">
-                                                <label>Indirizzo E-mail</label>
-                                                <input type="text" class="form-control" name="email" required="" value="{$row.email}">
+                                                <label><span class="text-danger">*</span> Indirizzo E-mail</label>
+                                                <input type="email" class="form-control" name="email" required="" value="{$row.email}">
                                             </div>
                                         </div>
                                     </div>
@@ -133,7 +133,7 @@
                                         </div>
                                         <div class="col-xs-8">
                                             <div class="form-group">
-                                                <input type="file" name="logo">
+                                                <input type="file" accept="image/jpeg" name="logo">
 
                                                 <p class="help-block">Selezionare un file immagine</p>
                                             </div>
