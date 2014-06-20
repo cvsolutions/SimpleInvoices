@@ -38,6 +38,9 @@
                                 <div class="form-group">
                                     <label><span class="text-danger">*</span> Prezzo</label>
                                     <input type="text" class="form-control" name="prezzo" required="" id="prezzo" value="{$servizi.prezzo}">
+                                    <div class="checkbox">
+                                        <label><input type="checkbox" {if $servizi.inclusa eq 1}checked{/if} name="inclusa" id="inclusa" value="1"> IVA inclusa</label>
+                                    </div>
                                 </div>
                             </div>
 

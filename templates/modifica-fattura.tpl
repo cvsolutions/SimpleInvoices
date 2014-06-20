@@ -231,6 +231,10 @@
                                             <div class="form-group">
                                                 <label><span class="text-danger">*</span> Prezzo</label>
                                                 <input type="text" class="form-control ignore" name="prezzo" required="" id="prezzo" value="">
+
+                                                <div class="checkbox">
+                                                    <label><input type="checkbox" name="inclusa" id="inclusa" value="1"> IVA inclusa</label>
+                                                </div>
                                             </div>
                                         </div>
 
@@ -260,7 +264,12 @@
                             <div class="col-xs-12">
                                 <hr/>
                                 <input type="hidden" name="id" id="id" required="" value="{$fatture.id}">
-                                <input type="submit" class="btn btn-default" value="Salva">
+
+                                <div class="btn-group">
+                                    <input type="submit" class="btn btn-default" value="Salva">
+                                    <a href="/stampa/pdf/{$fatture.id}.pdf?qta=1" class="btn btn-default" target="_blank">Stampa</a>
+                                    <a href="/stampa/pdf/{$fatture.id}.pdf?qta=0" class="btn btn-default" target="_blank">Stampa con quantità</a>
+                                </div>
                             </div>
                         </div>
 

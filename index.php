@@ -249,15 +249,22 @@ $app->post('/aggiungi-servizi', function (Request $request) use ($DB, $app) {
 
     try {
 
-        $date = new DateTime('NOW');
+        $date    = new DateTime('NOW');
+        $inclusa = $request->get('inclusa');
+
+        if (isset($inclusa)) {
+            $prezzo = ($request->get('prezzo') + ($request->get('prezzo') * $request->get('iva')) / 100);
+        } else {
+            $prezzo = $request->get('prezzo');
+        }
 
         $servizi = $DB->prepare('INSERT INTO servizi (id, codice, descrizione, quantita, prezzo, totale, iva, id_fattura, attivo, pubblicazione) VALUES (?, ?, ?, ?, ?, ?, ?, ?, 0, ?)');
         $servizi->bindValue(1, ID_RAND);
         $servizi->bindParam(2, $request->get('codice'), PDO::PARAM_STR);
         $servizi->bindParam(3, $request->get('descrizione'), PDO::PARAM_STR);
         $servizi->bindParam(4, $request->get('quantita'), PDO::PARAM_INT);
-        $servizi->bindParam(5, $request->get('prezzo'), PDO::PARAM_STR);
-        $servizi->bindValue(6, ($request->get('prezzo') * $request->get('quantita')), PDO::PARAM_STR);
+        $servizi->bindValue(5, $prezzo, PDO::PARAM_STR);
+        $servizi->bindValue(6, ($prezzo * $request->get('quantita')), PDO::PARAM_STR);
         $servizi->bindParam(7, $request->get('iva'), PDO::PARAM_INT);
         $servizi->bindParam(8, $request->get('id_fattura'), PDO::PARAM_INT);
         $servizi->bindParam(9, $date->format('Y-m-d H:i:s'));
@@ -431,7 +438,16 @@ $app->post('/modifica-servizi', function (Request $request) use ($DB, $app) {
 
     try {
 
-        $date = new DateTime('NOW');
+        $date    = new DateTime('NOW');
+        $inclusa = $request->get('inclusa');
+
+        if (isset($inclusa)) {
+            $iva    = (($request->get('iva') / 100) + 1);
+            $prezzo = $request->get('prezzo') / $iva;
+
+        } else {
+            $prezzo = $request->get('prezzo');
+        }
 
         switch ($request->get('action')) {
 
@@ -440,8 +456,8 @@ $app->post('/modifica-servizi', function (Request $request) use ($DB, $app) {
                 $servizi->bindParam(1, $request->get('codice'), PDO::PARAM_STR);
                 $servizi->bindParam(2, $request->get('descrizione'), PDO::PARAM_STR);
                 $servizi->bindParam(3, $request->get('quantita'), PDO::PARAM_INT);
-                $servizi->bindParam(4, $request->get('prezzo'), PDO::PARAM_STR);
-                $servizi->bindValue(5, ($request->get('prezzo') * $request->get('quantita')), PDO::PARAM_STR);
+                $servizi->bindValue(4, round($prezzo, 2), PDO::PARAM_STR);
+                $servizi->bindValue(5, ($prezzo * $request->get('quantita')), PDO::PARAM_STR);
                 $servizi->bindParam(6, $request->get('iva'), PDO::PARAM_INT);
                 $servizi->bindParam(7, $date->format('Y-m-d H:i:s'));
                 $servizi->bindParam(8, $request->get('id'), PDO::PARAM_INT);
@@ -521,8 +537,8 @@ $app->get('/stampa/{action}/{id}.pdf', function ($action, $id) use ($DB, $tpl, $
     $servizi->bindParam(1, $row['id'], PDO::PARAM_INT);
     $servizi->execute();
 
-    $tpl->assign('configurazione', $configurazione->fetch(PDO::FETCH_ASSOC));
     $tpl->assign('fatture', $row);
+    $tpl->assign('configurazione', $configurazione->fetch(PDO::FETCH_ASSOC));
     $tpl->assign('clienti', $clienti->fetch(PDO::FETCH_ASSOC));
     $tpl->assign('servizi', $servizi->fetchAll(PDO::FETCH_ASSOC));
 

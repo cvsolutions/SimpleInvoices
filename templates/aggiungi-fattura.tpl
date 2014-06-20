@@ -31,6 +31,7 @@
                                     <div class="col-xs-6">
                                         <div class="form-group">
                                             <label><span class="text-danger">*</span> Data</label>
+
                                             <div class="input-group date" id="datetimepicker1" data-date-format="YYYY-MM-DD">
                                                 <input type="text" class="form-control" name="emissione" required="" value="{$smarty.now|date_format:"%Y-%m-%d"}" readonly>
                                                 <span class="input-group-addon"><span class="glyphicon glyphicon-calendar"></span></span>
@@ -230,6 +231,10 @@
                                             <div class="form-group">
                                                 <label><span class="text-danger">*</span> Prezzo</label>
                                                 <input type="text" class="form-control ignore" name="prezzo" required="" id="prezzo" value="">
+
+                                                <div class="checkbox">
+                                                    <label><input type="checkbox" name="inclusa" id="inclusa" value="1"> IVA inclusa</label>
+                                                </div>
                                             </div>
                                         </div>
 

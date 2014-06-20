@@ -179,6 +179,7 @@ $(document).ready(function () {
             var descrizione = $('#descrizione').val();
             var quantita = $('#quantita').val();
             var prezzo = $('#prezzo').val();
+            var inclusa = $('#inclusa').val();
             var iva = $('#iva').val();
             var id_fattura = $('#id').val();
             var id_servizio = $('#id_servizio').val();
@@ -191,6 +192,7 @@ $(document).ready(function () {
                     descrizione: descrizione,
                     quantita: quantita,
                     prezzo: prezzo,
+                    inclusa: inclusa,
                     iva: iva,
                     id_fattura: id_fattura,
                     id_servizio: id_servizio
@@ -293,6 +295,13 @@ $(document).ready(function () {
                 $('#descrizione').val(data.descrizione);
                 $('#quantita').val(data.quantita);
                 $('#prezzo').val(data.prezzo);
+
+                if (data.inclusa == 1) {
+                    $('#inclusa').attr('checked', true);
+                } else {
+                    $('#inclusa').attr('checked', false);
+                }
+
                 $('#iva').val(data.iva);
             },
             error: function (xhr, ajaxOptions, thrownError) {

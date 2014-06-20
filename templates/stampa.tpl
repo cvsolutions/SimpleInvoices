@@ -96,10 +96,19 @@
     <tr>
         <td colspan="2">&nbsp;</td>
     </tr>
-    <tr>
-        <td style="padding-bottom: 5px;"><strong>TOTALE IVA 0%</strong></td>
-        <td style="text-align: right; padding-bottom: 5px;">€ 0</td>
-    </tr>
+
+    {foreach from=$servizi item=row}
+        {assign var="t" value=""}
+        <tr>
+            <td style=""><strong>TOTALE IMPONIBILE</strong></td>
+            <td style="text-align: right;">€ {$row.totale|number_format:2}</td>
+        </tr>
+        <tr>
+            <td style="padding-bottom: 10px;"><strong>IVA ({$row.iva}%)</strong></td>
+            <td style="text-align: right; padding-bottom: 10px;">€ {math|number_format:2 equation="((imponibile * (iva)) / 100)" imponibile=$row.totale iva=$row.iva}</td>
+        </tr>
+    {/foreach}
+
     <tr>
         <td style="border-top: 1px solid #000000; padding-top: 5px;"><strong>TOTALE FATTURA</strong></td>
         <td style="text-align: right; border-top: 1px solid #000000; padding-top: 5px;">€ 0</td>
