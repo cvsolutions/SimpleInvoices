@@ -7,6 +7,7 @@ use Symfony\Component\HttpFoundation\Request;
 define('SUCCESS_MESSAGE', 'Operazione eseguita con successo!');
 define('IMAGES_ONLY_MESSAGE', 'È possibile inserire solo immagini!');
 define('DOMPDF_ENABLE_AUTOLOAD', false);
+define('DOMPDF_ENABLE_REMOTE', true);
 define('ID_RAND', mt_rand(11111, 99999));
 
 require_once __DIR__ . '/vendor/autoload.php';
@@ -52,8 +53,8 @@ $app->get('/fatture.json', function () use ($DB, $app) {
             'anno' => $row['anno'],
             'emissione' => $date->format('d/m/Y'),
             'ragione_sociale' => $row['ragione_sociale'],
-            'totale' => 0,
-            'iva' => 0
+            'totale' => number_format(0, 2),
+            'iva' => number_format(0, 2)
         );
     }
     return $app->json(array('aaData' => $obj));
@@ -294,9 +295,9 @@ $app->get('/servizi/{fattura}.json', function ($fattura) use ($DB, $app) {
             'id' => $row['id'],
             'codice' => $row['codice'],
             'descrizione' => sprintf('%s...', substr($row['descrizione'], 0, 17)),
-            'prezzo' => $row['prezzo'],
+            'prezzo' => number_format($row['prezzo'], 2),
             'quantita' => $row['quantita'],
-            'totale' => $row['totale'],
+            'totale' => number_format($row['totale'], 2),
             'iva' => sprintf('%d%%', $row['iva'])
         );
     }
@@ -488,9 +489,9 @@ $app->get('/elimina-fattura/{id}', function ($id) use ($DB, $app) {
 });
 
 /**
- * PDF Fattura
+ *
  */
-$app->get('/pdf/{id}.pdf', function ($id) use ($DB, $tpl, $app) {
+$app->get('/stampa/{action}/{id}.pdf', function ($action, $id) use ($DB, $tpl, $app) {
 
     /**
      * SELECT configurazione
@@ -527,10 +528,22 @@ $app->get('/pdf/{id}.pdf', function ($id) use ($DB, $tpl, $app) {
 
     /** @var DOMPDF $dompdf */
     $dompdf = new DOMPDF();
-    $dompdf->load_html($tpl->fetch('pdf.tpl'));
-    $dompdf->render();
-    $dompdf->stream(sprintf('%d.pdf', $id), array('Attachment' => 0));
-    //$tpl->display('pdf.tpl');
+
+    switch ($action) {
+
+        case'pdf':
+            $tpl->assign('SERVER_NAME', '');
+            $dompdf->load_html($tpl->fetch('stampa.tpl'));
+            $dompdf->render();
+            $dompdf->stream(sprintf('%d.pdf', $id), array('Attachment' => 0));
+            break;
+
+        case'A4':
+            $tpl->assign('SERVER_NAME', '/');
+            $tpl->display('stampa.tpl');
+            break;
+    }
+
     return false;
 });
 
