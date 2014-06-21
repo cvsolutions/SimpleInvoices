@@ -53,8 +53,8 @@ $app->get('/fatture.json', function () use ($DB, $app) {
             'anno' => $row['anno'],
             'emissione' => $date->format('d/m/Y'),
             'ragione_sociale' => $row['ragione_sociale'],
-            'totale' => number_format(0, 2),
-            'aliquota' => number_format(0, 2)
+            'totale' => number_format($row['totale'], 2),
+            'iva' => $row['iva']
         );
     }
     return $app->json(array('aaData' => $obj));
@@ -178,7 +178,17 @@ $app->post('/aggiungi-fattura', function (Request $request) use ($DB, $app) {
 
     try {
 
-        $fatture = $DB->prepare('INSERT INTO fatture (id, numero, anno, emissione, oggetto, pagamento, note, id_cliente, pubblicazione) VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?)');
+        $sum_totale = $DB->prepare('SELECT SUM(totale) AS totale FROM servizi WHERE id_fattura = ? AND attivo = 0');
+        $sum_totale->bindParam(1, $request->get('id'), PDO::PARAM_INT);
+        $sum_totale->execute();
+        $row_sum_totale = $sum_totale->fetch(PDO::FETCH_ASSOC);
+
+        $sum_scorporo = $DB->prepare('SELECT SUM(scorporo) AS scorporo FROM servizi WHERE id_fattura = ? AND attivo = 0');
+        $sum_scorporo->bindParam(1, $request->get('id'), PDO::PARAM_INT);
+        $sum_scorporo->execute();
+        $row_sum_scorporo = $sum_scorporo->fetch(PDO::FETCH_ASSOC);
+
+        $fatture = $DB->prepare('INSERT INTO fatture (id, numero, anno, emissione, oggetto, pagamento, note, totale, iva, id_cliente, pubblicazione) VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)');
         $fatture->bindParam(1, $request->get('id'), PDO::PARAM_INT);
         $fatture->bindParam(2, $request->get('numero'), PDO::PARAM_INT);
         $fatture->bindParam(3, $date->format('Y'));
@@ -186,8 +196,10 @@ $app->post('/aggiungi-fattura', function (Request $request) use ($DB, $app) {
         $fatture->bindParam(5, $request->get('oggetto'), PDO::PARAM_STR);
         $fatture->bindParam(6, $request->get('pagamento'), PDO::PARAM_STR);
         $fatture->bindParam(7, $request->get('note'), PDO::PARAM_STR);
-        $fatture->bindParam(8, $id_cliente, PDO::PARAM_INT);
-        $fatture->bindParam(9, $date->format('Y-m-d H:i:s'));
+        $fatture->bindValue(8, round($row_sum_totale['totale'], 2), PDO::PARAM_STR);
+        $fatture->bindValue(9, round($row_sum_scorporo['scorporo'], 2), PDO::PARAM_STR);
+        $fatture->bindParam(10, $id_cliente, PDO::PARAM_INT);
+        $fatture->bindParam(11, $date->format('Y-m-d H:i:s'));
         $fatture->execute();
 
         if ($cliente == 0) {
@@ -314,7 +326,7 @@ $app->get('/servizi/{fattura}.json', function ($fattura) use ($DB, $app) {
             'prezzo' => number_format($row['prezzo'], 2),
             'quantita' => $row['quantita'],
             'totale' => number_format($row['totale'], 2),
-            'aliquota' => sprintf('%d%%', $row['aliquota'])
+            'scorporo' => $row['scorporo']
         );
     }
     return $app->json(array('aaData' => $obj));
@@ -487,6 +499,22 @@ $app->post('/modifica-servizi', function (Request $request) use ($DB, $app) {
                 break;
 
         }
+
+        $sum_totale = $DB->prepare('SELECT SUM(totale) AS totale FROM servizi WHERE id_fattura = ?');
+        $sum_totale->bindParam(1, $request->get('id_fattura'), PDO::PARAM_INT);
+        $sum_totale->execute();
+        $row_sum_totale = $sum_totale->fetch(PDO::FETCH_ASSOC);
+
+        $sum_scorporo = $DB->prepare('SELECT SUM(scorporo) AS scorporo FROM servizi WHERE id_fattura = ?');
+        $sum_scorporo->bindParam(1, $request->get('id_fattura'), PDO::PARAM_INT);
+        $sum_scorporo->execute();
+        $row_sum_scorporo = $sum_scorporo->fetch(PDO::FETCH_ASSOC);
+
+        $fatture = $DB->prepare('UPDATE fatture SET totale = ?, iva = ? WHERE id = ?');
+        $fatture->bindValue(1, round($row_sum_totale['totale'], 2), PDO::PARAM_STR);
+        $fatture->bindValue(2, round($row_sum_scorporo['scorporo'], 2), PDO::PARAM_STR);
+        $fatture->bindParam(3, $request->get('id_fattura'), PDO::PARAM_INT);
+        $fatture->execute();
 
         return $app->json(array(
             'notice' => 'success',

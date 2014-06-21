@@ -111,7 +111,7 @@
 
     <tr>
         <td style="border-top: 1px solid #000000; padding-top: 5px;"><strong>TOTALE FATTURA</strong></td>
-        <td style="text-align: right; border-top: 1px solid #000000; padding-top: 5px;">€ 0</td>
+        <td style="text-align: right; border-top: 1px solid #000000; padding-top: 5px;">€ {math|number_format:2 equation="totale + iva" totale=$fatture.totale iva=$fatture.iva}</td>
     </tr>
     <tr>
         <td colspan="2">&nbsp;</td>

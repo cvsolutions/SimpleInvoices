@@ -73,6 +73,7 @@
                             <div class="col-xs-12">
                                 <hr/>
                                 <input type="hidden" name="id" value="{$servizi.id}">
+                                <input type="hidden" name="id_fattura" value="{$servizi.id_fattura}">
                                 <input type="submit" class="btn btn-default" value="Salva">
                             </div>
                         </div>

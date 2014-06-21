@@ -43,7 +43,7 @@ $(document).ready(function () {
             {data: 'emissione'},
             {data: 'ragione_sociale'},
             {data: 'totale'},
-            {data: 'aliquota'}
+            {data: 'iva'}
         ],
         columnDefs: [
             {
@@ -218,7 +218,7 @@ $(document).ready(function () {
                             {data: 'prezzo' },
                             {data: 'quantita'},
                             {data: 'totale'},
-                            {data: 'aliquota'}
+                            {data: 'scorporo'}
                         ],
                         columnDefs: [
                             {
@@ -331,7 +331,7 @@ $(document).ready(function () {
             {data: 'prezzo' },
             {data: 'quantita'},
             {data: 'totale'},
-            {data: 'aliquota'}
+            {data: 'scorporo'}
         ],
         columnDefs: [
             {
@@ -422,7 +422,7 @@ $(document).ready(function () {
                             {data: 'prezzo' },
                             {data: 'quantita'},
                             {data: 'totale'},
-                            {data: 'aliquota'}
+                            {data: 'scorporo'}
                         ],
                         columnDefs: [
                             {

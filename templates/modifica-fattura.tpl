@@ -264,12 +264,7 @@
                             <div class="col-xs-12">
                                 <hr/>
                                 <input type="hidden" name="id" id="id" required="" value="{$fatture.id}">
-
-                                <div class="btn-group">
-                                    <input type="submit" class="btn btn-default" value="Salva">
-                                    <a href="/stampa/pdf/{$fatture.id}.pdf?qta=1" class="btn btn-default" target="_blank">Stampa</a>
-                                    <a href="/stampa/pdf/{$fatture.id}.pdf?qta=0" class="btn btn-default" target="_blank">Stampa con quantità</a>
-                                </div>
+                                <input type="submit" class="btn btn-default" value="Salva">
                             </div>
                         </div>
 
