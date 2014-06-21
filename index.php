@@ -305,6 +305,7 @@ $app->post('/aggiungi-servizi', function (Request $request) use ($DB, $app) {
             'fattura' => $request->get('id_fattura'),
             'totale' => $row_sum_totale['totale'],
             'iva' => $row_sum_scorporo['scorporo'],
+            'somma' => round(($row_sum_totale['totale']+$row_sum_scorporo['scorporo']),2),
             'messages' => SUCCESS_MESSAGE
         ));
 

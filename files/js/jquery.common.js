@@ -237,9 +237,10 @@ $(document).ready(function () {
                         ]
                     });
 
-                    $('#_totale').html(data.totale);
-                    $('#_iva').html(data.iva);
-                    $('#_somma').html((data.totale + data.iva));
+                    $('#_totale').html(accounting.formatMoney(data.totale, ''));
+                    $('#_iva').html(accounting.formatMoney(data.iva, ''));
+                    $('#_somma').html(accounting.formatMoney(data.somma, ''));
+
                 },
                 error: function (xhr, ajaxOptions, thrownError) {
                     alert(thrownError);

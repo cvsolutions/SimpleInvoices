@@ -59,6 +59,7 @@
 <script src="../files/js/bootstrap-datetimepicker.it.js"></script>
 <script src="../files/js/jquery.isloading.js"></script>
 <script src="../files/js/jquery.validate.js"></script>
+<script src="../files/js/accounting.js"></script>
 <script src="../files/js/messages_it.js"></script>
 <script src="../files/fancybox/jquery.fancybox.pack.js"></script>
 <script src="../files/fancybox/jquery.fancybox.js"></script>

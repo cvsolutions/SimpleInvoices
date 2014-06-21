@@ -176,9 +176,9 @@
                                 <div class="row">
                                     <div class="col-xs-12">
                                         <ul class="list-inline">
-                                            <li>Totale Imp. <strong class="badge">{$fatture.totale|number_format:2}</strong></li>
-                                            <li>IVA <strong class="badge">{$fatture.iva|number_format:2}</strong></li>
-                                            <li>Totale <strong class="badge">{math|number_format:2 equation="totale + iva" totale=$fatture.totale iva=$fatture.iva}</strong></li>
+                                            <li>Totale Imp. <strong id="_totale" class="badge">{$fatture.totale|number_format:2}</strong></li>
+                                            <li>IVA <strong id="_iva" class="badge">{$fatture.iva|number_format:2}</strong></li>
+                                            <li>Totale <strong id="_somma" class="badge">{math|number_format:2 equation="totale + iva" totale=$fatture.totale iva=$fatture.iva}</strong></li>
                                         </ul>
                                     </div>
                                 </div>
