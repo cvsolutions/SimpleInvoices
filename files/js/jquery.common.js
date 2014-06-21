@@ -175,14 +175,20 @@ $(document).ready(function () {
 
         if (_codice && _descrizione && _quantita && _prezzo) {
 
+            var inclusa = 1;
             var codice = $('#codice').val();
             var descrizione = $('#descrizione').val();
             var quantita = $('#quantita').val();
             var prezzo = $('#prezzo').val();
-            var inclusa = $('#inclusa').val();
             var aliquota = $('#aliquota').val();
             var id_fattura = $('#id').val();
             var id_servizio = $('#id_servizio').val();
+
+            if ($('#inclusa').is(':checked')) {
+                inclusa = 1
+            } else {
+                inclusa = 0;
+            }
 
             $.ajax({
                 url: '/aggiungi-servizi',

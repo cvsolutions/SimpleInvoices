@@ -178,12 +178,12 @@ $app->post('/aggiungi-fattura', function (Request $request) use ($DB, $app) {
 
     try {
 
-        $sum_totale = $DB->prepare('SELECT SUM(totale) AS totale FROM servizi WHERE id_fattura = ? AND attivo = 0');
+        $sum_totale = $DB->prepare('SELECT SUM(totale) AS totale FROM servizi WHERE id_fattura = ?');
         $sum_totale->bindParam(1, $request->get('id'), PDO::PARAM_INT);
         $sum_totale->execute();
         $row_sum_totale = $sum_totale->fetch(PDO::FETCH_ASSOC);
 
-        $sum_scorporo = $DB->prepare('SELECT SUM(scorporo) AS scorporo FROM servizi WHERE id_fattura = ? AND attivo = 0');
+        $sum_scorporo = $DB->prepare('SELECT SUM(scorporo) AS scorporo FROM servizi WHERE id_fattura = ?');
         $sum_scorporo->bindParam(1, $request->get('id'), PDO::PARAM_INT);
         $sum_scorporo->execute();
         $row_sum_scorporo = $sum_scorporo->fetch(PDO::FETCH_ASSOC);
@@ -261,10 +261,9 @@ $app->post('/aggiungi-servizi', function (Request $request) use ($DB, $app) {
 
     try {
 
-        $date    = new DateTime('NOW');
-        $inclusa = $request->get('inclusa');
+        $date = new DateTime('NOW');
 
-        if (isset($inclusa)) {
+        if ($request->get('inclusa') == 1) {
 
             $iva      = (($request->get('aliquota') / 100) + 1);
             $prezzo   = round(($request->get('prezzo') / $iva), 2);
@@ -392,15 +391,27 @@ $app->post('/modifica-fattura/{id}', function ($id, Request $request) use ($DB, 
 
         $date = new DateTime('NOW');
 
-        $fatture = $DB->prepare('UPDATE fatture SET numero = ?, emissione = ?, oggetto = ?, pagamento = ?, note = ?, id_cliente = ? , pubblicazione = ? WHERE id = ?');
+        $sum_totale = $DB->prepare('SELECT SUM(totale) AS totale FROM servizi WHERE id_fattura = ?');
+        $sum_totale->bindParam(1, $id, PDO::PARAM_INT);
+        $sum_totale->execute();
+        $row_sum_totale = $sum_totale->fetch(PDO::FETCH_ASSOC);
+
+        $sum_scorporo = $DB->prepare('SELECT SUM(scorporo) AS scorporo FROM servizi WHERE id_fattura = ?');
+        $sum_scorporo->bindParam(1, $id, PDO::PARAM_INT);
+        $sum_scorporo->execute();
+        $row_sum_scorporo = $sum_scorporo->fetch(PDO::FETCH_ASSOC);
+
+        $fatture = $DB->prepare('UPDATE fatture SET numero = ?, emissione = ?, oggetto = ?, pagamento = ?, note = ?, totale = ?, iva = ?, id_cliente = ? , pubblicazione = ? WHERE id = ?');
         $fatture->bindParam(1, $request->get('numero'), PDO::PARAM_INT);
         $fatture->bindParam(2, $request->get('emissione'), PDO::PARAM_STR);
         $fatture->bindParam(3, $request->get('oggetto'), PDO::PARAM_STR);
         $fatture->bindParam(4, $request->get('pagamento'), PDO::PARAM_STR);
         $fatture->bindParam(5, $request->get('note'), PDO::PARAM_STR);
-        $fatture->bindParam(6, $request->get('id_cliente'), PDO::PARAM_INT);
-        $fatture->bindParam(7, $date->format('Y-m-d H:i:s'));
-        $fatture->bindParam(8, $id, PDO::PARAM_INT);
+        $fatture->bindValue(6, round($row_sum_totale['totale'], 2), PDO::PARAM_STR);
+        $fatture->bindValue(7, round($row_sum_scorporo['scorporo'], 2), PDO::PARAM_STR);
+        $fatture->bindParam(8, $request->get('id_cliente'), PDO::PARAM_INT);
+        $fatture->bindParam(9, $date->format('Y-m-d H:i:s'));
+        $fatture->bindParam(10, $id, PDO::PARAM_INT);
         $fatture->execute();
 
         $clienti = $DB->prepare('UPDATE clienti SET ragione_sociale = ?, codice_fiscale = ?, partita_iva = ?, indirizzo = ?, cap = ?, citta = ?, provincia = ? WHERE id = ?');
