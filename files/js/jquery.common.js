@@ -236,6 +236,10 @@ $(document).ready(function () {
                             }
                         ]
                     });
+
+                    $('#_totale').html(data.totale);
+                    $('#_iva').html(data.iva);
+                    $('#_somma').html((data.totale + data.iva));
                 },
                 error: function (xhr, ajaxOptions, thrownError) {
                     alert(thrownError);
@@ -410,8 +414,13 @@ $(document).ready(function () {
                 dataType: 'json',
                 cache: false,
                 success: function (data) {
-                    parent.location.reload();
+
+                    // parent.location.reload();
+                    $.fancybox.close(true);
+                    $.fancybox.close();
+                    parent.$.fancybox.close(true);
                     parent.$.fancybox.close();
+                    
                     $('#lista-servizi').dataTable({
                         ajax: '/servizi/' + data.fattura + '.json',
                         language: {

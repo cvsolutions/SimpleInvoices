@@ -176,9 +176,9 @@
                                 <div class="row">
                                     <div class="col-xs-12">
                                         <ul class="list-inline">
-                                            <li>Totale Imp. <strong class="badge">0</strong></li>
-                                            <li>IVA <strong class="badge">0</strong></li>
-                                            <li>Totale <strong class="badge">0</strong></li>
+                                            <li>Totale Imp. <strong id="_totale" class="badge">0</strong></li>
+                                            <li>IVA <strong id="_iva" class="badge">0</strong></li>
+                                            <li>Totale <strong id="_somma" class="badge">0</strong></li>
                                         </ul>
                                     </div>
                                 </div>

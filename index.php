@@ -290,9 +290,21 @@ $app->post('/aggiungi-servizi', function (Request $request) use ($DB, $app) {
         $servizi->bindParam(10, $date->format('Y-m-d H:i:s'));
         $servizi->execute();
 
+        $sum_totale = $DB->prepare('SELECT SUM(totale) AS totale FROM servizi WHERE id_fattura = ?');
+        $sum_totale->bindParam(1, $request->get('id_fattura'), PDO::PARAM_INT);
+        $sum_totale->execute();
+        $row_sum_totale = $sum_totale->fetch(PDO::FETCH_ASSOC);
+
+        $sum_scorporo = $DB->prepare('SELECT SUM(scorporo) AS scorporo FROM servizi WHERE id_fattura = ?');
+        $sum_scorporo->bindParam(1, $request->get('id_fattura'), PDO::PARAM_INT);
+        $sum_scorporo->execute();
+        $row_sum_scorporo = $sum_scorporo->fetch(PDO::FETCH_ASSOC);
+
         return $app->json(array(
             'notice' => 'success',
             'fattura' => $request->get('id_fattura'),
+            'totale' => $row_sum_totale['totale'],
+            'iva' => $row_sum_scorporo['scorporo'],
             'messages' => SUCCESS_MESSAGE
         ));
 
@@ -529,7 +541,7 @@ $app->post('/modifica-servizi', function (Request $request) use ($DB, $app) {
 
         return $app->json(array(
             'notice' => 'success',
-            'fattura' => $request->get('id'),
+            'fattura' => $request->get('id_fattura'),
             'messages' => SUCCESS_MESSAGE
         ));
 
