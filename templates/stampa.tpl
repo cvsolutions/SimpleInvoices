@@ -86,7 +86,7 @@
                         <td style="border-top: 1px solid #999999;">€ {$row.prezzo|number_format:2}</td>
                         <td style="border-top: 1px solid #999999;">{$row.quantita}</td>
                         <td style="border-top: 1px solid #999999;">€ {$row.totale|number_format:2}</td>
-                        <td style="border-top: 1px solid #999999;">{$row.iva}%</td>
+                        <td style="border-top: 1px solid #999999;">{$row.aliquota}%</td>
                     </tr>
                 {/foreach}
                 </tbody>
@@ -104,8 +104,8 @@
             <td style="text-align: right;">€ {$row.totale|number_format:2}</td>
         </tr>
         <tr>
-            <td style="padding-bottom: 10px;"><strong>IVA ({$row.iva}%)</strong></td>
-            <td style="text-align: right; padding-bottom: 10px;">€ {math|number_format:2 equation="((imponibile * (iva)) / 100)" imponibile=$row.totale iva=$row.iva}</td>
+            <td style="padding-bottom: 10px;"><strong>IVA ({$row.aliquota}%)</strong></td>
+            <td style="text-align: right; padding-bottom: 10px;">€ {$row.scorporo|number_format:2}</td>
         </tr>
     {/foreach}
 

@@ -43,7 +43,7 @@ $(document).ready(function () {
             {data: 'emissione'},
             {data: 'ragione_sociale'},
             {data: 'totale'},
-            {data: 'iva'}
+            {data: 'aliquota'}
         ],
         columnDefs: [
             {
@@ -180,7 +180,7 @@ $(document).ready(function () {
             var quantita = $('#quantita').val();
             var prezzo = $('#prezzo').val();
             var inclusa = $('#inclusa').val();
-            var iva = $('#iva').val();
+            var aliquota = $('#aliquota').val();
             var id_fattura = $('#id').val();
             var id_servizio = $('#id_servizio').val();
 
@@ -193,7 +193,7 @@ $(document).ready(function () {
                     quantita: quantita,
                     prezzo: prezzo,
                     inclusa: inclusa,
-                    iva: iva,
+                    aliquota: aliquota,
                     id_fattura: id_fattura,
                     id_servizio: id_servizio
                 },
@@ -218,7 +218,7 @@ $(document).ready(function () {
                             {data: 'prezzo' },
                             {data: 'quantita'},
                             {data: 'totale'},
-                            {data: 'iva'}
+                            {data: 'aliquota'}
                         ],
                         columnDefs: [
                             {
@@ -302,7 +302,7 @@ $(document).ready(function () {
                     $('#inclusa').attr('checked', false);
                 }
 
-                $('#iva').val(data.iva);
+                $('#aliquota').val(data.aliquota);
             },
             error: function (xhr, ajaxOptions, thrownError) {
                 alert(thrownError);
@@ -331,7 +331,7 @@ $(document).ready(function () {
             {data: 'prezzo' },
             {data: 'quantita'},
             {data: 'totale'},
-            {data: 'iva'}
+            {data: 'aliquota'}
         ],
         columnDefs: [
             {
@@ -422,7 +422,7 @@ $(document).ready(function () {
                             {data: 'prezzo' },
                             {data: 'quantita'},
                             {data: 'totale'},
-                            {data: 'iva'}
+                            {data: 'aliquota'}
                         ],
                         columnDefs: [
                             {

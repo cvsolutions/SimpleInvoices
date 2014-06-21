@@ -47,10 +47,10 @@
                             <div class="col-xs-3">
                                 <div class="form-group">
                                     <label>IVA</label>
-                                    <select class="form-control" name="iva" id="iva">
+                                    <select class="form-control" name="aliquota" id="aliquota">
                                         <option value="0">-</option>
                                         {for $foo=1 to 100}
-                                            <option value="{$foo}" {if $foo eq $servizi.iva}selected{/if}>{$foo}%</option>
+                                            <option value="{$foo}" {if $foo eq $servizi.aliquota}selected{/if}>{$foo}%</option>
                                         {/for}
                                     </select>
                                 </div>

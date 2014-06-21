@@ -54,7 +54,7 @@ $app->get('/fatture.json', function () use ($DB, $app) {
             'emissione' => $date->format('d/m/Y'),
             'ragione_sociale' => $row['ragione_sociale'],
             'totale' => number_format(0, 2),
-            'iva' => number_format(0, 2)
+            'aliquota' => number_format(0, 2)
         );
     }
     return $app->json(array('aaData' => $obj));
@@ -253,21 +253,30 @@ $app->post('/aggiungi-servizi', function (Request $request) use ($DB, $app) {
         $inclusa = $request->get('inclusa');
 
         if (isset($inclusa)) {
-            $prezzo = ($request->get('prezzo') + ($request->get('prezzo') * $request->get('iva')) / 100);
+
+            $iva      = (($request->get('aliquota') / 100) + 1);
+            $prezzo   = round(($request->get('prezzo') / $iva), 2);
+            $totale   = round(($prezzo * $request->get('quantita')), 2);
+            $scorporo = round((($totale * $request->get('aliquota')) / 100), 2);
+
         } else {
-            $prezzo = $request->get('prezzo');
+
+            $prezzo   = $request->get('prezzo');
+            $totale   = round(($prezzo * $request->get('quantita')), 2);
+            $scorporo = round((($totale * $request->get('aliquota')) / 100), 2);
         }
 
-        $servizi = $DB->prepare('INSERT INTO servizi (id, codice, descrizione, quantita, prezzo, totale, iva, id_fattura, attivo, pubblicazione) VALUES (?, ?, ?, ?, ?, ?, ?, ?, 0, ?)');
+        $servizi = $DB->prepare('INSERT INTO servizi (id, codice, descrizione, quantita, prezzo, totale, aliquota, scorporo, id_fattura, attivo, pubblicazione) VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, 0, ?)');
         $servizi->bindValue(1, ID_RAND);
         $servizi->bindParam(2, $request->get('codice'), PDO::PARAM_STR);
         $servizi->bindParam(3, $request->get('descrizione'), PDO::PARAM_STR);
         $servizi->bindParam(4, $request->get('quantita'), PDO::PARAM_INT);
         $servizi->bindValue(5, $prezzo, PDO::PARAM_STR);
-        $servizi->bindValue(6, ($prezzo * $request->get('quantita')), PDO::PARAM_STR);
-        $servizi->bindParam(7, $request->get('iva'), PDO::PARAM_INT);
-        $servizi->bindParam(8, $request->get('id_fattura'), PDO::PARAM_INT);
-        $servizi->bindParam(9, $date->format('Y-m-d H:i:s'));
+        $servizi->bindValue(6, $totale, PDO::PARAM_STR);
+        $servizi->bindParam(7, $request->get('aliquota'), PDO::PARAM_INT);
+        $servizi->bindValue(8, $scorporo, PDO::PARAM_STR);
+        $servizi->bindParam(9, $request->get('id_fattura'), PDO::PARAM_INT);
+        $servizi->bindParam(10, $date->format('Y-m-d H:i:s'));
         $servizi->execute();
 
         return $app->json(array(
@@ -305,7 +314,7 @@ $app->get('/servizi/{fattura}.json', function ($fattura) use ($DB, $app) {
             'prezzo' => number_format($row['prezzo'], 2),
             'quantita' => $row['quantita'],
             'totale' => number_format($row['totale'], 2),
-            'iva' => sprintf('%d%%', $row['iva'])
+            'aliquota' => sprintf('%d%%', $row['aliquota'])
         );
     }
     return $app->json(array('aaData' => $obj));
@@ -442,25 +451,32 @@ $app->post('/modifica-servizi', function (Request $request) use ($DB, $app) {
         $inclusa = $request->get('inclusa');
 
         if (isset($inclusa)) {
-            $iva    = (($request->get('iva') / 100) + 1);
-            $prezzo = $request->get('prezzo') / $iva;
+
+            $iva      = (($request->get('aliquota') / 100) + 1);
+            $prezzo   = round(($request->get('prezzo') / $iva), 2);
+            $totale   = round(($prezzo * $request->get('quantita')), 2);
+            $scorporo = round((($totale * $request->get('aliquota')) / 100), 2);
 
         } else {
-            $prezzo = $request->get('prezzo');
+
+            $prezzo   = $request->get('prezzo');
+            $totale   = round(($prezzo * $request->get('quantita')), 2);
+            $scorporo = round((($totale * $request->get('aliquota')) / 100), 2);
         }
 
         switch ($request->get('action')) {
 
             case 1:
-                $servizi = $DB->prepare('UPDATE servizi SET codice = ?, descrizione = ?, quantita = ?, prezzo = ?, totale = ?, iva = ?, pubblicazione = ? WHERE id = ?');
+                $servizi = $DB->prepare('UPDATE servizi SET codice = ?, descrizione = ?, quantita = ?, prezzo = ?, totale = ?, aliquota = ?, scorporo = ?, pubblicazione = ? WHERE id = ?');
                 $servizi->bindParam(1, $request->get('codice'), PDO::PARAM_STR);
                 $servizi->bindParam(2, $request->get('descrizione'), PDO::PARAM_STR);
                 $servizi->bindParam(3, $request->get('quantita'), PDO::PARAM_INT);
-                $servizi->bindValue(4, round($prezzo, 2), PDO::PARAM_STR);
-                $servizi->bindValue(5, ($prezzo * $request->get('quantita')), PDO::PARAM_STR);
-                $servizi->bindParam(6, $request->get('iva'), PDO::PARAM_INT);
-                $servizi->bindParam(7, $date->format('Y-m-d H:i:s'));
-                $servizi->bindParam(8, $request->get('id'), PDO::PARAM_INT);
+                $servizi->bindValue(4, $prezzo, PDO::PARAM_STR);
+                $servizi->bindValue(5, $totale, PDO::PARAM_STR);
+                $servizi->bindParam(6, $request->get('aliquota'), PDO::PARAM_INT);
+                $servizi->bindValue(7, $scorporo, PDO::PARAM_STR);
+                $servizi->bindParam(8, $date->format('Y-m-d H:i:s'));
+                $servizi->bindParam(9, $request->get('id'), PDO::PARAM_INT);
                 $servizi->execute();
                 break;
 
