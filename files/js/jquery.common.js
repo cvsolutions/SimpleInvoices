@@ -414,13 +414,8 @@ $(document).ready(function () {
                 dataType: 'json',
                 cache: false,
                 success: function (data) {
-
-                    // parent.location.reload();
-                    $.fancybox.close(true);
-                    $.fancybox.close();
+                    parent.location.reload();
                     parent.$.fancybox.close(true);
-                    parent.$.fancybox.close();
-                    
                     $('#lista-servizi').dataTable({
                         ajax: '/servizi/' + data.fattura + '.json',
                         language: {
