@@ -97,17 +97,29 @@
         <td colspan="2">&nbsp;</td>
     </tr>
 
-    {foreach from=$servizi item=row}
-        {assign var="t" value=""}
+    {if $count_aliquota eq 0}
+
+        {foreach from=$servizi item=row}
+            <tr>
+                <td style=""><strong>TOTALE IMPONIBILE</strong></td>
+                <td style="text-align: right;">€ {$row.totale|number_format:2}</td>
+            </tr>
+            <tr>
+                <td style="padding-bottom: 10px;"><strong>IVA ({$row.aliquota}%)</strong></td>
+                <td style="text-align: right; padding-bottom: 10px;">€ {$row.scorporo|number_format:2}</td>
+            </tr>
+        {/foreach}
+
+    {else}
         <tr>
             <td style=""><strong>TOTALE IMPONIBILE</strong></td>
-            <td style="text-align: right;">€ {$row.totale|number_format:2}</td>
+            <td style="text-align: right;">€ {$sum_totale|number_format:2}</td>
         </tr>
         <tr>
             <td style="padding-bottom: 10px;"><strong>IVA ({$row.aliquota}%)</strong></td>
-            <td style="text-align: right; padding-bottom: 10px;">€ {$row.scorporo|number_format:2}</td>
+            <td style="text-align: right; padding-bottom: 10px;">€ {$sum_scorporo|number_format:2}</td>
         </tr>
-    {/foreach}
+    {/if}
 
     <tr>
         <td style="border-top: 1px solid #000000; padding-top: 5px;"><strong>TOTALE FATTURA</strong></td>

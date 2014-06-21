@@ -604,10 +604,35 @@ $app->get('/stampa/{action}/{id}.pdf', function ($action, $id) use ($DB, $tpl, $
     $servizi->bindParam(1, $row['id'], PDO::PARAM_INT);
     $servizi->execute();
 
+    /**
+     * SELECT GROUP BY aliquota
+     */
+    $count_aliquota = $DB->prepare('SELECT aliquota FROM servizi WHERE id_fattura = ? GROUP BY aliquota HAVING COUNT(*) > 1');
+    $count_aliquota->bindParam(1, $row['id'], PDO::PARAM_INT);
+    $count_aliquota->execute();
+    $is = $count_aliquota->fetch(PDO::FETCH_ASSOC);
+
+    if ($is['aliquota'] > 0) {
+
+        $sum_totale = $DB->prepare('SELECT SUM(totale) AS totale FROM servizi WHERE id_fattura = ?');
+        $sum_totale->bindParam(1, $row['id'], PDO::PARAM_INT);
+        $sum_totale->execute();
+        $row_sum_totale = $sum_totale->fetch(PDO::FETCH_ASSOC);
+
+        $sum_scorporo = $DB->prepare('SELECT SUM(scorporo) AS scorporo FROM servizi WHERE id_fattura = ?');
+        $sum_scorporo->bindParam(1, $row['id'], PDO::PARAM_INT);
+        $sum_scorporo->execute();
+        $row_sum_scorporo = $sum_scorporo->fetch(PDO::FETCH_ASSOC);
+
+        $tpl->assign('sum_totale', $row_sum_totale['totale']);
+        $tpl->assign('sum_scorporo', $row_sum_scorporo['scorporo']);
+    }
+
     $tpl->assign('fatture', $row);
     $tpl->assign('configurazione', $configurazione->fetch(PDO::FETCH_ASSOC));
     $tpl->assign('clienti', $clienti->fetch(PDO::FETCH_ASSOC));
     $tpl->assign('servizi', $servizi->fetchAll(PDO::FETCH_ASSOC));
+    $tpl->assign('count_aliquota', $is);
 
     /** @var DOMPDF $dompdf */
     $dompdf = new DOMPDF();
