@@ -58,7 +58,7 @@ $(document).ready(function () {
                         '</button>' +
                         '<ul class="dropdown-menu" role="menu">' +
                         '<li><a href="/stampa/pdf/' + row.id + '.pdf" target="_blank"><span class="glyphicon glyphicon-download-alt"></span> Esporta in PDF</a></li>' +
-                        '<li><a href="/stampa/A4/' + row.id + '.pdf" target="_blank"><span class="glyphicon glyphicon-zoom-in"></span> Anteprima di Stampa</a></li>' +
+                        '<li><a href="/stampa/A4/' + row.id + '.html" target="_blank"><span class="glyphicon glyphicon-zoom-in"></span> Anteprima di Stampa</a></li>' +
                         '<li class="divider"></li>' +
                         '<li><a href="/elimina-fattura/' + row.id + '"><span class="glyphicon glyphicon-trash"></span> Cancella</a></li>' +
                         '</ul>' +

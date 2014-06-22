@@ -30,7 +30,7 @@ $tpl->debugging = false;
 
 /** @var \Silex\Application $app */
 $app          = new \Silex\Application();
-$app['debug'] = true;
+$app['debug'] = false;
 
 /**
  * Elenco Fatture
@@ -582,7 +582,7 @@ $app->get('/elimina-fattura/{id}', function ($id) use ($DB, $app) {
 /**
  *
  */
-$app->get('/stampa/{action}/{id}.pdf', function ($action, $id) use ($DB, $tpl, $app) {
+$app->get('/stampa/{action}/{id}', function ($action, $id) use ($DB, $tpl, $app) {
 
     /**
      * SELECT configurazione

@@ -2,7 +2,7 @@
 <html lang="en">
 <head>
     <meta charset="UTF-8">
-    <title>PDF</title>
+    <title>Fattura {$fatture.numero}/{$fatture.anno}</title>
 </head>
 <body>
 
@@ -86,7 +86,7 @@
                         <td style="border-top: 1px solid #999999;">€ {$row.prezzo|number_format:2}</td>
                         <td style="border-top: 1px solid #999999;">{$row.quantita}</td>
                         <td style="border-top: 1px solid #999999;">€ {$row.totale|number_format:2}</td>
-                        <td style="border-top: 1px solid #999999;">{$row.aliquota}%</td>
+                        <td style="border-top: 1px solid #999999;">{if $row.aliquota eq 0}N.I.{else}{$row.aliquota}%{/if}</td>
                     </tr>
                 {/foreach}
                 </tbody>
@@ -104,10 +104,12 @@
                 <td style=""><strong>TOTALE IMPONIBILE</strong></td>
                 <td style="text-align: right;">€ {$row.totale|number_format:2}</td>
             </tr>
-            <tr>
-                <td style="padding-bottom: 10px;"><strong>IVA ({$row.aliquota}%)</strong></td>
-                <td style="text-align: right; padding-bottom: 10px;">€ {$row.scorporo|number_format:2}</td>
-            </tr>
+            {if $row.aliquota gt 0}
+                <tr>
+                    <td style="padding-bottom: 10px;"><strong>IVA ({$row.aliquota}%)</strong></td>
+                    <td style="text-align: right; padding-bottom: 10px;">€ {$row.scorporo|number_format:2}</td>
+                </tr>
+            {/if}
         {/foreach}
 
     {else}
@@ -115,10 +117,12 @@
             <td style=""><strong>TOTALE IMPONIBILE</strong></td>
             <td style="text-align: right;">€ {$sum_totale|number_format:2}</td>
         </tr>
-        <tr>
-            <td style="padding-bottom: 10px;"><strong>IVA ({$row.aliquota}%)</strong></td>
-            <td style="text-align: right; padding-bottom: 10px;">€ {$sum_scorporo|number_format:2}</td>
-        </tr>
+        {if $row.aliquota gt 0}
+            <tr>
+                <td style="padding-bottom: 10px;"><strong>IVA ({$row.aliquota}%)</strong></td>
+                <td style="text-align: right; padding-bottom: 10px;">€ {$sum_scorporo|number_format:2}</td>
+            </tr>
+        {/if}
     {/if}
 
     <tr>

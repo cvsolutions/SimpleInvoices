@@ -8,6 +8,6 @@ Simple Invoices è un software semplice è veloce per la creazione, l'archiviazi
 git clone https://github.com/cvsolutions/SimpleInvoices.git
 cd SimpleInvoices
 php composer.phar install
-chmod 775 data/fatture.db
-chmod 775 templates_c
+chmod 777 data/fatture.db
+chmod 777 templates_c
 ```
