@@ -1,4 +1,11 @@
 <?php
+/**
+ * Simple Invoices 1.0
+ *
+ * @author Concetto Vecchio
+ * @copyright 2014
+ */
+
 use Symfony\Component\HttpFoundation\Request;
 
 /**
@@ -305,7 +312,7 @@ $app->post('/aggiungi-servizi', function (Request $request) use ($DB, $app) {
             'fattura' => $request->get('id_fattura'),
             'totale' => $row_sum_totale['totale'],
             'iva' => $row_sum_scorporo['scorporo'],
-            'somma' => round(($row_sum_totale['totale']+$row_sum_scorporo['scorporo']),2),
+            'somma' => round(($row_sum_totale['totale'] + $row_sum_scorporo['scorporo']), 2),
             'messages' => SUCCESS_MESSAGE
         ));
 

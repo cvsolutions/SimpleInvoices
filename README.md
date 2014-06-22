@@ -1,18 +1,13 @@
 Simple Invoices 1.0
 ==============
 
-Simple invoices
+Simple Invoices è un software semplice è veloce per la creazione, l'archiviazione e la stampa di fatture. Estremamente semplice, possiede un interfaccia intuitiva e immediata.
 
-
-## Popolare configurazione
-```sql
-INSERT INTO configurazione (ragione_sociale) VALUES ('CV Solutions');
-```
-
-##### Svuotare il Database
-```sql
-DELETE FROM clienti;
-DELETE FROM configurazione;
-DELETE FROM fatture;
-DELETE FROM servizi;
+## Installazione
+```sh
+git clone https://github.com/cvsolutions/SimpleInvoices.git
+cd SimpleInvoices
+php composer.phar install
+chmod 775 data/fatture.db
+chmod 775 templates_c
 ```
